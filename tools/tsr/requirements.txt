@@ -1,3 +1,0 @@
-rich
-coverage
-mutmut==2.1.0

@@ -1,8 +1,0 @@
-rich
-tempdir
-matplotlib
-tqdm
-numpy
-termcolor
-black
-astor

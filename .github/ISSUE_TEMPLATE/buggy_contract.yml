@@ -7,14 +7,14 @@ body:
     id: version
     attributes:
       label: "EvalPlus version"
-      description: What is the version of EvalPlus? You can find it by running `pip show evalplus`.
+      description: What is the version of EvalPlus? You can find it by running `pip show openeval`.
       placeholder: For example, 0.1.0
     validations:
       required: true
   - type: input
     id: cache
     attributes:
-      label: "Output of running `ls ~/.cache/evalplus`"
+      label: "Output of running `ls ~/.cache/openeval`"
     validations:
       required: true
   - type: input
@@ -28,7 +28,7 @@ body:
     id: original
     attributes:
       label: "The original wrong contract"
-      description: You can run `python -c "from evalplus.data import get_human_eval_plus; print(get_human_eval_plus()['HumanEval/❓']['contract'])"`
+      description: You can run `python -c "from openeval.data import get_human_eval_plus; print(get_human_eval_plus()['HumanEval/❓']['contract'])"`
       render: python
     validations:
       required: true

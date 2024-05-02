@@ -162,12 +162,11 @@ cython_debug/
 
 # VSCode
 .vscode/
-EvalPlus/
+OpenPlus/
 backup/
 passrate.p*
 min_cov_dir/
-HumanEvalPlus*.gz
-MbppPlus*.gz
-evalplus/_version.py
-*mbpp.json
+openeval/_version.py
 *.jsonl
+inspect/
+*.zip

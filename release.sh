@@ -23,10 +23,10 @@ export PYTHONPATH=$PWD pytest tests
 git tag $version
 
 # docker build
-docker build . -t ganler/evalplus:$version
-docker tag ganler/evalplus:$version ganler/evalplus:latest
-docker push ganler/evalplus:$version
-docker push ganler/evalplus:latest
+docker build . -t terryzho/openeval:$version
+docker tag terryzho/openeval:$version terryzho/openeval:latest
+docker push terryzho/openeval:$version
+docker push terryzho/openeval:latest
 
 rm -rf dist
 python3 -m build

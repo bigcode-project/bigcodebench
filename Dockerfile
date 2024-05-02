@@ -7,13 +7,13 @@ RUN apt-get update && apt-get install -y git
 # upgrade to latest pip
 RUN pip install --upgrade pip
 
-COPY . /evalplus
+COPY . /openeval
 
-RUN cd /evalplus && pip install .
+RUN cd /openeval && pip install .
 
 # Pre-install the dataset
-RUN python3 -c "from evalplus.data import get_human_eval_plus, get_mbpp_plus; get_human_eval_plus(); get_mbpp_plus()"
+RUN python3 -c "from openeval.data import get_open_eval_plus;"
 
 WORKDIR /app
 
-ENTRYPOINT ["python3", "-m", "evalplus.evaluate"]
+ENTRYPOINT ["python3", "-m", "openeval.evaluate"]

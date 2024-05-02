@@ -5,14 +5,14 @@ from typing import List
 from warnings import warn
 
 # Communism
-os.environ["HF_HOME"] = os.environ.get("HF_HOME", "/JawTitan/huggingface/")
+# os.environ["HF_HOME"] = os.environ.get("HF_HOME", "/JawTitan/huggingface/")
 
 import openai
 
 try:
     import anthropic
 
-    from evalplus.gen.util import anthropic_request
+    from openeval.gen.util import anthropic_request
 except ImportError:
     warn("Anthropic decoder will not work. Fix by `pip install anthropic`")
 
@@ -32,7 +32,7 @@ try:
 except ImportError:
     warn("VLLM decoder will not work. Fix by `pip install vllm`")
 
-from evalplus.gen.util import openai_request
+from openeval.gen.util import openai_request
 
 EOS = [
     "<|endoftext|>",
@@ -50,7 +50,7 @@ class DecoderBase(ABC):
         name: str,
         batch_size: int = 1,
         temperature: float = 0.8,
-        max_new_tokens: int = 512,
+        max_new_tokens: int = 1024,
         direct_completion: bool = True,
         dtype: str = "bfloat16",  # default
         trust_remote_code: bool = False,
@@ -68,10 +68,8 @@ class DecoderBase(ABC):
         self.trust_remote_code = trust_remote_code
 
         if direct_completion:
-            if dataset.lower() == "humaneval":
+            if dataset.lower() == "openeval":
                 self.eos += ["\ndef ", "\nclass ", "\nimport ", "\nfrom ", "\nassert "]
-            elif dataset.lower() == "mbpp":
-                self.eos += ['\n"""', "\nassert"]
 
     @abstractmethod
     def codegen(
@@ -118,7 +116,6 @@ class VLlmDecoder(DecoderBase):
 
         gen_strs = [x.outputs[0].text.replace("\t", "    ") for x in vllm_outputs]
         return gen_strs
-
 
 # some random words which serves as the splitter
 _MAGIC_SPLITTER_ = "-[[]]-this-is-really-our-highest-priority-[[]]-"
@@ -1059,5 +1056,20 @@ def make_model(
             direct_completion=True,
             dataset=dataset,
         )
-
+    elif name == "codeqwen1.5-7b-chat":
+        return GeneralChatVllmDecoder(
+                batch_size=batch_size,
+                name="Qwen/CodeQwen1.5-7B-Chat",
+                temperature=temperature,
+                direct_completion=False,
+                dataset=dataset,
+            )
+    elif name == "codeqwen1.5-7b":
+        return VLlmDecoder(
+                batch_size=batch_size,
+                name="Qwen/CodeQwen1.5-7B",
+                temperature=temperature,
+                direct_completion=True,
+                dataset=dataset,
+            )
     raise ValueError(f"Invalid model name: {name}")

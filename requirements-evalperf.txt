@@ -1,3 +1,0 @@
-Pympler
-rich
-cirron @ git+https://github.com/evalplus/Cirron@master
