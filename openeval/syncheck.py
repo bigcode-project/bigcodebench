@@ -28,9 +28,9 @@ def script(
     solutions = load_solutions(samples)
 
     if dataset == "openeval":
-        from openeval.data import get_open_eval_plus
+        from openeval.data import get_open_eval
 
-        dataset = get_open_eval_plus()
+        dataset = get_open_eval()
         dataset_name = "OpenEval"
 
     print(colored(f"Dataset: {dataset_name}", "blue"))

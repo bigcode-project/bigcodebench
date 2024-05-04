@@ -23,6 +23,7 @@
 import itertools
 import multiprocessing
 import os
+import sys
 import time
 import unittest
 from multiprocessing import Array, Value, Manager
@@ -107,6 +108,7 @@ def unsafe_execute(
     entry_point: str,
     code: str,
     test_code: str,
+    timeout: float,
     stat,  # Value
     details,  # Array
 ):
@@ -114,7 +116,8 @@ def unsafe_execute(
         # These system calls are needed when cleaning up tempdir.
         import os
         import shutil
-
+        import builtins
+        
         rmtree = shutil.rmtree
         rmdir = os.rmdir
         chdir = os.chdir
@@ -122,18 +125,29 @@ def unsafe_execute(
         # allow only 4GB memory usage
         maximum_memory_bytes = 4 * 1024 * 1024 * 1024
         reliability_guard(maximum_memory_bytes=maximum_memory_bytes)
-        exec_globals = {}
+        exec_globals = {
+            '__builtins__': builtins,
+            '__name__': '__main__',
+            '__file__': '',  # you might specify the script's intended file path if needed
+            '__package__': None,
+            '__doc__': None,
+            'sys': sys,
+            'os': os,
+            'environ': os.environ,
+        }
         try:
             code = code + "\n\n" + test_code
+            
             with swallow_io():
                 exec(code, exec_globals)
                 TestCases = exec_globals['TestCases']
                 loader = unittest.TestLoader()
                 suite = loader.loadTestsFromTestCase(TestCases)
                 test_result = unittest.TestResult()
-            for i, test in enumerate(suite):
-                with swallow_io():
-                    test.run(test_result)
+                start_time = time.time()
+                with time_limit(timeout):
+                    suite.run(test_result)
+            
             issues = test_result.failures + test_result.errors
             for test, trace in issues:
                 details[test.id().split(".")[-1]] = trace
@@ -146,6 +160,15 @@ def unsafe_execute(
         os.rmdir = rmdir
         os.chdir = chdir
 
+def watchdog(process, timeout_seconds):
+    time.sleep(timeout_seconds)
+    if process.is_alive():
+        process.terminate()  # Attempt to terminate cleanly
+        process.join(5)      # Give it a few seconds to terminate
+        if process.is_alive():
+            process.kill()  # Force termination if still alive
+            process.join()
+            
 
 def untrusted_check(
     dataset: str,
@@ -153,12 +176,12 @@ def untrusted_check(
     test_code: str,
     entry_point: str,
 ) -> Tuple[str, np.ndarray]:
-    timeout = os.getenv("EVALPLUS_TIMEOUT_PER_TASK", 60) + 1
-
+    timeout = os.getenv("EVALPLUS_TIMEOUT_PER_TASK", 60)
     # shared memory objects
     stat = Value("i", _UNKNOWN)
     manager = Manager()
     details = manager.dict()
+
     p = multiprocessing.Process(
         target=unsafe_execute,
         args=(
@@ -166,12 +189,13 @@ def untrusted_check(
             entry_point,
             code,
             test_code,
+            timeout,
             stat,
             details,
         ),
     )
     p.start()
-    p.join(timeout=timeout + 1)
+    p.join(timeout=timeout+2)
     if p.is_alive():
         p.terminate()
         time.sleep(0.1)
@@ -182,9 +206,9 @@ def untrusted_check(
     stat = _mapping[stat.value]
     # convert details to a dict
     details = dict(details)
+    
     if not stat:
         stat = TIMEOUT
-
     if stat == PASS:
         if details:
             stat = FAIL

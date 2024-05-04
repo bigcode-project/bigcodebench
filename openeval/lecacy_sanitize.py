@@ -11,7 +11,7 @@ from typing import List, Optional
 from tqdm import tqdm
 
 from openeval.data import (
-    get_open_eval_plus,
+    get_open_eval,
     load_solutions,
     write_directory,
     write_jsonl,
@@ -124,7 +124,7 @@ def script(
 ):
     # task_id -> entry_point
     entry_point = {}
-    dataset = {**get_open_eval_plus()}
+    dataset = {**get_open_eval()}
 
     for task_id, problem in dataset.items():
         entry_point[task_id] = problem["entry_point"]

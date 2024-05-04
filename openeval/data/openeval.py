@@ -11,58 +11,7 @@ from openeval.data.utils import (
     stream_jsonl,
 )
 
-HUMANEVAL_PLUS_VERSION = "v0.1.9"
 HUMANEVAL_OVERRIDE_PATH = os.environ.get("HUMANEVAL_OVERRIDE_PATH", None)
-
-
-def _ready_open_eval_plus_path(mini=False, noextreme=False, version="default") -> str:
-    if HUMANEVAL_OVERRIDE_PATH:
-        return HUMANEVAL_OVERRIDE_PATH
-
-    version = HUMANEVAL_PLUS_VERSION if version == "default" else version
-    url, plus_path = get_dataset_metadata(
-        "OpenEvalPlus", HUMANEVAL_PLUS_VERSION, mini, noextreme
-    )
-    make_cache(url, plus_path)
-
-    return plus_path
-
-
-def get_open_eval_plus_hash(mini=False, noextreme=False, version="default") -> str:
-    """Get the hash of OpenEvalPlus.
-    Returns:
-        str: The hash of OpenEvalPlus
-    """
-    plus_path = _ready_open_eval_plus_path(mini, noextreme, version="default")
-    with open(plus_path, "rb") as f:
-        plus = f.read()
-    return hashlib.md5(plus).hexdigest()
-
-
-def get_open_eval_plus(
-    err_incomplete=True, mini=False, noextreme=False, version="default"
-) -> Dict[str, Dict]:
-    """Get OpenEvalPlus locally.
-    Args:
-        err_incomplete (bool, optional): Whether to raise error if OpenEvalPlus is not complete. Defaults to True.
-        mini (bool, optional): Whether to use the mini version of OpenEvalPlus. Defaults to False.
-    Returns:
-        List[Dict[str, str]]: List of dicts with keys "task_id", "prompt", "contract", "canonical_solution", "base_input"
-    Notes:
-        "task_id" is the identifier string for the task
-        "prompt" is the function signature with docstring
-        "contract" is the assertions for the function's input (validity)
-        "canonical_solution" is the ground-truth implementation for diff-testing
-        "test" is the tests for validating the implementation
-        # "atol" is the absolute tolerance for diff-testing
-    """
-    plus_path = _ready_open_eval_plus_path(
-        mini=mini, noextreme=noextreme, version=version
-    )
-    plus = {task["task_id"]: task for task in stream_jsonl(plus_path)}
-    if err_incomplete:
-        completeness_check("OpenEval+", plus)
-    return plus
 
 
 def get_open_eval() -> Dict[str, Dict]:

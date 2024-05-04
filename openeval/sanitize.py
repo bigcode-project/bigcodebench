@@ -1,6 +1,8 @@
 """Post-processing LLM-generated Python code implemented using tree-sitter."""
 
 import os
+import ast
+import astunparse
 import pathlib
 from typing import Dict, Generator, List, Optional, Set, Tuple
 
@@ -120,6 +122,31 @@ def has_return_statement(node: Node) -> bool:
     return False
 
 
+def extract_entry_code(code, function_name):
+    try:
+        tree = ast.parse(code)
+
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef) and node.name == function_name:
+                # Retrieve the function's docstring
+                docstring = ast.get_docstring(node)
+                if docstring:
+                    # Find the position just after the docstring node
+                    if isinstance(node.body[0], ast.Expr) and isinstance(node.body[0].value, ast.Str):
+                        docstring_node = node.body[0]
+                        # Get the line number where the docstring ends
+                        docstring_end_line = docstring_node.end_lineno
+                        lines = code.splitlines()
+                        function_code = "\n".join(lines[docstring_end_line:node.end_lineno])
+                        return function_code
+                else:
+                    return astunparse.unparse(node.body)
+    except:
+        pass
+
+    return code
+
+
 def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
     code = code_extract(code)
     parser = get_parser("python")
@@ -184,7 +211,9 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
                 sanitized_output += code[node.start_byte : entry_end_byte] + "\n"
             else:
                 sanitized_output += code[node.start_byte : node.end_byte] + "\n"
-    return sanitized_output[:-1]
+    # print(extract_entry_code(sanitized_output[:-1], entrypoint))
+    # return sanitized_output[:-1]
+    return extract_entry_code(sanitized_output[:-1], entrypoint)
 
 
 def script(
@@ -203,9 +232,9 @@ def script(
     target_path = pathlib.Path(samples)
     if not inplace:
         if is_folder:
-            new_name = target_path.name + "-sanitized"
+            new_name = target_path.name + "-sanitized-plus"
         else:
-            new_name = target_path.name.replace(".jsonl", "-sanitized.jsonl")
+            new_name = target_path.name.replace(".jsonl", "-sanitized-plus.jsonl")
         target_path = target_path.parent / new_name
     target_path = str(target_path)
 
@@ -216,8 +245,6 @@ def script(
 
     for solution in tqdm(load_solutions(samples)):
         task_id = solution["task_id"]
-        # if task_id not in ["f_836_chien.py", "f_200_wending_chien_okay.py", "f_524_ming.py"]:
-        #     continue
         if task_id not in dataset:
             print(
                 f"Skiping {task_id} as it does not existing in the latest EvalPlus dataset."
@@ -236,8 +263,7 @@ def script(
             assert "completion" in solution
             old_code = dataset[task_id]["prompt"] + "\n" + solution["completion"]
 
-        new_code = sanitize(code=old_code, entrypoint=function_name)
-
+        new_code = dataset[task_id]["prompt"] + "\n" + sanitize(code=old_code, entrypoint=function_name)
         # if changed, print the message
         if new_code != old_code:
             msg = "Sanitized: " + dbg_identifier

@@ -1,40 +1,46 @@
 import time
+import os
+import sys
 import unittest
+import builtins
+
 from copy import deepcopy
 
 from openeval.eval.utils import time_limit, swallow_io
 
 
-def trusted_exec(code, test_code, entry_point, record_time=False, output_not_none=False):
+def trusted_exec(code, test_code, entry_point):
     """Execute trusted code in place."""
-    exec_globals = {}
-    code = code + "\n\n" + test_code
+    # Example of setting environment variables
+    # Load other necessary environment settings
+    exec_globals = {
+        '__builtins__': builtins,
+        '__name__': '__main__',
+        '__file__': '',  # you might specify the script's intended file path if needed
+        '__package__': None,
+        '__doc__': None,
+        'sys': sys,
+        'os': os,
+        # Environment variables
+        'environ': os.environ,
+    }
+    
+    code = code + "\n" + test_code
     exec(code, exec_globals)
     TestCases = exec_globals['TestCases']
     loader = unittest.TestLoader()
     suite = loader.loadTestsFromTestCase(TestCases)
 
-    # Measure and print the runtime for each test case
-    rtime = []
     test_result = unittest.TestResult()
-    for test in suite:
-        with swallow_io():
-            start = time.time()
-            test.run(unittest.TestResult())
-            rtime.append(time.time() - start)
-    # if test_result.errors or test_result.failures:
-    #     for test_case, error_message in test_result.errors:
-    #         print(f"Error in {test_case.id()}: {error_message}")
-    #     for test_case, failure_message in test_result.failures:
-    #         print(f"Failure in {test_case.id()}: {failure_message}")
-    # else:
-    #     print("All tests passed.")
-    if test_result.errors or test_result.failures:
+    suite.run(test_result)
+
+    # Handle the test results
+    if test_result.failures or test_result.errors:
+        for test, trace in test_result.failures + test_result.errors:
+            print(f"{test.id()}: {trace}")
         raise Exception("Test failed.")
-        exit(1)
     else:
         print("All tests passed.")
-    return rtime
 
 
 def trusted_check_exec(code, inputs, entry_point):

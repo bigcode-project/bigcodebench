@@ -34,33 +34,15 @@ from openeval.gen.util import trusted_exec
 Result = Tuple[str, List[bool]]
 
 
-def get_groundtruth(problems, hashcode, tasks_only_output_not_none):
-    cache_file = os.path.join(CACHE_DIR, f"{hashcode}.pkl")
-    if os.path.exists(cache_file):
-        print(f"Load from ground-truth from {cache_file}")
-        with open(cache_file, "rb") as f:
-            return pickle.load(f)
-
-    os.makedirs(CACHE_DIR, exist_ok=True)
-    print("Computing expected output...")
-    tbegin = time.time()
+def get_groundtruth(problems):
+    print("\nAsserting the groundtruth...")
     expected_output = {}
     for task_id, problem in problems.items():
-        oracle = {}
-        oracle["base_time"] = trusted_exec(
+        trusted_exec(
             problem["prompt"] + "\n" + problem["canonical_solution"],
             problem["test"],
             problem["entry_point"],
-            output_not_none=problem["entry_point"] in tasks_only_output_not_none,
         )
-        expected_output[task_id] = oracle
-    print(f"Expected outputs computed in {time.time() - tbegin:.2f}s")
-
-    with open(cache_file, "wb") as f:
-        pickle.dump(expected_output, f)
-
-    return expected_output
-
 
 def check_correctness(
     dataset: str,
@@ -68,6 +50,7 @@ def check_correctness(
     problem: Dict[str, Any],
     solution: str,
     identifier=None,
+    check_gt=False,
 ) -> Dict[str, Result]:  # {...}, "base" | "plus" -> (status, details)
     ret = {
         "completion_id": completion_id,
@@ -81,7 +64,6 @@ def check_correctness(
         problem["test"],
         problem["entry_point"],
     )
-
     return ret
 
 
@@ -106,7 +88,9 @@ def evaluate(flags):
     else:
         if flags.dataset == "openeval":
             problems = get_open_eval()
-
+            if flags.check_gt:
+                get_groundtruth(problems)
+        
         results = {
             "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "eval": {},
@@ -120,13 +104,7 @@ def evaluate(flags):
             remainings = set()
 
             print("Reading samples...")
-            # count = 0
             for sample in tqdm(load_solutions(flags.samples)):
-                # count += 1 
-                # if count < 2:
-                #     continue
-                # if count > 5:
-                #     break
                 task_id = sample["task_id"]
                 if task_id not in problems:
                     warn(
@@ -145,6 +123,7 @@ def evaluate(flags):
                     problems[task_id],
                     solution,
                     sample["_identifier"],
+                    flags.check_gt,
                 )
                 futures.append(executor.submit(check_correctness, *args))
                 completion_id[task_id] += 1
@@ -188,7 +167,6 @@ def evaluate(flags):
     # Calculate pass@k.
     total = np.array([len(r) for r in results["eval"].values()])
     base_correct = []
-    # new_correct = []
 
     for res in results["eval"].values():
         bc = sum([r["status"] == PASS for r in res])
@@ -236,7 +214,7 @@ def main():
         "--noextreme", action="store_true", help="Omit extreme test inputs"
     )
     parser.add_argument(
-        "--version", default="default", type=str, help="Version of the dataset"
+        "--check-gt", action="store_true", help="Check the groundtruth"
     )
     args = parser.parse_args()
 

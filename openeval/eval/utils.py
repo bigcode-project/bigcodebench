@@ -27,8 +27,32 @@ import os
 import platform
 import signal
 import tempfile
+import subprocess
 from typing import Optional
 
+@contextlib.contextmanager
+def swallow_subprocess_output():
+    """Context manager to swallow stdout and stderr for subprocesses."""
+    original_popen = subprocess.Popen
+    original_run = subprocess.run
+
+    def _popen_patch(*args, **kwargs):
+        kwargs.setdefault('stdout', subprocess.PIPE)
+        kwargs.setdefault('stderr', subprocess.PIPE)
+        return original_popen(*args, **kwargs)
+
+    def _run_patch(*args, **kwargs):
+        kwargs.setdefault('stdout', subprocess.PIPE)
+        kwargs.setdefault('stderr', subprocess.PIPE)
+        return original_run(*args, **kwargs)
+
+    subprocess.Popen = _popen_patch
+    subprocess.run = _run_patch
+    try:
+        yield
+    finally:
+        subprocess.Popen = original_popen
+        subprocess.run = original_run
 
 @contextlib.contextmanager
 def swallow_io():
@@ -36,7 +60,8 @@ def swallow_io():
     with contextlib.redirect_stdout(stream):
         with contextlib.redirect_stderr(stream):
             with redirect_stdin(stream):
-                yield
+                with swallow_subprocess_output():
+                    yield
 
 
 @contextlib.contextmanager
@@ -111,7 +136,12 @@ def reliability_guard(maximum_memory_bytes: Optional[int] = None):
     Codex paper for more information about OpenAI's code sandbox, and proceed
     with caution.
     """
-
+    
+    import os
+    os.environ["OMP_NUM_THREADS"] = "1"
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3" 
+    os.environ['TF_ENABLE_ONEDNN_OPTS'] = "0"
+    
     if maximum_memory_bytes is not None:
         import resource
 
@@ -132,10 +162,6 @@ def reliability_guard(maximum_memory_bytes: Optional[int] = None):
 
     builtins.exit = None
     builtins.quit = None
-
-    import os
-
-    os.environ["OMP_NUM_THREADS"] = "1"
 
     # os.kill = None
     # os.system = None
