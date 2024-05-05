@@ -12,7 +12,7 @@ COPY . /openeval
 RUN cd /openeval && pip install .
 
 # Pre-install the dataset
-RUN python3 -c "from openeval.data import get_open_eval_plus;"
+RUN python3 -c "from openeval.data import get_open_eval;"
 
 WORKDIR /app
 
