@@ -1,6 +1,7 @@
 from openeval.data import get_open_eval
 import sys
 import os
+import shutil
 import json
 import argparse
 
@@ -15,6 +16,8 @@ def inspection(args):
         -- execution_trace.txt: execution trace
     """
     path = os.path.join("inspect", args.eval_results.split("/")[-1].replace(".json", ""))
+    if args.in_place:
+        shutil.rmtree(path, ignore_errors=True)
     if not os.path.exists(path):
         os.makedirs(path)
     if args.dataset == "openeval":
@@ -51,6 +54,7 @@ def main():
         "--dataset", required=True, type=str, choices=["openeval"]
     )
     parser.add_argument("--eval-results", required=True, type=str)
+    parser.add_argument("--in-place", action="store_true")
     args = parser.parse_args()
     
     inspection(args)

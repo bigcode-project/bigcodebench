@@ -6,8 +6,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: "EvalPlus version"
-      description: What is the version of EvalPlus? You can find it by running `pip show openeval`.
+      label: "OpenEval version"
+      description: What is the version of OpenEval? You can find it by running `pip show openeval`.
       placeholder: For example, 0.1.0
     validations:
       required: true
@@ -21,14 +21,14 @@ body:
     id: task_id
     attributes:
       label: "Task ID of the programming task"
-      placeholder: HumanEval/[??]
+      placeholder: OpenEval/[??]
     validations:
       required: true
   - type: textarea
     id: original
     attributes:
       label: "The original wrong contract"
-      description: You can run `python -c "from openeval.data import get_human_eval_plus; print(get_human_eval_plus()['HumanEval/❓']['contract'])"`
+      description: You can run `python -c "from openeval.data import get_open_eval print(get_open_eval['OpenEval/❓']['contract'])"`
       render: python
     validations:
       required: true

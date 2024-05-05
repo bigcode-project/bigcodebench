@@ -45,34 +45,21 @@ def code_extract(text: str) -> str:
     return "\n".join(lines[longest_line_pair[0] : longest_line_pair[1] + 1])
 
 
-def get_callee_name(
-    node: Node, class_names: Set[str], function_names: Set[str]
-) -> Optional[str]:
-    for child in node.children:
-        if child.type == ATTRIBUTE_TYPE:
-            name = child.children[0].text.decode("utf8")
-            if name in class_names:
-                return name
-        elif child.type == IDENTIFIER_TYPE:
-            name = child.text.decode("utf8")
-            if name in function_names or name in class_names:
-                return name
+def get_deps(nodes: List[Tuple[str, Node]]) -> Dict[str, Set[str]]:
 
+    def dfs_get_deps(node: Node, deps: Set[str]) -> None:
+        for child in node.children:
+            if child.type == IDENTIFIER_TYPE:
+                deps.add(child.text.decode("utf8"))
+            else:
+                dfs_get_deps(child, deps)
 
-def get_call_graph(
-    nodes: List[Tuple[str, Node]], class_names: Set[str], function_names: Set[str]
-) -> Dict[str, str]:
-    call_graph = {}
+    name2deps = {}
     for name, node in nodes:
-        function_calls = []
-        traverse_nodes = traverse_tree(node)
-        for node in traverse_nodes:
-            if node.type == "call":
-                callee_name = get_callee_name(node, class_names, function_names)
-                if callee_name:
-                    function_calls.append(callee_name)
-        call_graph[name] = function_calls
-    return call_graph
+        deps = set()
+        dfs_get_deps(node, deps)
+        name2deps[name] = deps
+    return name2deps
 
 
 def get_function_dependency(entrypoint: str, call_graph: Dict[str, str]) -> Set[str]:
@@ -122,35 +109,11 @@ def has_return_statement(node: Node) -> bool:
     return False
 
 
-def extract_entry_code(code, function_name):
-    try:
-        tree = ast.parse(code)
-
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef) and node.name == function_name:
-                # Retrieve the function's docstring
-                docstring = ast.get_docstring(node)
-                if docstring:
-                    # Find the position just after the docstring node
-                    if isinstance(node.body[0], ast.Expr) and isinstance(node.body[0].value, ast.Str):
-                        docstring_node = node.body[0]
-                        # Get the line number where the docstring ends
-                        docstring_end_line = docstring_node.end_lineno
-                        lines = code.splitlines()
-                        function_code = "\n".join(lines[docstring_end_line:node.end_lineno])
-                        return function_code
-                else:
-                    return astunparse.unparse(node.body)
-    except:
-        pass
-
-    return code
-
-
 def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
     code = code_extract(code)
+    code_bytes = bytes(code, "utf8")
     parser = get_parser("python")
-    tree = parser.parse(bytes(code, "utf8"))
+    tree = parser.parse(code_bytes)
     class_names = set()
     function_names = set()
     variable_names = set()
@@ -158,8 +121,7 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
     root_node = tree.root_node
     import_nodes = []
     definition_nodes = []
-    
-    entry_end_byte = -1
+
     for child in root_node.children:
         if child.type in IMPORT_TYPE:
             import_nodes.append(child)
@@ -175,12 +137,6 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
             if not (
                 name in function_names or name in variable_names or name in class_names
             ):
-                # hard-code the special case for the entrypoint
-                if name == entrypoint:
-                    entry_end_byte = child.end_byte
-                    entry_code = code[child.start_byte:child.end_byte]
-                    if "\n\n#" in entry_code:
-                        entry_end_byte = entry_code.index("\n\n#") + child.start_byte
                 definition_nodes.append((name, child))
                 function_names.add(get_definition_name(child))
         elif (
@@ -195,25 +151,27 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
                 variable_names.add(name)
 
     if entrypoint:
-        call_graph = get_call_graph(definition_nodes, class_names, function_names)
-        reacheable = get_function_dependency(entrypoint, call_graph)
+        name2deps = get_deps(definition_nodes)
+        reacheable = get_function_dependency(entrypoint, name2deps)
 
-    sanitized_output = ""
+    sanitized_output = b""
+
     for node in import_nodes:
-        sanitized_output += code[node.start_byte : node.end_byte] + "\n"
+        sanitized_output += code_bytes[node.start_byte : node.end_byte] + b"\n"
 
     for pair in definition_nodes:
         name, node = pair
-        if not (name in variable_names) and entrypoint and not (name in reacheable):
+        if entrypoint and not (name in reacheable):
             continue
-        if node.start_byte < entry_end_byte or entry_end_byte == -1:
-            if node.end_byte > entry_end_byte and entry_end_byte:
-                sanitized_output += code[node.start_byte : entry_end_byte] + "\n"
-            else:
-                sanitized_output += code[node.start_byte : node.end_byte] + "\n"
-    # print(extract_entry_code(sanitized_output[:-1], entrypoint))
-    # return sanitized_output[:-1]
-    return extract_entry_code(sanitized_output[:-1], entrypoint)
+        sanitized_output += code_bytes[node.start_byte : node.end_byte] + b"\n"
+        
+    sanitized_output = sanitized_output[:-1].decode("utf8")
+    
+    lines = sanitized_output.splitlines()
+    for i in range(len(lines) - 1, -1, -1):
+        if lines[i].startswith(" "):
+            return "\n".join(lines[:i+1])
+    return sanitized_output
 
 
 def script(
@@ -232,9 +190,9 @@ def script(
     target_path = pathlib.Path(samples)
     if not inplace:
         if is_folder:
-            new_name = target_path.name + "-sanitized-plus"
+            new_name = target_path.name + "-sanitized"
         else:
-            new_name = target_path.name.replace(".jsonl", "-sanitized-plus.jsonl")
+            new_name = target_path.name.replace(".jsonl", "-sanitized.jsonl")
         target_path = target_path.parent / new_name
     target_path = str(target_path)
 
@@ -263,7 +221,7 @@ def script(
             assert "completion" in solution
             old_code = dataset[task_id]["prompt"] + "\n" + solution["completion"]
 
-        new_code = dataset[task_id]["prompt"] + "\n" + sanitize(code=old_code, entrypoint=function_name)
+        new_code = sanitize(code=old_code, entrypoint=function_name)
         # if changed, print the message
         if new_code != old_code:
             msg = "Sanitized: " + dbg_identifier

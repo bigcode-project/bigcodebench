@@ -606,6 +606,14 @@ def make_model(
             temperature=temperature,
             dataset=dataset,
         )
+    elif name.startswith("starcoder2") and "instruct" in name:
+        return GeneralChatVllmDecoder(
+            batch_size=batch_size,
+            name=f"bigcode/{name}",
+            temperature=temperature,
+            direct_completion=False,
+            dataset=dataset,
+        )
     elif name == "starcoder2-15b-oci":
         return VLlmDecoder(
             batch_size=batch_size,
