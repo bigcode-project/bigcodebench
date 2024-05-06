@@ -6,29 +6,29 @@ body:
   - type: input
     id: version
     attributes:
-      label: "OpenEval version"
-      description: What is the version of OpenEval? You can find it by running `pip show openeval`.
+      label: "WildCodeBench version"
+      description: What is the version of WildCodeBench? You can find it by running `pip show wildcode`.
       placeholder: For example, 0.1.0
     validations:
       required: true
   - type: input
     id: cache
     attributes:
-      label: "Output of running `ls ~/.cache/openeval`"
+      label: "Output of running `ls ~/.cache/wildcode`"
     validations:
       required: true
   - type: input
     id: task_id
     attributes:
       label: "Task ID of the programming task"
-      placeholder: OpenEval/[??]
+      placeholder: WildCodeBench/[??]
     validations:
       required: true
   - type: textarea
     id: original
     attributes:
       label: "The original wrong contract"
-      description: You can run `python -c "from openeval.data import get_open_eval print(get_open_eval['OpenEval/❓']['contract'])"`
+      description: You can run `python -c "from wildcode.data import get_wild_code_bench print(get_wild_code_bench['WildCodeBench/❓']['contract'])"`
       render: python
     validations:
       required: true

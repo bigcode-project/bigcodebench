@@ -1,1 +1,1 @@
-exclude openeval/_experimental/**/*.py
+exclude wildcode/_experimental/**/*.py

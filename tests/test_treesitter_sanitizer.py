@@ -1,4 +1,4 @@
-from openeval.sanitize import code_extract, sanitize
+from wildcode.sanitize import code_extract, sanitize
 
 
 def test_code_extract():

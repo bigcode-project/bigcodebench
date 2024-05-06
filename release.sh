@@ -23,10 +23,10 @@ export PYTHONPATH=$PWD pytest tests
 git tag $version
 
 # docker build
-docker build . -t terryzho/openeval:$version
-docker tag terryzho/openeval:$version terryzho/openeval:latest
-docker push terryzho/openeval:$version
-docker push terryzho/openeval:latest
+docker build . -t terryzho/wildcode:$version
+docker tag terryzho/wildcode:$version terryzho/wildcode:latest
+docker push terryzho/wildcode:$version
+docker push terryzho/wildcode:latest
 
 rm -rf dist
 python3 -m build

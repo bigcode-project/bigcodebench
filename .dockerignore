@@ -170,5 +170,5 @@ HumanEvalPlus*.jsonl
 HumanEvalPlus*.gz
 MbppPlus*.jsonl
 MbppPlus*.gz
-openeval/_version.py
+wildcode/_version.py
 *mbpp.json

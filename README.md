@@ -1,4 +1,4 @@
-# `🛠️OpenEval🛠️`
+# `🛠️WildCodeBench🛠️`
 
 
 ## 💻 LLM-generated code
@@ -9,7 +9,7 @@ Each sample file is packaged in a zip file named like `${model_name}_temp_${temp
 You can unzip them to a folder named like `${model_name}_temp_${temperature}` and run the evaluation from scratch with:
 
 ```bash
-openeval.evaluate --dataset humaneval --samples ${model_name}_temp_${temperature}
+wildcode.evaluate --dataset humaneval --samples ${model_name}_temp_${temperature}
 ```
 
 ## 🔨 Useful tools
@@ -17,18 +17,18 @@ openeval.evaluate --dataset humaneval --samples ${model_name}_temp_${temperature
 To use these tools, please first install the repository from GitHub:
 
 ```bash
-git clone https://github.com/openeval/openeval.git
-cd openeval
+git clone https://github.com/wildcode/wildcode.git
+cd wildcode
 pip install -r tools/requirements.txt
 ```
 
 ### Code generation
 
-We have configured the code generation of a wide range of LLMs (see support details in [codegen/models.py](https://github.com/openeval/openeval/blob/master/codegen/model.py)).
+We have configured the code generation of a wide range of LLMs (see support details in [codegen/models.py](https://github.com/wildcode/wildcode/blob/master/codegen/model.py)).
 Example to run greedy generation on StarCoderBase-7B:
 
 ```shell
-python codegen/generate.py --model starcoderbase-7b --bs 1 --temperature 0 --n_samples 1 --resume --greedy --root [result_path] --dataset openeval
+python codegen/generate.py --model starcoderbase-7b --bs 1 --temperature 0 --n_samples 1 --resume --greedy --root [result_path] --dataset wildcode
 ```
 
 ## 📜 Citation
