@@ -18,7 +18,7 @@
 
 ### WildCodeBench
 
-WildCodeBench is an igorous benchmark for code generation with realistic constraints in the wild. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more fine-grained descriptions and diverse tool use.
+WildCodeBench is an rigorous benchmark for code generation with realistic constraints in the wild. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more fine-grained descriptions and diverse tool use.
 
 ### WildCode
 
@@ -37,9 +37,9 @@ WildCode is a rigorous evaluation framework for LLM4Code, with:
 > [!Tip]
 >
 > WildCode ❤️ [bigcode-evaluation-harness](https://github.com/bigcode-project/bigcode-evaluation-harness)!
-> WildCodeBench will be integrated to bigcode-evaluation-harness that you can also run it there!
+> WildCodeBench will be integrated to bigcode-evaluation-harness, and you can also run it there!
 
-To get started, please first setup the environment:
+To get started, please first set up the environment:
 
 ```shell
 pip install wild-code --upgrade
@@ -75,13 +75,13 @@ To generate code samples from a model, you can use the following command:
 ```shell
 wildcode.generate --model [model_name] --dataset wildcodebench --greedy --bs [bs] --temperature [temp] --n_samples [n_samples] --resume --backend [vllm|hf|openai]
 ```
-The generated code samples will be sored in a file named `[model_name]--wildcodebench--[backend]-[temp]-[n_samples].jsonl`.
+The generated code samples will be stored in a file named `[model_name]--wildcodebench--[backend]-[temp]-[n_samples].jsonl`.
 
 <details><summary>🤔 Structure of `problem`? <i>:: click to expand ::</i></summary>
 <div>
 
 * `task_id` is the identifier string for the task
-* `entry_point` is name of the function
+* `entry_point` is the name of the function
 * `prompt` is the function signature with docstring
 * `instruction` is the instruction for the task completion
 + `canonical_solution` is the ground-truth implementation (re-implemented to fix bugs in HumanEval)
@@ -183,7 +183,7 @@ Base
 <div>
 
 If you do greedy decoding where there is only one sample for each task, the evaluation should take just a few seconds.
-When running 1 samples x 964 tasks x all tests, it can take around ??-?? minutes by using `--parallel 64` and `--test-details`.
+When running 1 sample x 964 tasks x all tests, it can take around ??-?? minutes by using `--parallel 64` and `--test-details`.
 Here are some tips to speed up the evaluation:
 
 * Use `--parallel $(nproc)`
