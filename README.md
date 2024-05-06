@@ -214,7 +214,7 @@ We share pre-generated code samples from LLMs we have [evaluated](https://wildco
 
 ## Known Issues
 
-- [ ] We notice that some tasks heavily use memory for scientific modeling during testing. It will lead to timeout issues on some machines. If you get an error message like "Check failed: ret == 0 (11 vs. 0)Thread creation via pthread_create() failed." in Tensorflow, it is very likely due to the memory issue. Try to allocate more memory to the process or reduce the number of parallel processes.
+- [ ] We notice that some tasks heavily use memory for scientific modeling during testing. It will lead to timeout issues on some machines. If you get an error message like `Check failed: ret == 0 (11 vs. 0)Thread creation via pthread_create() failed.` in Tensorflow, it is very likely due to the memory issue. Try to allocate more memory to the process or reduce the number of parallel processes.
 
 ## 📜 Citation
 
