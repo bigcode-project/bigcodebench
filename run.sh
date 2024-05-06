@@ -32,10 +32,8 @@ for TEMP in ${TEMPS[@]}; do
     fi
 
     SAMPLE_FILE=$MODEL--$DATASET--$BACKEND-$TEMP-$N_SAMPLES.jsonl
-    rm -rf $MODEL--$DATASET--$BACKEND-$TEMP-$N_SAMPLES-sanitized.jsonl
     wildcode.sanitize --samples $SAMPLE_FILE
-    rm -rf $MODEL--$DATASET--$BACKEND-$TEMP-$N_SAMPLES-sanitized_eval_results.json
-    wildcode.evaluate --dataset wildcode --samples $MODEL--$DATASET--$BACKEND-$TEMP-$N_SAMPLES-sanitized.jsonl
-    # python codegen/inspection.py --dataset wildcode --eval-results $MODEL-$DATASET-$TEMP-$N_SAMPLES-sanitized_eval_results.json --in-place
+    wildcode.evaluate --dataset $DATASET --samples $MODEL--$DATASET--$BACKEND-$TEMP-$N_SAMPLES-sanitized.jsonl
+    wildcode.inspect --dataset $DATASET --eval-results $MODEL-$DATASET-$TEMP-$N_SAMPLES-sanitized_eval_results.json --in-place
   done
 done

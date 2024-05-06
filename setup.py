@@ -27,6 +27,7 @@ setup(
             "wildcode.syncheck = wildcode.syncheck:main",
             "wildcode.legacy_sanitize = wildcode.legacy_sanitize:main",
             "wildcode.generate = wildcode.generate:main",
+            "wildcode.inspect = wildcode.inspect:main",
         ]
     },
 )
