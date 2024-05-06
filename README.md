@@ -55,12 +55,12 @@ pip install "git+https://github.com/bigcode-project/wild-code.git" --upgrade
 </div>
 </details>
 
-<details><summary>⏬ Using EvalPlus as a local repo? <i>:: click to expand ::</i></summary>
+<details><summary>⏬ Using WildCode as a local repo? <i>:: click to expand ::</i></summary>
 <div>
 
 ```shell
 git clone https://github.com/bigcode-project/wild-code.git
-cd evalplus
+cd wild-code
 export PYTHONPATH=$PYTHONPATH:$(pwd)
 pip install -e .
 ```
@@ -101,29 +101,29 @@ The generated code samples will be sored in a file named `[model_name]--wildcode
 ### Code post-processing
 
 LLM-generated text may not be compilable code for including natural language lines or incomplete extra code.
-We provide a tool namely `evalplus.sanitize` to clean up the code:
+We provide a tool namely `wildcode.sanitize` to clean up the code:
 
 ```shell
 # 💡 If you are storing codes in jsonl:
-evalplus.sanitize --samples samples.jsonl
+wildcode.sanitize --samples samples.jsonl
 # Sanitized code will be produced to `samples-sanitized.jsonl`
 
 # 💡 If you are storing codes in directories:
-evalplus.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
+wildcode.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
 # Sanitized code will be produced to `/path/to/vicuna-[??]b_temp_[??]-sanitized`
 ```
 
 <details><summary>🔎 Checking the compilability of post-processed code<i>:: click to expand ::</i></summary>
 <div>
 
-To double-check the post-processing results, you can use `evalplus.syncheck` to check the code validity before and after sanitization, which will print erroneous code snippets and why they are wrong:
+To double-check the post-processing results, you can use `wildcode.syncheck` to check the code validity before and after sanitization, which will print erroneous code snippets and why they are wrong:
 
 ```shell
 # 💡 If you are storing codes in jsonl:
-evalplus.syncheck --samples samples.jsonl --dataset [wildcodebench]
+wildcode.syncheck --samples samples.jsonl --dataset [wildcodebench]
 
 # 💡 If you are storing codes in directories:
-evalplus.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [wildcodebench]
+wildcode.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [wildcodebench]
 ```
 
 </div>
@@ -135,13 +135,12 @@ evalplus.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [wildcodeb
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
 ```bash
-docker run -v $(pwd):/app ganler/evalplus:latest --dataset [humaneval|mbpp] --samples samples.jsonl
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
 
 ```bash
-evalplus.evaluate --dataset [wildcodebench] --samples samples.jsonl
+wildcode.evaluate --dataset [wildcodebench] --samples samples.jsonl
 ```
 
 > [!Tip]
