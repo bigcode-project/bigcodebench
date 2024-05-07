@@ -1,4 +1,4 @@
-# `🌳WildCodeBench`
+# 🌳WildCodeBench
 
 > [!WARNING] 
 > The project is under active development. Please check back later for more updates.
@@ -134,12 +134,20 @@ wildcode.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [wildcodeb
 
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
-```bash
+```shell
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
 
-```bash
+First, install the dependencies for WildCodeBench:
+
+```shell
+pip install -r requirements-wildcodebench.txt
+```
+
+Then, run the evaluation:
+
+```shell
 wildcode.evaluate --dataset [wildcodebench] --samples samples.jsonl
 ```
 
