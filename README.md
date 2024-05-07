@@ -18,7 +18,7 @@
 
 ### WildCodeBench
 
-WildCodeBench is an rigorous benchmark for code generation with realistic constraints in the wild. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more fine-grained descriptions and diverse tool use.
+WildCodeBench is a rigorous benchmark for code generation with realistic constraints in the wild. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more fine-grained descriptions and diverse tool use.
 
 ### WildCode
 
