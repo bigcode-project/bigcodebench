@@ -135,6 +135,7 @@ wildcode.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [wildcodeb
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
 ```shell
+docker run -v $(pwd):/app terryzho/wildcode:latest --dataset [wildcodebench] --samples samples.jsonl
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -199,7 +200,7 @@ Here are some tips to speed up the evaluation:
 </div>
 </details>
 
-## Failure Inspection
+## Failure inspection
 
 You can inspect the failed samples by using the following command:
 
@@ -207,7 +208,7 @@ You can inspect the failed samples by using the following command:
 wildcode.inspect --dataset $DATASET --eval-results sample-sanitized_eval_results.json --in-place
 ```
 
-## Full Script
+## Full script
 
 We provide a sample script to run the full pipeline:
 
@@ -219,7 +220,7 @@ bash run.sh
 
 We share pre-generated code samples from LLMs we have [evaluated](https://wildcodebench.github.io/leaderboard.html):
 
-## Known Issues
+## Known issues
 
 - [ ] We notice that some tasks heavily use memory for scientific modeling during testing. It will lead to timeout issues on some machines. If you get an error message like `Check failed: ret == 0 (11 vs. 0)Thread creation via pthread_create() failed.` in Tensorflow, it is very likely due to the memory issue. Try to allocate more memory to the process or reduce the number of parallel processes.
 
