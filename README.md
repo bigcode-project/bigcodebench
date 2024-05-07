@@ -7,9 +7,17 @@
 > WildCode framework currently only supports the Code2Code generation task. We are working on adding the NL2Code task based on NL instructions.
 
 <p align="center">
+    <a href="https://pypi.org/project/wild-code/"><img src="https://img.shields.io/pypi/v/wild-code?color=g"></a>
+    <a href="https://hub.docker.com/r/terryzho/wildcode" title="Docker"><img src="https://img.shields.io/docker/image-size/terryzho/wildcode"></a>
+    <a href="https://github.com/evalplus/evalplus/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/wild-code"></a>
+</p>
+
+<p align="center">
+    <a href="#-about">🌳About</a> •
     <a href="#-quick-start">🔥Quick Start</a> •
     <a href="#-llm-generated-code">💻LLM code</a> •
-    <a href="#-useful-tools">🔨Tools</a> •
+    <a href="#-failure-inspection">🔍Failure inspection</a> •
+    <a href="#-known-issues">🐞Known issues</a> •
     <a href="#-citation">📜Citation</a> •
     <a href="#-acknowledgement">🙏Acknowledgement</a>
 </p>
