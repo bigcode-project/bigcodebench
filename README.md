@@ -4,7 +4,7 @@
 > The project is under active development. Please check back later for more updates.
 
 > [!WARNING]
-> WildCode framework currently only supports the Code2Code generation task. We are working on adding the NL2Code task based on NL instructions.
+> WildCode framework currently only supports the Code2Code generation task. We are working on adding the NL2Code task.
 
 <p align="center">
     <a href="https://pypi.org/project/wild-code/"><img src="https://img.shields.io/pypi/v/wild-code?color=g"></a>
@@ -213,7 +213,7 @@ Here are some tips to speed up the evaluation:
 You can inspect the failed samples by using the following command:
 
 ```shell
-wildcode.inspect --dataset $DATASET --eval-results sample-sanitized_eval_results.json --in-place
+wildcode.inspect --dataset [wildcodebench] --eval-results sample-sanitized_eval_results.json --in-place
 ```
 
 ## Full script
