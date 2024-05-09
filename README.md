@@ -4,6 +4,9 @@
 > The project is under active development. Please check back later for more updates.
 
 > [!WARNING]
+> Please use WildCode with caution. Different from [EvalPlus](https://github.com/evalplus/evalplus), WildCode has a much less constrained execution environment to support tasks with diverse library dependencies. This may lead to security risks. We recommend using a sandbox such as [Docker](https://docs.docker.com/get-docker/) to run the evaluation.
+
+> [!WARNING]
 > WildCode framework currently only supports the Code2Code generation task. We are working on adding the NL2Code task.
 
 <p align="center">
@@ -39,6 +42,11 @@ WildCode is a rigorous evaluation framework for LLM4Code, with:
 * ✨ **Precise evaluation & ranking**: See [our leaderboard](https://wildcodebench.github.io/leaderboard.html) for latest LLM rankings before & after rigorous evaluation.
 * ✨ **Pre-generated samples**: WildCode accelerates code intelligence research by open-sourcing [LLM-generated samples](#-LLM-generated-code) for various models -- no need to re-run the expensive benchmarks!
 
+### Main Differences from EvalPlus
+
+We inherit the design of the EvalPlus framework, which is a flexible and extensible evaluation framework for code generation tasks. However, WildCode has the following differences:
+* Execution Environment: The execution environment in WildCode is less bounded than EvalPlus to support tasks with diverse library dependencies.
+* Test Evaluation: WildCode relies on `unittest` for evaluating the generated code, which is more suitable for the test harness in WildCodeBench.
 
 ## 🔥 Quick Start
 
@@ -76,7 +84,7 @@ pip install -e .
 </div>
 </details>
 
-### Code generation
+### Code Generation
 
 To generate code samples from a model, you can use the following command:
 
@@ -106,7 +114,7 @@ The generated code samples will be stored in a file named `[model_name]--wildcod
 > 2. `solution` (optional): Self-contained solution (usually including the prompt)
 >    * Example: `{"task_id": "HumanEval/?", "solution": "def f():\n    return 1"}`
 
-### Code post-processing
+### Code Post-processing
 
 LLM-generated text may not be compilable code for including natural language lines or incomplete extra code.
 We provide a tool namely `wildcode.sanitize` to clean up the code:
@@ -138,7 +146,7 @@ wildcode.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [wildcodeb
 </details>
 
 
-### Code evaluation
+### Code Evaluation
 
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
@@ -182,11 +190,11 @@ The output should be like (below is GPT-4 greedy decoding example):
 
 ```
 Asserting the groundtruth...
-Expected outputs computed in 2400.0 seconds
+Expected outputs computed in 1200.0 seconds
 Reading samples...
-964it [30:04, 37.79it/s]
+1047it [00:00, 1901.64it/s]
 Evaluating samples...
-100%|██████████████████████████████████████████| 964/964 [00:03<00:00, 44.75it/s]
+100%|██████████████████████████████████████████| 1047/1047 [19:53<00:00, 6.75it/s]
 Base
 {'pass@1': 0.548}
 ```
@@ -208,7 +216,7 @@ Here are some tips to speed up the evaluation:
 </div>
 </details>
 
-## Failure inspection
+## Failure Inspection
 
 You can inspect the failed samples by using the following command:
 
@@ -224,11 +232,11 @@ We provide a sample script to run the full pipeline:
 bash run.sh
 ```
 
-## 💻 LLM-generated code
+## 💻 LLM-generated Code
 
-We share pre-generated code samples from LLMs we have [evaluated](https://wildcodebench.github.io/leaderboard.html):
+We will share pre-generated code samples from LLMs we have [evaluated](https://wildcodebench.github.io/leaderboard.html):
 
-## Known issues
+## Known Issues
 
 - [ ] We notice that some tasks heavily use memory for scientific modeling during testing. It will lead to timeout issues on some machines. If you get an error message like `Check failed: ret == 0 (11 vs. 0)Thread creation via pthread_create() failed.` in Tensorflow, it is very likely due to the memory issue. Try to allocate more memory to the process or reduce the number of parallel processes.
 
