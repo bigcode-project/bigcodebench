@@ -29,7 +29,7 @@ def get_wild_code_bench() -> Dict[str, Dict]:
     # Check if open eval file exists in CACHE_DIR
     wild_code_bench_path = os.path.join(CACHE_DIR, "WildCodeBench.jsonl")
     make_cache(
-        "https://github.com/bigcode-project/open-eval/raw/main/data/open-eval.jsonl.gz",
+        "https://github.com/bigcode-project/wild-code-bench-annotation/raw/main/data/wild-code-bench.jsonl.gz",
         wild_code_bench_path,
     )
     print(wild_code_bench_path)

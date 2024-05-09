@@ -34,20 +34,23 @@ from wildcode.gen.util import trusted_exec
 Result = Tuple[str, List[bool]]
 
 
-def get_groundtruth(problems, hashcode):
+def get_groundtruth(problems, hashcode, check_gt_only):
     cache_file = os.path.join(CACHE_DIR, f"{hashcode}.pkl")
     if os.path.exists(cache_file):
-        print(f"Load from ground-truth from {cache_file}")
-        with open(cache_file, "rb") as f:
-            return pickle.load(f)
+        if check_gt_only:
+            os.remove(cache_file)
+        else:
+            print(f"Load from ground-truth from {cache_file}")
+            with open(cache_file, "rb") as f:
+                return pickle.load(f)
 
     os.makedirs(CACHE_DIR, exist_ok=True)
     print("\nAsserting the groundtruth...")
     tbegin = time.time()
     expected_time = {}
-    for task_id, problem in problems.items():
+    for task_id, problem in tqdm(problems.items()):
         expected_time[task_id] = trusted_exec(
-            problem["prompt"] + "\n" + problem["canonical_solution"],
+            problem["prompt"] + "\n" + problem["clean_canonical_solution"],
             problem["test"],
             problem["entry_point"],
         )
@@ -76,7 +79,6 @@ def check_correctness(
     ret["base"] = untrusted_check(
         dataset,
         solution,
-        # problem["prompt"] + "\n" + problem["canonical_solution"],
         problem["test"],
         problem["entry_point"],
         min_time_limit,
@@ -91,6 +93,10 @@ def evaluate(flags):
     else:
         n_workers = flags.parallel
 
+    if flags.check_gt_only:
+        # bypass the samples
+        flags.samples = "__dummy__.jsonl"
+        
     if os.path.isdir(flags.samples):
         result_path = os.path.join(flags.samples, "eval_results.json")
     else:
@@ -106,9 +112,12 @@ def evaluate(flags):
     else:
         if flags.dataset == "wildcodebench":
             problems = get_wild_code_bench()
-            dataset_hash = get_wild_code_bench_hash()            
-            expected_time = get_groundtruth(problems, dataset_hash)
-            
+            dataset_hash = get_wild_code_bench_hash()       
+            expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
+        
+        if flags.check_gt_only:
+            return
+        
         results = {
             "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "eval": {},
@@ -144,7 +153,8 @@ def evaluate(flags):
                     # problems[task_id]["canonical_solution"],
                     sample["_identifier"],
                     flags.min_time_limit,
-                    expected_time[task_id],
+                    # expected_time[task_id],
+                    120
                 )
                 futures.append(executor.submit(check_correctness, *args))
                 completion_id[task_id] += 1
@@ -233,10 +243,7 @@ def main():
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
     parser.add_argument(
-        "--noextreme", action="store_true", help="Omit extreme test inputs"
-    )
-    parser.add_argument(
-        "--check-gt", action="store_true", help="Check the groundtruth"
+        "--check-gt-only", action="store_true", help="Check the groundtruth"
     )
     args = parser.parse_args()
 

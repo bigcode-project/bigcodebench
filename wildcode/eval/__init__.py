@@ -25,6 +25,7 @@ import multiprocessing
 import os
 import sys
 import time
+import types
 import unittest
 from multiprocessing import Array, Value, Manager
 from typing import Any, Dict, List, Tuple, Union
@@ -125,21 +126,26 @@ def unsafe_execute(
         # allow only 32GB memory usage
         maximum_memory_bytes = 32 * 1024 * 1024 * 1024
         reliability_guard(maximum_memory_bytes=maximum_memory_bytes)
-        exec_globals = {
+        module_name = "__test__"
+        new_module = types.ModuleType(module_name)
+        # Set necessary attributes for the module
+        new_module.__dict__.update({
             '__builtins__': builtins,
-            '__name__': '__main__',
-            '__file__': '',  # you might specify the script's intended file path if needed
+            '__file__': f"{module_name}.py",
             '__package__': None,
             '__doc__': None,
             'sys': sys,
             'os': os,
             'environ': os.environ,
-        }
+        })
+
         try:
-            code = code + "\n\n" + test_code
+            full_code = code + "\n" + test_code
+
             with swallow_io():
-                exec(code, exec_globals)
-                TestCases = exec_globals['TestCases']
+                exec(compile(full_code, f"{module_name}.py", 'exec'), new_module.__dict__)
+                sys.modules[module_name] = new_module
+                TestCases = getattr(new_module, 'TestCases')
                 loader = unittest.TestLoader()
                 suite = loader.loadTestsFromTestCase(TestCases)
                 test_result = unittest.TestResult()

@@ -2,7 +2,6 @@
 
 import os
 import ast
-import astunparse
 import pathlib
 from typing import Dict, Generator, List, Optional, Set, Tuple
 
@@ -167,10 +166,16 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
         
     sanitized_output = sanitized_output[:-1].decode("utf8")
     
+    # ad-hoc approach to remove unnecessary lines, but it works
     lines = sanitized_output.splitlines()
+    outer_lines = []
     for i in range(len(lines) - 1, -1, -1):
         if lines[i].startswith(" "):
-            return "\n".join(lines[:i+1])
+            break
+        if not lines[i].startswith(" ") and entrypoint in lines[i]:
+            outer_lines.append(i)
+    if outer_lines:
+        sanitized_output = "\n".join(lines[: outer_lines[-1]])
     return sanitized_output
 
 
