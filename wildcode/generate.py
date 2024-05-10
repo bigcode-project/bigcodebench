@@ -31,9 +31,9 @@ def codegen(
         TimeElapsedColumn(),
     ) as p:
         if dataset == "wildcodebench":
-            from wildcode.data import get_wild_code_bench, write_jsonl
+            from wildcode.data import get_wildcodebench, write_jsonl
 
-            dataset = get_wild_code_bench()
+            dataset = get_wildcodebench()
 
         # create save_path if it doesn't exist, e.g., a/b.jsonl
         dirname = os.path.dirname(save_path)

@@ -16,8 +16,8 @@ from termcolor import cprint
 from tqdm import tqdm
 
 from wildcode.data import (
-    get_wild_code_bench,
-    get_wild_code_bench_hash,
+    get_wildcodebench,
+    get_wildcodebench_hash,
     load_solutions,
 )
 from wildcode.data.utils import CACHE_DIR
@@ -111,8 +111,8 @@ def evaluate(flags):
         results = compatible_eval_result(results)
     else:
         if flags.dataset == "wildcodebench":
-            problems = get_wild_code_bench()
-            dataset_hash = get_wild_code_bench_hash()       
+            problems = get_wildcodebench()
+            dataset_hash = get_wildcodebench_hash()       
             expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
         
         if flags.check_gt_only:
@@ -207,7 +207,7 @@ def evaluate(flags):
 
     pass_at_k = {
         f"pass@{k}": estimate_pass_at_k(total, base_correct, k).mean()
-        for k in [1, 10, 100]
+        for k in [1, 5, 10]
         if total.min() >= k
     }
     cprint(f"{flags.dataset}", "green")

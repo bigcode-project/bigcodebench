@@ -28,7 +28,7 @@ body:
     id: original
     attributes:
       label: "The original wrong contract"
-      description: You can run `python -c "from wildcode.data import get_wild_code_bench print(get_wild_code_bench['WildCodeBench/❓']['contract'])"`
+      description: You can run `python -c "from wildcode.data import get_wildcodebench print(get_wildcodebench['WildCodeBench/❓']['contract'])"`
       render: python
     validations:
       required: true

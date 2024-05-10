@@ -10,7 +10,7 @@ from tree_sitter import Node
 from tree_sitter_languages import get_parser
 
 from wildcode.data import (
-    get_wild_code_bench,
+    get_wildcodebench,
     load_solutions,
     write_directory,
     write_jsonl,
@@ -185,7 +185,7 @@ def script(
     # task_id -> entry_point
     entry_point = {}
     # merge two datasets
-    dataset = {**get_wild_code_bench()}
+    dataset = {**get_wildcodebench()}
 
     for task_id, problem in dataset.items():
         entry_point[task_id] = problem["entry_point"]

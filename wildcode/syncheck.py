@@ -28,9 +28,9 @@ def script(
     solutions = load_solutions(samples)
 
     if dataset == "wildcodebench":
-        from wildcode.data import get_wild_code_bench
+        from wildcode.data import get_wildcodebench
 
-        dataset = get_wild_code_bench()
+        dataset = get_wildcodebench()
         dataset_name = "WildCodeBench"
 
     print(colored(f"Dataset: {dataset_name}", "blue"))

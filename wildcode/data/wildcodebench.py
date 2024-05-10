@@ -14,7 +14,7 @@ from wildcode.data.utils import (
 HUMANEVAL_OVERRIDE_PATH = os.environ.get("HUMANEVAL_OVERRIDE_PATH", None)
 
 
-def get_wild_code_bench() -> Dict[str, Dict]:
+def get_wildcodebench() -> Dict[str, Dict]:
     """Get WildCodeBench from OpenAI's github repo and return as a list of parsed dicts.
 
     Returns:
@@ -27,23 +27,22 @@ def get_wild_code_bench() -> Dict[str, Dict]:
         "entry_point" is the name of the function.
     """
     # Check if open eval file exists in CACHE_DIR
-    wild_code_bench_path = os.path.join(CACHE_DIR, "WildCodeBench.jsonl")
+    wildcodebench_path = os.path.join(CACHE_DIR, "WildCodeBench.jsonl")
     make_cache(
         "https://github.com/bigcode-project/wild-code-bench-annotation/raw/main/data/wild-code-bench.jsonl.gz",
-        wild_code_bench_path,
+        wildcodebench_path,
     )
-    print(wild_code_bench_path)
-    wild_code_bench = open(wild_code_bench_path, "r").read().split("\n")
-    wild_code_bench = [json.loads(line) for line in wild_code_bench if line]
+    wildcodebench = open(wildcodebench_path, "r").read().split("\n")
+    wildcodebench = [json.loads(line) for line in wildcodebench if line]
 
-    return {task["task_id"]: task for task in wild_code_bench}
+    return {task["task_id"]: task for task in wildcodebench}
 
-def get_wild_code_bench_hash() -> str:
+def get_wildcodebench_hash() -> str:
     """Get the hash of WildCodeBench.
     Returns:
         str: The hash of WildCodeBench
     """
-    wild_code_bench_path = os.path.join(CACHE_DIR, "WildCodeBench.jsonl")
-    with open(wild_code_bench_path, "rb") as f:
-        wild_code_bench = f.read()
-    return hashlib.md5(wild_code_bench).hexdigest()
+    wildcodebench_path = os.path.join(CACHE_DIR, "WildCodeBench.jsonl")
+    with open(wildcodebench_path, "rb") as f:
+        wildcodebench = f.read()
+    return hashlib.md5(wildcodebench).hexdigest()

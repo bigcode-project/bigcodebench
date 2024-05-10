@@ -11,7 +11,7 @@ from typing import List, Optional
 from tqdm import tqdm
 
 from wildcode.data import (
-    get_wild_code_bench,
+    get_wildcodebench,
     load_solutions,
     write_directory,
     write_jsonl,
@@ -124,7 +124,7 @@ def script(
 ):
     # task_id -> entry_point
     entry_point = {}
-    dataset = {**get_wild_code_bench()}
+    dataset = {**get_wildcodebench()}
 
     for task_id, problem in dataset.items():
         entry_point[task_id] = problem["entry_point"]

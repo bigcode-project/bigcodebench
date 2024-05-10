@@ -1,4 +1,4 @@
-from wildcode.data import get_wild_code_bench
+from wildcode.data import get_wildcodebench
 import sys
 import os
 import shutil
@@ -21,7 +21,7 @@ def inspection(args):
     if not os.path.exists(path):
         os.makedirs(path)
     if args.dataset == "wildcodebench":
-        problems = get_wild_code_bench()
+        problems = get_wildcodebench()
 
     eval_results = json.load(open(args.eval_results, "r"))
     for task_id, results in eval_results["eval"].items():
