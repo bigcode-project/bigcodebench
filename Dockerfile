@@ -2,7 +2,7 @@
 FROM python:3.10-slim
 
 # install git
-RUN apt-get update && apt-get install -y git && apt-get -y install g++
+RUN apt-get update && apt-get install -y git && apt-get -y install g++ && apt-get install python3-tk
 
 # upgrade to latest pip
 RUN pip install --upgrade pip
