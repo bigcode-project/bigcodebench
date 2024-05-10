@@ -7,16 +7,27 @@ import builtins
 
 from copy import deepcopy
 
-from wildcode.eval.utils import time_limit, swallow_io
-from wildcode.eval.utils import create_tempdir
-
+from wildcode.eval.utils import (
+    create_tempdir,
+    reliability_guard,
+    swallow_io,
+    time_limit,
+)
 def trusted_exec(code, test_code, task_id):
     """Execute trusted code in place."""
     
     with create_tempdir():
+        import os
+        import shutil
+        import builtins
+        
+        rmtree = shutil.rmtree
+        rmdir = os.rmdir
+        chdir = os.chdir
         module_name = "__test__"
         new_module = types.ModuleType(module_name)
-        
+        maximum_memory_bytes = 32 * 1024 * 1024 * 1024
+        reliability_guard(maximum_memory_bytes=maximum_memory_bytes)
         # Set necessary attributes for the module
         new_module.__dict__.update({
             '__builtins__': builtins,
@@ -41,7 +52,14 @@ def trusted_exec(code, test_code, task_id):
         start = time.time()
         with swallow_io():
             suite.run(test_result)
+        for test, trace in test_result.failures + test_result.errors:
+            print(trace)
+        # Needed for cleaning up.
+        shutil.rmtree = rmtree
+        os.rmdir = rmdir
+        os.chdir = chdir
         assert len(test_result.failures+test_result.errors) == 0, f"{task_id} failed"
+        
         return time.time() - start
 
 def trusted_check_exec(code, inputs):

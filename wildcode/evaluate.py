@@ -52,7 +52,7 @@ def get_groundtruth(problems, hashcode, check_gt_only):
         expected_time[task_id] = trusted_exec(
             problem["prompt"] + "\n" + problem["clean_canonical_solution"],
             problem["test"],
-            problem["entry_point"],
+            problem["task_id"],
         )
     print(f"Expected outputs computed in {time.time() - tbegin:.2f}s")
     
