@@ -89,7 +89,7 @@ pip install -e .
 To generate code samples from a model, you can use the following command:
 
 ```shell
-wildcode.generate --model [model_name] --dataset wildcodebench --greedy --bs [bs] --temperature [temp] --n_samples [n_samples] --resume --backend [vllm|hf|openai]
+wildcode.generate --model [model_name] --dataset [wildcodebench] --greedy --bs [bs] --temperature [temp] --n_samples [n_samples] --resume --backend [vllm|hf|openai]
 ```
 The generated code samples will be stored in a file named `[model_name]--wildcodebench--[backend]-[temp]-[n_samples].jsonl`.
 
@@ -100,7 +100,7 @@ The generated code samples will be stored in a file named `[model_name]--wildcod
 * `entry_point` is the name of the function
 * `prompt` is the function signature with docstring
 * `instruction` is the instruction for the task completion
-+ `canonical_solution` is the ground-truth implementation (re-implemented to fix bugs in HumanEval)
++ `canonical_solution` is the ground-truth implementation
 + `test` is the `unittest` test case
 
 </div>
@@ -110,9 +110,9 @@ The generated code samples will be stored in a file named `[model_name]--wildcod
 >
 > **Expected Schema of `[model_name]--wildcodebench--[backend]-[temp]-[n_samples].jsonl`**
 >
-> 1. `task_id`: Task ID, which are the keys of `get_[human_eval|mbpp]_plus()`
+> 1. `task_id`: Task ID, which are the keys of `get_wildcodebench()`
 > 2. `solution` (optional): Self-contained solution (usually including the prompt)
->    * Example: `{"task_id": "HumanEval/?", "solution": "def f():\n    return 1"}`
+>    * Example: `{"task_id": "WildCodeBench/?", "solution": "def f():\n    return 1"}`
 
 ### Code Post-processing
 
@@ -151,7 +151,7 @@ wildcode.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [wildcodeb
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
 ```shell
-docker run -v $(pwd):/app terryzho/wildcode:latest --dataset [wildcodebench] --samples samples.jsonl
+docker run -v $(pwd):/wildcode terryzho/wildcode:latest --dataset [wildcodebench] --samples samples.jsonl
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -200,7 +200,7 @@ Base
 ```
 
 - `Base` is the `pass@k` for the original HumanEval
-- The "k" includes `[1, 10, 100]` where k values `<=` the sample size will be used
+- The "k" includes `[1, 5, 10]` where k values `<=` the sample size will be used
 - A cache file named like `samples_eval_results.jsonl` will be cached. Remove it to re-run the evaluation
 
 <details><summary>🤔 How long it would take? <i>:: click to expand ::</i></summary>
