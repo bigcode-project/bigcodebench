@@ -178,3 +178,6 @@ def reliability_guard(maximum_memory_bytes: Optional[int] = None):
 
     builtins.exit = None
     builtins.quit = None
+
+    import matplotlib.pyplot as plt
+    plt.close('all')
