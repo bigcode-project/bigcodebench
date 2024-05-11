@@ -151,9 +151,10 @@ wildcode.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [wildcodeb
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
 ```shell
-docker run -it -v $(pwd):/wildcode terryzho/wildcode:v0.4.0 bash
-docker cp ./README.md wildcode_container:/wildcode
-wildcode.evaluate --dataset wildcodebench --samples samples.jsonl --check-gt-only
+# mount the current directory to the container
+docker run -v $(pwd) terryzho/wildcode:latest --dataset wildcodebench --samples samples.jsonl
+# ...Or locally ⚠️
+wildcode.evaluate --dataset wildcodebench --samples samples.jsonl
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -161,7 +162,7 @@ wildcode.evaluate --dataset wildcodebench --samples samples.jsonl --check-gt-onl
 First, install the dependencies for WildCodeBench:
 
 ```shell
-pip install -r requirements-wildcodebench.txt
+pip install -r https://raw.githubusercontent.com/bigcode-project/wildcodebench-annotation/main/requirements.txt
 ```
 
 Then, run the evaluation:
