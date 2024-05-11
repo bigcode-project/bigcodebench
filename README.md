@@ -151,7 +151,9 @@ wildcode.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [wildcodeb
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
 ```shell
-docker run -v $(pwd):/wildcode terryzho/wildcode:latest --dataset [wildcodebench] --samples samples.jsonl
+docker run -it -v $(pwd):/wildcode terryzho/wildcode:v0.4.0 bash
+docker cp ./README.md wildcode_container:/wildcode
+wildcode.evaluate --dataset wildcodebench --samples samples.jsonl --check-gt-only
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -192,14 +194,13 @@ The output should be like (below is GPT-4 greedy decoding example):
 Asserting the groundtruth...
 Expected outputs computed in 1200.0 seconds
 Reading samples...
-1047it [00:00, 1901.64it/s]
+1140it [00:00, 1901.64it/s]
 Evaluating samples...
-100%|██████████████████████████████████████████| 1047/1047 [19:53<00:00, 6.75it/s]
-Base
-{'pass@1': 0.548}
+100%|██████████████████████████████████████████| 1140/1140 [19:53<00:00, 6.75it/s]
+wildcodebench
+{'pass@1': 0.568}
 ```
 
-- `Base` is the `pass@k` for the original HumanEval
 - The "k" includes `[1, 5, 10]` where k values `<=` the sample size will be used
 - A cache file named like `samples_eval_results.jsonl` will be cached. Remove it to re-run the evaluation
 
