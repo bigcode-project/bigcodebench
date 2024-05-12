@@ -78,7 +78,7 @@ def codegen(
                     samples = [
                         dict(
                             task_id=task_id,
-                            solution=prompt+completion,
+                            solution=task["prompt"]+completion,
                         )
                         for task_id, completion in zip([task_id]*len(outputs), outputs)
                     ]
