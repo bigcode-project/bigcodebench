@@ -89,7 +89,7 @@ pip install -e .
 To generate code samples from a model, you can use the following command:
 
 ```shell
-wildcode.generate --model [model_name] --dataset [wildcodebench] --greedy --bs [bs] --temperature [temp] --n_samples [n_samples] --resume --backend [vllm|hf|openai]
+wildcode.generate --model [model_name] --dataset [wildcodebench] --greedy --bs [bs] --temperature [temp] --n_samples [n_samples] --resume --backend [vllm|hf|openai] --tp [gpu_number]
 ```
 The generated code samples will be stored in a file named `[model_name]--wildcodebench--[backend]-[temp]-[n_samples].jsonl`.
 
@@ -152,7 +152,7 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```shell
 # mount the current directory to the container
-docker run -v $(pwd) terryzho/wildcode:latest --dataset wildcodebench --samples samples.jsonl
+docker run -v $(pwd) terryzho/wildcode:latest --dataset wildcodebench --samples samples.jsonl --check-gt-only
 # ...Or locally ⚠️
 wildcode.evaluate --dataset wildcodebench --samples samples.jsonl
 ```
