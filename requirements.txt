@@ -15,4 +15,3 @@ vllm
 anthropic
 mistralai
 stop-sequencer
-flash-attn

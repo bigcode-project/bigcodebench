@@ -86,6 +86,11 @@ pip install -e .
 
 ### Code Generation
 
+You are suggested to use `flash-attn` for generating code samples.
+```shell
+pip install -U flash-attn
+```
+
 To generate code samples from a model, you can use the following command:
 
 ```shell
