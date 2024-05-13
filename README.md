@@ -157,7 +157,7 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```shell
 # mount the current directory to the container
-docker run -v $(pwd):/wildcode terryzho/wildcode:latest --dataset wildcodebench --samples samples.jsonl --check-gt-only
+docker run -v $(pwd):/wildcode terryzho/wildcode:latest --dataset wildcodebench --samples samples.jsonl
 # ...Or locally ⚠️
 wildcode.evaluate --dataset wildcodebench --samples samples.jsonl
 ```
