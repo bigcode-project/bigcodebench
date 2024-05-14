@@ -123,8 +123,8 @@ def unsafe_execute(
         rmdir = os.rmdir
         chdir = os.chdir
         # Disable functionalities that can make destructive changes to the test.
-        # allow only 32GB memory usage
-        maximum_memory_bytes = 32 * 1024 * 1024 * 1024
+        # allow only 128GB memory usage
+        maximum_memory_bytes = 128 * 1024 * 1024 * 1024
         reliability_guard(maximum_memory_bytes=maximum_memory_bytes)
         module_name = "__test__"
         new_module = types.ModuleType(module_name)
