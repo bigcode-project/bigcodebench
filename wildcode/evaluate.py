@@ -150,11 +150,9 @@ def evaluate(flags):
                     completion_id[task_id],
                     problems[task_id],
                     solution,
-                    # problems[task_id]["canonical_solution"],
                     sample["_identifier"],
                     flags.min_time_limit,
-                    # expected_time[task_id],
-                    120
+                    expected_time[task_id],
                 )
                 futures.append(executor.submit(check_correctness, *args))
                 completion_id[task_id] += 1
