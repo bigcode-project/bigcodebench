@@ -109,6 +109,43 @@ def chdir(root):
         os.chdir(cwd)
 
 
+@contextlib.contextmanager
+def safe_environment():
+    # Save original functions
+    original_kill = os.kill
+    original_subprocess_call = subprocess.call
+    original_check_output = subprocess.check_output
+
+    def safe_kill(pid, sig):
+        print(f"Prevented attempt to kill PID {pid} with signal {sig}")
+        # Prevent killing any process, or you can add your logic to allow killing non-critical processes
+
+    def safe_subprocess_call(command, *args, **kwargs):
+        print(f"Intercepted subprocess call: {command}")
+        if 'killall' in command:
+            return 0  # Simulate successful execution without doing anything
+        return original_subprocess_call(command, *args, **kwargs)
+
+    def safe_check_output(command, *args, **kwargs):
+        print(f"Intercepted command: {command}")
+        if 'ps' in command:
+            return b""  # Simulate no processes found
+        return original_check_output(command, *args, **kwargs)
+
+    # Override the risky functions with the safe versions
+    os.kill = safe_kill
+    subprocess.call = safe_subprocess_call
+    subprocess.check_output = safe_check_output
+
+    try:
+        yield
+    finally:
+        # Restore original functions after the block
+        os.kill = original_kill
+        subprocess.call = original_subprocess_call
+        subprocess.check_output = original_check_output
+
+
 class TimeoutException(Exception):
     pass
 

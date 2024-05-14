@@ -12,6 +12,7 @@ from wildcode.eval.utils import (
     reliability_guard,
     swallow_io,
     time_limit,
+    safe_environment,
 )
 def trusted_exec(code, test_code, task_id):
     """Execute trusted code in place."""
@@ -50,7 +51,7 @@ def trusted_exec(code, test_code, task_id):
         suite = loader.loadTestsFromTestCase(TestCases)
         test_result = unittest.TestResult()
         start = time.time()
-        with swallow_io():
+        with safe_environment(), swallow_io():
             suite.run(test_result)
         for test, trace in test_result.failures + test_result.errors:
             print(trace)
