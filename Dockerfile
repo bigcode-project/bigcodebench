@@ -2,7 +2,7 @@
 FROM python:3.10-slim
 
 # install git, g++ and python3-tk
-RUN apt-get update && apt-get install -y git g++ python3-tk zip unzip procps
+RUN apt-get update && apt-get install -y git g++ python3-tk zip unzip procps r-base
 
 # upgrade to latest pip
 RUN pip install --upgrade pip
