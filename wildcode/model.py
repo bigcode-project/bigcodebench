@@ -20,6 +20,11 @@ try:
 except ImportError:
     warn("MistralAI decoder will not work. Fix by `pip install mistralai`")
 
+try:
+    import google.generativeai as genai
+except ImportError:
+    warn("GoogleGenAI decoder will not work. Fix by `pip install google-generativeai`")
+
 import torch
 from stop_sequencer import StopSequencer
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -335,7 +340,7 @@ class MistralChatDecoder(DecoderBase):
                 messages=[
                     ChatMessage(
                         role="user",
-                        content="Please generate code to solve the following problem in a Python markdown block:"
+                        content="Please generate self-contained code to solve the following problem in a Python markdown block:"
                         + f"\n```python\n{prompt.strip()}\n```",
                     )
                 ],
@@ -364,8 +369,13 @@ class AnthropicMessageDecoder(AnthropicDecoder):
     def codegen(
         self, prompt: str, do_sample: bool = True, num_samples: int = 200
     ) -> List[str]:
+        kwargs = {}
         if do_sample:
             assert self.temperature > 0, "Temperature must be positive for sampling"
+            kwargs["top_p"] = 0.95
+            kwargs["temperature"] = self.temperature
+        else:
+            self.temperature = 0
 
         batch_size = min(self.batch_size, num_samples)
         if not do_sample:
@@ -379,15 +389,58 @@ class AnthropicMessageDecoder(AnthropicDecoder):
                 messages=[
                     {
                         "role": "user",
-                        "content": "Please generate code to complete the following problem wrapped in a Python markdown block:"
+                        "content": "Please generate self-contained code to complete the following problem wrapped in a Python markdown block:"
                         + f"\n```python\n{prompt.strip()}\n```\n",
                     }
                 ],
                 max_tokens=self.max_new_tokens,
-                temperature=self.temperature,
                 stop_sequences=["\n```\n", "\nif "],
+                **kwargs,
             )
             outputs.append(message.content[0].text)
+
+        return outputs
+
+
+class GoogleGenAIDecoder(DecoderBase, ABC):
+    def __init__(self, name: str, **kwargs) -> None:
+        super().__init__(name, **kwargs)
+        genai.configure(api_key=os.environ['GOOGLE_API_KEY'])
+
+    def is_direct_completion(self) -> bool:
+        return False
+    
+
+class GeminiDecoder(GoogleGenAIDecoder):
+    def codegen(
+        self, prompt: str, do_sample: bool = True, num_samples: int = 200
+    ) -> List[str]:
+        kwargs = {}
+        if do_sample:
+            assert self.temperature > 0, "Temperature must be positive for sampling"
+            kwargs["top_p"] = 0.95
+            kwargs["temperature"] = self.temperature
+        else:
+            self.temperature = 0
+
+        batch_size = min(self.batch_size, num_samples)
+        if not do_sample:
+            assert batch_size == 1, "Sampling only supports batch size of 1"
+
+        genai_config = genai.GenerationConfig(
+            max_output_tokens=self.max_new_tokens,
+            **kwargs,
+        )
+                
+        ret = model.generate_content("Please generate self-contained code to complete the following problem wrapped in a Python markdown block:"
+                                     + f"\n```python\n{prompt.strip()}\n```")
+        
+        outputs = []
+        for _ in range(batch_size):
+            message = model.generate_content("Please generate self-contained code to complete the following problem wrapped in a Python markdown block:"
+                                     + f"\n```python\n{prompt.strip()}\n```",
+                                        generation_config=genai_config)
+            outputs.append(message.text)
 
         return outputs
 
@@ -431,6 +484,12 @@ def make_model(
         )
     elif backend == "anthropic":
         return AnthropicMessageDecoder(
+            name=model,
+            batch_size=batch_size,
+            temperature=temperature,
+        )
+    elif backend == "google":
+        return GeminiDecoder(
             name=model,
             batch_size=batch_size,
             temperature=temperature,

@@ -112,7 +112,7 @@ def main():
     
     
     assert args.dataset in ["wildcodebench"], f"Invalid dataset {args.dataset}"
-    assert args.backend in ["vllm", "hf", "openai", "mistral", "anthropic"]
+    assert args.backend in ["vllm", "hf", "openai", "mistral", "anthropic", "google"]
 
     if args.greedy and (args.temperature != 0 or args.bs != 1 or args.n_samples != 1)\
         or (args.temperature == 0 and args.n_samples == 1):
