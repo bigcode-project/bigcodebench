@@ -431,18 +431,40 @@ class GeminiDecoder(GoogleGenAIDecoder):
             max_output_tokens=self.max_new_tokens,
             **kwargs,
         )
-    
-        model = genai.GenerativeModel(model_name=self.name, generation_config=genai_config)
 
+        safety_settings = [
+            {
+                "category": "HARM_CATEGORY_DANGEROUS",
+                "threshold": "BLOCK_NONE",
+            },
+            {
+                "category": "HARM_CATEGORY_HARASSMENT",
+                "threshold": "BLOCK_NONE",
+            },
+            {
+                "category": "HARM_CATEGORY_HATE_SPEECH",
+                "threshold": "BLOCK_NONE",
+            },
+            {
+                "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                "threshold": "BLOCK_NONE",
+            },
+            {
+                "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                "threshold": "BLOCK_NONE",
+            },
+        ]
+        
+        model = genai.GenerativeModel(model_name=self.name, generation_config=genai_config, safety_settings=safety_settings)
         
         outputs = []
         for _ in range(batch_size):
-            message = model.generate_content(
+            response = model.generate_content(
                 "Please generate self-contained code to complete the following problem wrapped in a Python markdown block:"
                 + f"\n```python\n{prompt.strip()}\n```",
                 generation_config=genai_config
             )
-            outputs.append(message.text)
+            outputs.append(response.candidates[0].content.parts[0].text)
 
         return outputs
 
