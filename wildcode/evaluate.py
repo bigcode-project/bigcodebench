@@ -98,10 +98,16 @@ def evaluate(flags):
         flags.samples = "__dummy__.jsonl"
         
     if os.path.isdir(flags.samples):
-        result_path = os.path.join(flags.samples, "eval_results.json")
+        if flags.reprompt:
+            result_path = os.path.join(flags.samples, "reprompt_eval_results.json")
+        else:
+            result_path = os.path.join(flags.samples, "eval_results.json")
     else:
         assert flags.samples.endswith(".jsonl")
-        result_path = flags.samples.replace(".jsonl", "_eval_results.json")
+        if flags.reprompt:
+            result_path = flags.samples.replace(".jsonl", "_reprompt_eval_results.json")
+        else:
+            result_path = flags.samples.replace(".jsonl", "_eval_results.json")
 
     if os.path.isfile(result_path):
         print(f"Load from previous results from {result_path}")
@@ -144,6 +150,8 @@ def evaluate(flags):
                     if "solution" in sample
                     else problems[task_id]["prompt"] + sample["completion"]
                 )
+                if flags.reprompt:
+                    solution = problems[task_id]["prompt_wo_doc"] + "\n    pass\n" + solution
                 remainings.add(sample["_identifier"])
                 args = (
                     flags.dataset,
@@ -240,6 +248,9 @@ def main():
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
+    parser.add_argument(
+        "--reprompt", action="store_true", help="Prepend the prompt again"
+    )
     parser.add_argument(
         "--check-gt-only", action="store_true", help="Check the groundtruth"
     )
