@@ -180,7 +180,7 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
 
 
 def script(
-    samples: str, inplace: bool = False, debug_task: str = None
+    samples: str, inplace: bool = False, debug_task: str = None, reprompt: bool = False
 ):
     # task_id -> entry_point
     entry_point = {}
@@ -195,9 +195,15 @@ def script(
     target_path = pathlib.Path(samples)
     if not inplace:
         if is_folder:
-            new_name = target_path.name + "-sanitized"
+            if reprompt:
+                new_name = target_path.name + "-sanitized-reprompt"
+            else:
+                new_name = target_path.name + "-sanitized"
         else:
-            new_name = target_path.name.replace(".jsonl", "-sanitized.jsonl")
+            if reprompt:
+                new_name = target_path.name.replace(".jsonl", "-sanitized-reprompt.jsonl")
+            else:
+                new_name = target_path.name.replace(".jsonl", "-sanitized.jsonl")
         target_path = target_path.parent / new_name
     target_path = str(target_path)
 
@@ -222,6 +228,8 @@ def script(
         ntotal += 1
         if "solution" in solution:
             old_code = solution["solution"]
+            if reprompt:
+                old_code = solution["solution"].replace("```python\n    ", "```python\n"+dataset[task_id]["prompt"]+"    ")
         else:
             assert "completion" in solution
             old_code = dataset[task_id]["prompt"] + "\n" + solution["completion"]
