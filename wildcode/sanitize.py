@@ -109,7 +109,7 @@ def has_return_statement(node: Node) -> bool:
 
 
 def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
-    code = code_extract(code)
+    code = code_extract(code.strip())
     code_bytes = bytes(code, "utf8")
     parser = get_parser("python")
     tree = parser.parse(code_bytes)
