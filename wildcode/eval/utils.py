@@ -24,10 +24,13 @@ import contextlib
 import faulthandler
 import io
 import os
+import sys
 import platform
 import signal
 import tempfile
 import subprocess
+import threading
+import multiprocessing
 from typing import Optional
 
 @contextlib.contextmanager
@@ -113,17 +116,49 @@ def chdir(root):
 def safe_environment():
     # Save original functions
     original_kill = os.kill
+    original_killpg = os.killpg
+    original_system = os.system
     original_subprocess_call = subprocess.call
     original_subprocess_check_output = subprocess.check_output
+    original_subprocess_run = subprocess.run
     original_subprocess_popen = subprocess.Popen
+    original_os_popen = os.popen
+    original_os_execv = os.execv
+    original_os_execvp = os.execvp
+    original_os_execvpe = os.execvpe
+
+    current_pid = os.getpid()
+    current_pgid = os.getpgid(current_pid)
+    manager = multiprocessing.Manager()
+    child_pids = manager.list()
 
     def safe_kill(pid, sig):
-        print(f"Prevented attempt to kill PID {pid} with signal {sig}")
-        # Prevent killing any process, or you can add your logic to allow killing non-critical processes
+        try:
+            pgid = os.getpgid(pid)
+            if pid == current_pid or pid in child_pids:
+                print(f"Allowed to kill PID {pid} with signal {sig}")
+                original_kill(pid, sig)
+            else:
+                print(f"Prevented attempt to kill PID {pid} with signal {sig}")
+        except ProcessLookupError:
+            print(f"Process {pid} does not exist.")
+
+    def safe_killpg(pgid, sig):
+        if pgid == current_pgid or pgid in {os.getpgid(pid) for pid in child_pids}:
+            print(f"Allowed to kill PGID {pgid} with signal {sig}")
+            original_killpg(pgid, sig)
+        else:
+            print(f"Prevented attempt to kill PGID {pgid} with signal {sig}")
+
+    def safe_system(command):
+        print(f"Intercepted system command: {command}")
+        if 'kill' in command or 'killall' in command:
+            return 0  # Simulate successful execution without doing anything
+        return original_system(command)
 
     def safe_subprocess_call(command, *args, **kwargs):
         print(f"Intercepted subprocess call: {command}")
-        if 'killall' in command:
+        if 'kill' in command or 'killall' in command:
             return 0  # Simulate successful execution without doing anything
         return original_subprocess_call(command, *args, **kwargs)
 
@@ -133,26 +168,71 @@ def safe_environment():
             return b""  # Simulate no processes found
         return original_subprocess_check_output(command, *args, **kwargs)
 
-    def safe_subprocess_popen(command, *args, **kwargs):
-        print(f"Intercepted Popen command: {command}")
+    def safe_subprocess_run(*args, **kwargs):
+        print(f"Intercepted subprocess run command: {args}")
+        if 'kill' in args[0] or 'killall' in args[0]:
+            return subprocess.CompletedProcess(args, 0, b'', b'')  # Simulate successful execution
+        return original_subprocess_run(*args, **kwargs)
+
+    class SafePopen(subprocess.Popen):
+        def __init__(self, *args, **kwargs):
+            print(f"Intercepted Popen command: {args}")
+            kwargs['preexec_fn'] = os.setsid  # Start the process in a new session
+            super().__init__(*args, **kwargs)
+            child_pids.append(self.pid)
+
+        def communicate(self, *args, **kwargs):
+            try:
+                return super().communicate(*args, **kwargs)
+            except subprocess.TimeoutExpired:
+                print("Timeout expired, intercepted and returning None")
+                return None, None
+
+        def kill(self):
+            print(f"Intercepted kill call for PID {self.pid}")
+            safe_kill(self.pid, signal.SIGTERM)
+
+        def terminate(self):
+            print(f"Intercepted terminate call for PID {self.pid}")
+            safe_kill(self.pid, signal.SIGTERM)
+
+    def safe_os_popen(command):
+        print(f"Intercepted os.popen command: {command}")
         if 'kill' in command or 'killall' in command:
-            return original_subprocess_popen(['echo', 'Intercepted'], *args, **kwargs)
-        return original_subprocess_popen(command, *args, **kwargs)
+            return os.popen('echo Intercepted')
+        return original_os_popen(command)
+
+    def safe_exec(*args, **kwargs):
+        print(f"Intercepted exec command: {args}")
 
     # Override the risky functions with the safe versions
     os.kill = safe_kill
+    os.killpg = safe_killpg
+    os.system = safe_system
     subprocess.call = safe_subprocess_call
     subprocess.check_output = safe_subprocess_check_output
-    subprocess.Popen = safe_subprocess_popen
+    subprocess.run = safe_subprocess_run
+    subprocess.Popen = SafePopen
+    os.popen = safe_os_popen
+    os.execv = safe_exec
+    os.execvp = safe_exec
+    os.execvpe = safe_exec
 
     try:
         yield
     finally:
         # Restore original functions after the block
         os.kill = original_kill
+        os.killpg = original_killpg
+        os.system = original_system
         subprocess.call = original_subprocess_call
         subprocess.check_output = original_subprocess_check_output
+        subprocess.run = original_subprocess_run
         subprocess.Popen = original_subprocess_popen
+        os.popen = original_os_popen
+        os.execv = original_os_execv
+        os.execvp = original_os_execvp
+        os.execvpe = original_os_execvpe
 
 
 class TimeoutException(Exception):

@@ -11,11 +11,26 @@ from wildcode.data.utils import (
     stream_jsonl,
 )
 
-HUMANEVAL_OVERRIDE_PATH = os.environ.get("HUMANEVAL_OVERRIDE_PATH", None)
+WILDCODEBENCH_OVERRIDE_PATH = os.environ.get("WILDCODEBENCH_OVERRIDE_PATH", None)
+WILDCODEBENCH_VERSION = "v0.1.1"
+
+def _ready_wildcodebench_path(mini=False, noextreme=False, version="default") -> str:
+    if WILDCODEBENCH_OVERRIDE_PATH:
+        return WILDCODEBENCH_OVERRIDE_PATH
+
+    version = WILDCODEBENCH_VERSION if version == "default" else version
+    url, path = get_dataset_metadata(
+        "WildCodeBench", WILDCODEBENCH_VERSION, mini, noextreme
+    )
+    make_cache(url, path)
+
+    return path
 
 
-def get_wildcodebench() -> Dict[str, Dict]:
-    """Get WildCodeBench from OpenAI's github repo and return as a list of parsed dicts.
+def get_wildcodebench(
+    err_incomplete=True, mini=False, noextreme=False, version="default"
+    ) -> Dict[str, Dict]:
+    """Get WildCodeBench from BigCode's github repo and return as a list of parsed dicts.
 
     Returns:
         List[Dict[str, str]]: List of dicts with keys "prompt", "test", "entry_point"
@@ -27,22 +42,20 @@ def get_wildcodebench() -> Dict[str, Dict]:
         "entry_point" is the name of the function.
     """
     # Check if open eval file exists in CACHE_DIR
-    wildcodebench_path = os.path.join(CACHE_DIR, "WildCodeBench.jsonl")
-    make_cache(
-        "https://github.com/bigcode-project/wild-code-bench-annotation/raw/main/data/wild-code-bench.jsonl.gz",
-        wildcodebench_path,
+    data_path = _ready_wildcodebench_path(
+        mini=mini, noextreme=noextreme, version=version
     )
-    wildcodebench = open(wildcodebench_path, "r").read().split("\n")
-    wildcodebench = [json.loads(line) for line in wildcodebench if line]
+    data = {task["task_id"]: task for task in stream_jsonl(data_path)}
+    if err_incomplete:
+        completeness_check("WildCodeBench", data)
+    return data
 
-    return {task["task_id"]: task for task in wildcodebench}
-
-def get_wildcodebench_hash() -> str:
+def get_wildcodebench_hash(mini=False, noextreme=False, version="default") -> str:
     """Get the hash of WildCodeBench.
     Returns:
         str: The hash of WildCodeBench
     """
-    wildcodebench_path = os.path.join(CACHE_DIR, "WildCodeBench.jsonl")
-    with open(wildcodebench_path, "rb") as f:
-        wildcodebench = f.read()
-    return hashlib.md5(wildcodebench).hexdigest()
+    data_path = _ready_wildcodebench_path(mini, noextreme, version="default")
+    with open(data_path, "rb") as f:
+        data = f.read()
+    return hashlib.md5(data).hexdigest()

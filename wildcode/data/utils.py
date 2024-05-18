@@ -12,14 +12,14 @@ CACHE_DIR = user_cache_dir("wildcodebench")
 
 
 def get_dataset_metadata(name: str, version: str, mini: bool, noextreme: bool = False):
-    assert name in ["WildCodeBenchPlus"], f"Unknown/unsupported dataset: {name}"
+    assert name in ["WildCodeBench"], f"Unknown/unsupported dataset: {name}"
     extra = ""
     assert not (mini and noextreme), "Cannot have both mini and noextreme"
     if mini:
         extra = "-Mini"
     if noextreme:
         extra = "-NoExtreme"
-    url = f"https://github.com/wildcode/{name.lower()}_release/releases/download/{version}/{name}{extra}.jsonl.gz"
+    url = f"https://github.com/bigcode-project/wildcodebench-annotation/releases/download/{version}/{name}{extra}.jsonl.gz"
     cache_path = os.path.join(CACHE_DIR, f"{name}{extra}-{version}.jsonl")
     return url, cache_path
 
@@ -30,11 +30,11 @@ def make_cache(gzip_url, cache_path):
         # Install WildCodeBench dataset and parse as jsonl
         print(f"Downloading dataset from {gzip_url}")
         with tempdir.TempDir() as tmpdir:
-            plus_gz_path = os.path.join(tmpdir, f"data.jsonl.gz")
-            wget.download(gzip_url, plus_gz_path)
+            gz_path = os.path.join(tmpdir, f"data.jsonl.gz")
+            wget.download(gzip_url, gz_path)
 
-            with gzip.open(plus_gz_path, "rb") as f:
-                plus = f.read().decode("utf-8")
+            with gzip.open(gz_path, "rb") as f:
+                data = f.read().decode("utf-8")
 
         # create CACHE_DIR if not exists
         if not os.path.exists(CACHE_DIR):
@@ -42,7 +42,7 @@ def make_cache(gzip_url, cache_path):
 
         # Write the original open eval file to CACHE_DIR
         with open(cache_path, "w") as f:
-            f.write(plus)
+            f.write(data)
 
 
 def write_jsonl(
@@ -149,14 +149,13 @@ def write_directory(directory: PathLike, data: Iterable[Dict]):
         counters[task_id] += 1
 
 
-def completeness_check(name, plus):
-    for task_id, task in plus.items():
+def completeness_check(name, data):
+    for task_id, task in data.items():
         for key in [
             "prompt",
-            "contract",
             "canonical_solution",
             "test",
-            "atol",
+            "instruction"
         ]:
             assert key in task, f"{key} not found in {name} #{task_id}!"
 
