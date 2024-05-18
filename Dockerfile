@@ -12,7 +12,7 @@ RUN adduser --disabled-password --gecos "" wildcodeuser
 
 COPY . /wildcode
 
-RUN cd /wildcode && pip install . && pip install -r https://raw.githubusercontent.com/bigcode-project/wildcodebench-annotation/main/requirements.txt
+RUN cd /wildcode && pip install . && pip install -U -I -r https://raw.githubusercontent.com/bigcode-project/wildcodebench-annotation/main/requirements.txt
 
 # Pre-install the dataset
 RUN python3 -c "from wildcode.data import get_wildcodebench; get_wildcodebench()"
