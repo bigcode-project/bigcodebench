@@ -19,6 +19,7 @@ def codegen(
     save_path: str,
     dataset: str,
     greedy=False,
+    strip_newlines=False,
     n_samples=1,
     id_range=None,
     resume=True,
@@ -68,8 +69,11 @@ def codegen(
 
             sidx = n_samples - nsamples
             while sidx < n_samples:
+                prompt = task["prompt"]
+                if strip_newlines:
+                    prompt = prompt.strip("\n")
                 outputs = model.codegen(
-                    task["prompt"],
+                    prompt,
                     do_sample=not greedy,
                     num_samples=n_samples - sidx,
                 )
@@ -103,6 +107,7 @@ def main():
     parser.add_argument("--n_samples", default=1, type=int)
     parser.add_argument("--temperature", default=0.0, type=float)
     parser.add_argument("--greedy", action="store_true")
+    parser.add_argument("--strip_newlines", action="store_true")
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--id_range", nargs=2, type=int)
     parser.add_argument("--backend", default="vllm", type=str)
@@ -142,6 +147,7 @@ def main():
     codegen(
         dataset=args.dataset,
         greedy=args.greedy,
+        strip_newlines=args.strip_newlines,
         model=model_runner,
         save_path=save_path,
         n_samples=args.n_samples,
