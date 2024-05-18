@@ -30,7 +30,6 @@ wildcode.generate \
   --resume \
   --dataset $DATASET \
   --nl2code $NL2CODE \
-  --id_range 0 10 \
   --backend $BACKEND 
 
 wildcode.sanitize --samples $FILE_HEADER.jsonl
