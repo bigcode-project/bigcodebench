@@ -103,7 +103,7 @@ wildcode.generate \
     --backend [vllm|hf|openai|mistral|anthropic|google]
     --tp [gpu_number]
 ```
-The generated code samples will be stored in a file named `[model_name]--wildcodebench-[task]--[backend]-[temp]-[n_samples].jsonl`.
+The generated code samples will be stored in a file named `[model_name]--wildcodebench-[nl2c|c2c]--[backend]-[temp]-[n_samples].jsonl`.
 
 <details><summary>🤔 Structure of `problem`? <i>:: click to expand ::</i></summary>
 <div>
