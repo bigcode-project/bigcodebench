@@ -40,6 +40,7 @@ from wildcode.eval.utils import (
     reliability_guard,
     swallow_io,
     time_limit,
+    safe_environment,
 )
 
 
@@ -113,7 +114,7 @@ def unsafe_execute(
     stat,  # Value
     details,  # Array
 ):
-    with create_tempdir():
+    with safe_environment(), create_tempdir():
         # These system calls are needed when cleaning up tempdir.
         import os
         import shutil

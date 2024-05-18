@@ -114,7 +114,8 @@ def safe_environment():
     # Save original functions
     original_kill = os.kill
     original_subprocess_call = subprocess.call
-    original_check_output = subprocess.check_output
+    original_subprocess_check_output = subprocess.check_output
+    original_subprocess_popen = subprocess.Popen
 
     def safe_kill(pid, sig):
         print(f"Prevented attempt to kill PID {pid} with signal {sig}")
@@ -126,16 +127,23 @@ def safe_environment():
             return 0  # Simulate successful execution without doing anything
         return original_subprocess_call(command, *args, **kwargs)
 
-    def safe_check_output(command, *args, **kwargs):
+    def safe_subprocess_check_output(command, *args, **kwargs):
         print(f"Intercepted command: {command}")
         if 'ps' in command:
             return b""  # Simulate no processes found
-        return original_check_output(command, *args, **kwargs)
+        return original_subprocess_check_output(command, *args, **kwargs)
+
+    def safe_subprocess_popen(command, *args, **kwargs):
+        print(f"Intercepted Popen command: {command}")
+        if 'kill' in command or 'killall' in command:
+            return original_subprocess_popen(['echo', 'Intercepted'], *args, **kwargs)
+        return original_subprocess_popen(command, *args, **kwargs)
 
     # Override the risky functions with the safe versions
     os.kill = safe_kill
     subprocess.call = safe_subprocess_call
-    subprocess.check_output = safe_check_output
+    subprocess.check_output = safe_subprocess_check_output
+    subprocess.Popen = safe_subprocess_popen
 
     try:
         yield
@@ -143,7 +151,8 @@ def safe_environment():
         # Restore original functions after the block
         os.kill = original_kill
         subprocess.call = original_subprocess_call
-        subprocess.check_output = original_check_output
+        subprocess.check_output = original_subprocess_check_output
+        subprocess.Popen = original_subprocess_popen
 
 
 class TimeoutException(Exception):
