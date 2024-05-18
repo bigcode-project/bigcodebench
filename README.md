@@ -6,9 +6,6 @@
 > [!WARNING]
 > Please use WildCode with caution. Different from [EvalPlus](https://github.com/evalplus/evalplus), WildCode has a much less constrained execution environment to support tasks with diverse library dependencies. This may lead to security risks. We recommend using a sandbox such as [Docker](https://docs.docker.com/get-docker/) to run the evaluation.
 
-> [!WARNING]
-> WildCode framework currently only supports the Code2Code generation task. We are working on adding the NL2Code task.
-
 <p align="center">
     <a href="https://pypi.org/project/wild-code/"><img src="https://img.shields.io/pypi/v/wild-code?color=g"></a>
     <a href="https://hub.docker.com/r/terryzho/wildcode" title="Docker"><img src="https://img.shields.io/docker/image-size/terryzho/wildcode"></a>
@@ -94,9 +91,19 @@ pip install -U flash-attn
 To generate code samples from a model, you can use the following command:
 
 ```shell
-wildcode.generate --model [model_name] --dataset [wildcodebench] --greedy --bs [bs] --temperature [temp] --n_samples [n_samples] --resume --backend [vllm|hf|openai] --tp [gpu_number]
+wildcode.generate \
+    --model [model_name] \
+    --dataset [wildcodebench] \
+    --nl2code [False|True] \
+    --greedy \
+    --bs [bs] \
+    --temperature [temp] \
+    --n_samples [n_samples] \
+    --resume \
+    --backend [vllm|hf|openai|mistral|anthropic|google]
+    --tp [gpu_number]
 ```
-The generated code samples will be stored in a file named `[model_name]--wildcodebench--[backend]-[temp]-[n_samples].jsonl`.
+The generated code samples will be stored in a file named `[model_name]--wildcodebench-[task]--[backend]-[temp]-[n_samples].jsonl`.
 
 <details><summary>🤔 Structure of `problem`? <i>:: click to expand ::</i></summary>
 <div>
@@ -113,7 +120,7 @@ The generated code samples will be stored in a file named `[model_name]--wildcod
 
 > [!Note]
 >
-> **Expected Schema of `[model_name]--wildcodebench--[backend]-[temp]-[n_samples].jsonl`**
+> **Expected Schema of `[model_name]--wildcodebench-[task]--[backend]-[temp]-[n_samples].jsonl`**
 >
 > 1. `task_id`: Task ID, which are the keys of `get_wildcodebench()`
 > 2. `solution` (optional): Self-contained solution (usually including the prompt)
@@ -246,6 +253,8 @@ We will share pre-generated code samples from LLMs we have [evaluated](https://w
 ## Known Issues
 
 - [ ] We notice that some tasks heavily use memory for scientific modeling during testing. It will lead to timeout issues on some machines. If you get an error message like `Check failed: ret == 0 (11 vs. 0)Thread creation via pthread_create() failed.` in Tensorflow, it is very likely due to the memory issue. Try to allocate more memory to the process or reduce the number of parallel processes.
+
+- [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.5%) between runs. We are working on improving the evaluation stability.
 
 ## 📜 Citation
 

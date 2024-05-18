@@ -18,6 +18,7 @@ def codegen(
     model: DecoderBase,
     save_path: str,
     dataset: str,
+    nl2code=False,
     greedy=False,
     strip_newlines=False,
     n_samples=1,
@@ -36,6 +37,9 @@ def codegen(
 
             dataset = get_wildcodebench()
 
+        if model.is_direct_completion() and nl2code:
+            raise Exception("Base model does not support direct completion for NL2Code tasks")
+            
         # create save_path if it doesn't exist, e.g., a/b.jsonl
         dirname = os.path.dirname(save_path)
         if not os.path.exists(dirname) and dirname != "":
@@ -70,6 +74,8 @@ def codegen(
             sidx = n_samples - nsamples
             while sidx < n_samples:
                 prompt = task["prompt"]
+                if nl2code:
+                    prompt = task["instruction"]
                 if strip_newlines:
                     prompt = prompt.strip("\n")
                 outputs = model.codegen(
@@ -82,7 +88,7 @@ def codegen(
                     samples = [
                         dict(
                             task_id=task_id,
-                            solution=task["prompt"]+completion,
+                            solution=task["prompt"]+completion
                         )
                         for task_id, completion in zip([task_id]*len(outputs), outputs)
                     ]
@@ -103,6 +109,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, type=str)
     parser.add_argument("--dataset", required=True, type=str)
+    parser.add_argument("--nl2code", default=False, type=bool)
     parser.add_argument("--bs", default=1, type=int)
     parser.add_argument("--n_samples", default=1, type=int)
     parser.add_argument("--temperature", default=0.0, type=float)
@@ -145,11 +152,12 @@ def main():
     save_path = args.model.replace("/", "--") + f"--{args.dataset}--" +f"{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
     
     codegen(
-        dataset=args.dataset,
-        greedy=args.greedy,
-        strip_newlines=args.strip_newlines,
         model=model_runner,
         save_path=save_path,
+        dataset=args.dataset,
+        nl2code=args.nl2code,
+        greedy=args.greedy,
+        strip_newlines=args.strip_newlines,
         n_samples=args.n_samples,
         resume=args.resume,
         id_range=args.id_range,
