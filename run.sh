@@ -21,16 +21,28 @@ else
 fi
 
 echo $FILE_HEADER
-wildcode.generate \
-  --tp $NUM_GPU \
-  --model $MODEL \
-  --bs $BS \
-  --temperature $TEMP \
-  --n_samples $N_SAMPLES \
-  --resume \
-  --dataset $DATASET \
-  --nl2code $NL2CODE \
-  --backend $BACKEND 
+if [ "$NL2CODE" = "True" ]; then
+  wildcode.generate \
+    --tp $NUM_GPU \
+    --model $MODEL \
+    --bs $BS \
+    --temperature $TEMP \
+    --n_samples $N_SAMPLES \
+    --resume \
+    --dataset $DATASET \
+    --nl2code \
+    --backend $BACKEND
+else
+  wildcode.generate \
+    --tp $NUM_GPU \
+    --model $MODEL \
+    --bs $BS \
+    --temperature $TEMP \
+    --n_samples $N_SAMPLES \
+    --resume \
+    --dataset $DATASET \
+    --backend $BACKEND
+fi
 
 wildcode.sanitize --samples $FILE_HEADER.jsonl
 wildcode.evaluate --dataset $DATASET --samples $FILE_HEADER-sanitized.jsonl
