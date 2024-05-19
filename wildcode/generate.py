@@ -109,7 +109,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, type=str)
     parser.add_argument("--dataset", required=True, type=str)
-    parser.add_argument("--nl2code", default=False, type=bool)
+    parser.add_argument("--nl2code", action='store_true')
     parser.add_argument("--bs", default=1, type=int)
     parser.add_argument("--n_samples", default=1, type=int)
     parser.add_argument("--temperature", default=0.0, type=float)
@@ -149,11 +149,7 @@ def main():
         base_url=args.base_url,
         tp=args.tp,
     )
-    if args.nl2code:
-        task = "nl2c"
-    else:
-        task = "c2c"
-    save_path = args.model.replace("/", "--") + f"--{args.dataset}-{task}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
+    save_path = args.model.replace("/", "--") + f"--{args.dataset}--" +f"{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
     
     codegen(
         model=model_runner,
