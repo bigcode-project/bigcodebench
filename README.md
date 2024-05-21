@@ -1,4 +1,4 @@
-# 🌳WildCodeBench
+# BigEval
 
 > [!WARNING] 
 > The project is under active development. Please check back later for more updates.
