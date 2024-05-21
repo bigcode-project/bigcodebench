@@ -149,7 +149,11 @@ def main():
         base_url=args.base_url,
         tp=args.tp,
     )
-    save_path = args.model.replace("/", "--") + f"--{args.dataset}--" +f"{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
+    if args.nl2code:
+        task = "nl2c"
+    else:
+        task = "c2c"
+    save_path = args.model.replace("/", "--") + f"--{args.dataset}-{task}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
     
     codegen(
         model=model_runner,
