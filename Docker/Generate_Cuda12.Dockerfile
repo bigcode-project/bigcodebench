@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
+FROM nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04
 
 SHELL ["/bin/bash", "-c"]
 
@@ -100,15 +100,15 @@ RUN wget -O /tmp/Miniforge.sh https://github.com/conda-forge/miniforge/releases/
         "mkl==2023" \
         "mkl-static==2023" \
         "mkl-include==2023" \
-    && mamba install -y -q -c pytorch magma-cuda118 \
+    && mamba install -y -q -c pytorch magma-cuda121 \
     && mamba clean -a -f -y
 
 # Install VLLM precompiled with appropriate CUDA and ensure PyTorch is installed form the same version channel
 RUN source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
     && mamba activate Code-Eval \
-    && pip install https://github.com/vllm-project/vllm/releases/download/v0.4.0/vllm-0.4.0+cu118-cp311-cp311-manylinux1_x86_64.whl \
-        --extra-index-url https://download.pytorch.org/whl/cu118
+    && pip install https://github.com/vllm-project/vllm/releases/download/v0.4.0/vllm-0.4.0-cp311-cp311-manylinux1_x86_64.whl \
+        --extra-index-url https://download.pytorch.org/whl/cu121
 
 # Install Flash Attention
 RUN source /Miniforge/etc/profile.d/conda.sh \
@@ -122,7 +122,7 @@ RUN source /Miniforge/etc/profile.d/conda.sh \
 RUN adduser --disabled-password --gecos "" wildcodeuser
 
 # Acquire benchmark code to local
-RUN git clone https://github.com/NVIDIA/apex /wildcode
+RUN git clone https://github.com/bigcode-project/code-eval.git /wildcode
 
 RUN chown -R wildcodeuser:wildcodeuser /wildcode
 USER wildcodeuser

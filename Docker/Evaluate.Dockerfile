@@ -1,5 +1,5 @@
 # Better use newer Python as generated code can use new features
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 # install git, g++ and python3-tk
 RUN apt-get update && apt-get install -y git g++ python3-tk zip unzip procps r-base
@@ -10,7 +10,8 @@ RUN pip install --upgrade pip
 # Add a new user "wildcodeuser"
 RUN adduser --disabled-password --gecos "" wildcodeuser
 
-COPY . /wildcode
+# Acquire benchmark code to local
+RUN git clone https://github.com/bigcode-project/code-eval.git /wildcode
 
 RUN cd /wildcode && pip install . && pip install -U -I -r https://raw.githubusercontent.com/bigcode-project/wildcodebench-annotation/main/requirements.txt
 
