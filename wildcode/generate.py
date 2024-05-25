@@ -1,8 +1,6 @@
 import os
 import json
 import argparse
-from os import PathLike
-from typing import List
 
 from wildcode.model import DecoderBase, make_model
 from rich.progress import (
@@ -24,6 +22,7 @@ def codegen(
     n_samples=1,
     id_range=None,
     resume=True,
+    subsample_size=None,
 ):
     with Progress(
         TextColumn(f"{dataset} •" + "[progress.percentage]{task.percentage:>3.0f}%"),
@@ -36,10 +35,13 @@ def codegen(
             from wildcode.data import get_wildcodebench, write_jsonl
 
             dataset = get_wildcodebench()
+            if subsample_size:
+                if subsample_size < len(dataset):
+                    dataset = dataset[:subsample_size]
 
         if model.is_direct_completion() and nl2code:
             raise Exception("Base model does not support direct completion for NL2Code tasks")
-            
+
         # create save_path if it doesn't exist, e.g., a/b.jsonl
         dirname = os.path.dirname(save_path)
         if not os.path.exists(dirname) and dirname != "":
@@ -53,7 +55,7 @@ def codegen(
                     continue
 
             p_name = task_id.replace("/", "_")
-            
+
             # read the existing file if save_path exists
             if os.path.exists(save_path):
                 with open(save_path, "r") as f:
@@ -103,12 +105,14 @@ def codegen(
                 print(f"Generated {len(samples)} samples")
                 write_jsonl(save_path, samples, append=True)
                 sidx += len(outputs)
-                
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, type=str)
     parser.add_argument("--dataset", required=True, type=str)
+    parser.add_argument("--save_path", default=None, type=str)
+    parser.add_argument("--subsample_size", default=None, type=int)
     parser.add_argument("--nl2code", action='store_true')
     parser.add_argument("--bs", default=1, type=int)
     parser.add_argument("--n_samples", default=1, type=int)
@@ -121,8 +125,8 @@ def main():
     parser.add_argument("--base_url", default=None, type=str)
     parser.add_argument("--tp", default=1, type=int)
     args = parser.parse_args()
-    
-    
+
+
     assert args.dataset in ["wildcodebench"], f"Invalid dataset {args.dataset}"
     assert args.backend in ["vllm", "hf", "openai", "mistral", "anthropic", "google"]
 
@@ -153,8 +157,12 @@ def main():
         task = "nl2c"
     else:
         task = "c2c"
-    save_path = args.model.replace("/", "--") + f"--{args.dataset}-{task}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
-    
+
+    if not args.save_path:
+        save_path = args.model.replace("/", "--") + f"--{args.dataset}-{task}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
+    else:
+        save_path = args.save_path
+
     codegen(
         model=model_runner,
         save_path=save_path,
@@ -165,6 +173,7 @@ def main():
         n_samples=args.n_samples,
         resume=args.resume,
         id_range=args.id_range,
+        subsample_size=args.subsample_size,
     )
 
 
