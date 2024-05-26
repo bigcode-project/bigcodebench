@@ -1,7 +1,6 @@
 """Post-processing LLM-generated Python code implemented using tree-sitter."""
 
 import os
-import ast
 import pathlib
 from typing import Dict, Generator, List, Optional, Set, Tuple
 

@@ -213,7 +213,7 @@ def evaluate(flags):
 
     pass_at_k = {
         f"pass@{k}": estimate_pass_at_k(total, base_correct, k).mean()
-        for k in [1, 5, 10]
+        for k in [1, 5, 10, 25, 100]
         if total.min() >= k
     }
     cprint(f"{flags.dataset}", "green")

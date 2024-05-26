@@ -24,12 +24,10 @@ import contextlib
 import faulthandler
 import io
 import os
-import sys
 import platform
 import signal
 import tempfile
 import subprocess
-import threading
 import multiprocessing
 from typing import Optional
 
