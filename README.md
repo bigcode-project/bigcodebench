@@ -89,7 +89,7 @@ pip install -U flash-attn
 ```
 
 To generate code samples from a model, you can use the following command:
-
+>
 ```shell
 wildcode.generate \
     --model [model_name] \
@@ -100,11 +100,35 @@ wildcode.generate \
     --temperature [temp] \
     --n_samples [n_samples] \
     --resume \
-    --backend [vllm|hf|openai|mistral|anthropic|google]
+    --backend [vllm|hf|openai|mistral|anthropic|google] \
     --tp [gpu_number]
 ```
-The generated code samples will be stored in a file named `[model_name]--wildcodebench-[nl2c|c2c]--[backend]-[temp]-[n_samples].jsonl`.
-
+>
+The generated code samples will be stored in a file named `[model_name]--wildcodebench-[nl2c|c2c]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
+>
+```shell
+docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/wildcode -t codeeval/code-eval-generate-cu11:25052024 --model [model_name] \ 
+    --dataset [wildcodebench] \
+    --nl2code [False|True] \
+    --greedy \
+    --bs [bs] \   
+    --temperature [temp] \
+    --n_samples [n_samples] \
+    --resume \
+    --backend [vllm|hf|openai|mistral|anthropic|google] \
+    --tp [gpu_number]
+```
+>
+We make available `cuda 11.8.0` and `cuda 12.1.1` pre-built docker images with the Dockerfiles available in the `Docker` directory.
+>
+If you wish to use gated or private HuggingFace models and datasets, you need to build the container yourself with `--build-arg` flags as follows:
+>
+```shell
+docker build --build-arg HF_TOKEN=<YOUR_HF_TOKEN> -t codeeval/code-eval-generate-cu11:latest - < Docker/Generate_Cuda11.Dockerfile
+```
+>
+Following which, you can run the built container as shown in above.
+>
 <details><summary>🤔 Structure of `problem`? <i>:: click to expand ::</i></summary>
 <div>
 
@@ -164,7 +188,7 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```shell
 # mount the current directory to the container
-docker run -v $(pwd):/wildcode terryzho/wildcode:latest --dataset wildcodebench --samples samples.jsonl
+docker run -v $(pwd):/wildcode codeeval/code-eval-evaluate:latest --dataset wildcodebench --samples samples.jsonl
 # ...Or locally ⚠️
 wildcode.evaluate --dataset wildcodebench --samples samples.jsonl
 ```
