@@ -22,7 +22,6 @@ def codegen(
     n_samples=1,
     id_range=None,
     resume=True,
-    subsample_size=None,
 ):
     with Progress(
         TextColumn(f"{dataset} •" + "[progress.percentage]{task.percentage:>3.0f}%"),
@@ -33,11 +32,7 @@ def codegen(
     ) as p:
         if dataset == "wildcodebench":
             from wildcode.data import get_wildcodebench, write_jsonl
-
             dataset = get_wildcodebench()
-            if subsample_size:
-                if subsample_size < len(dataset):
-                    dataset = dataset[:subsample_size]
 
         if model.is_direct_completion() and nl2code:
             raise Exception("Base model does not support direct completion for NL2Code tasks")
@@ -112,7 +107,6 @@ def main():
     parser.add_argument("--model", required=True, type=str)
     parser.add_argument("--dataset", required=True, type=str)
     parser.add_argument("--save_path", default=None, type=str)
-    parser.add_argument("--subsample_size", default=None, type=int)
     parser.add_argument("--nl2code", action='store_true')
     parser.add_argument("--bs", default=1, type=int)
     parser.add_argument("--n_samples", default=1, type=int)
@@ -173,7 +167,6 @@ def main():
         n_samples=args.n_samples,
         resume=args.resume,
         id_range=args.id_range,
-        subsample_size=args.subsample_size,
     )
 
 
