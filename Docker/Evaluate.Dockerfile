@@ -10,7 +10,8 @@ RUN pip install --upgrade pip
 # Add a new user "wildcodeuser"
 RUN adduser --disabled-password --gecos "" wildcodeuser
 
-COPY . /wildcode
+# Acquire benchmark code to local
+RUN git clone https://github.com/bigcode-project/code-eval.git /wildcode
 
 RUN cd /wildcode && pip install . && pip install -U -I -r https://raw.githubusercontent.com/bigcode-project/wildcodebench-annotation/main/requirements.txt
 

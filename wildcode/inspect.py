@@ -1,5 +1,4 @@
 from wildcode.data import get_wildcodebench
-import sys
 import os
 import shutil
 import json
