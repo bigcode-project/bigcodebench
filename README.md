@@ -1,10 +1,10 @@
-# BigEval
+# BigCodeBench
 
 > [!WARNING] 
 > The project is under active development. Please check back later for more updates.
 
 > [!WARNING]
-> Please use WildCode with caution. Different from [EvalPlus](https://github.com/evalplus/evalplus), WildCode has a much less constrained execution environment to support tasks with diverse library dependencies. This may lead to security risks. We recommend using a sandbox such as [Docker](https://docs.docker.com/get-docker/) to run the evaluation.
+> Please use BigCodeBench with caution. Different from [EvalPlus](https://github.com/evalplus/evalplus), BigCodeBench has a much less constrained execution environment to support tasks with diverse library dependencies. This may lead to security risks. We recommend using a sandbox such as [Docker](https://docs.docker.com/get-docker/) to run the evaluation.
 
 <p align="center">
     <a href="https://pypi.org/project/bigcodebench/"><img src="https://img.shields.io/pypi/v/bigcodebench?color=g"></a>
@@ -27,29 +27,26 @@
 ### BigCodeBench
 
 BigCodeBench is a rigorous benchmark for code generation with realistic constraints in the wild. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more fine-grained descriptions and diverse tool use.
-
-### WildCode
-
 To facilitate the evaluation of LLMs on BigCodeBench, we provide a Python package `bigcodebench` that includes the dataset, generation scripts, and evaluation scripts. The package is built on top of the [EvalPlus](https://github.com/evalplus/evalplus) framework, which is a flexible and extensible evaluation framework for code generation tasks.
 
-### Why WildCode?
+### Why BigCodeBench?
 
-WildCode is a rigorous evaluation framework for LLM4Code, with:
+BigCodeBench focuses on the evaluation of LLM4Code with *diverse function calls* and *complex instruction*, with:
 
 * ✨ **Precise evaluation & ranking**: See [our leaderboard](https://bigcodebench.github.io/leaderboard.html) for latest LLM rankings before & after rigorous evaluation.
-* ✨ **Pre-generated samples**: WildCode accelerates code intelligence research by open-sourcing [LLM-generated samples](#-LLM-generated-code) for various models -- no need to re-run the expensive benchmarks!
+* ✨ **Pre-generated samples**: BigCodeBench accelerates code intelligence research by open-sourcing [LLM-generated samples](#-LLM-generated-code) for various models -- no need to re-run the expensive benchmarks!
 
 ### Main Differences from EvalPlus
 
-We inherit the design of the EvalPlus framework, which is a flexible and extensible evaluation framework for code generation tasks. However, WildCode has the following differences:
-* Execution Environment: The execution environment in WildCode is less bounded than EvalPlus to support tasks with diverse library dependencies.
-* Test Evaluation: WildCode relies on `unittest` for evaluating the generated code, which is more suitable for the test harness in BigCodeBench.
+We inherit the design of the EvalPlus framework, which is a flexible and extensible evaluation framework for code generation tasks. However, BigCodeBench has the following differences:
+* Execution Environment: The execution environment in BigCodeBench is less bounded than EvalPlus to support tasks with diverse library dependencies.
+* Test Evaluation: BigCodeBench relies on `unittest` for evaluating the generated code, which is more suitable for the test harness in BigCodeBench.
 
 ## 🔥 Quick Start
 
 > [!Tip]
 >
-> WildCode ❤️ [bigcode-evaluation-harness](https://github.com/bigcode-project/bigcode-evaluation-harness)!
+> BigCodeBench ❤️ [bigcode-evaluation-harness](https://github.com/bigcode-project/bigcode-evaluation-harness)!
 > BigCodeBench will be integrated to bigcode-evaluation-harness, and you can also run it there!
 
 To get started, please first set up the environment:
@@ -68,7 +65,7 @@ pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
 </div>
 </details>
 
-<details><summary>⏬ Using WildCode as a local repo? <i>:: click to expand ::</i></summary>
+<details><summary>⏬ Using BigCodeBench as a local repo? <i>:: click to expand ::</i></summary>
 <div>
 
 ```shell
