@@ -119,20 +119,20 @@ RUN source /Miniforge/etc/profile.d/conda.sh \
     && pip install flash-attn==2.5.8 --no-build-isolation
 
 # Acquire benchmark code to local
-RUN git clone https://github.com/bigcode-project/code-eval.git /wildcode
+RUN git clone https://github.com/bigcode-project/code-eval.git /bigcodebench
 
 # Install Code-Eval and pre-load the dataset
 RUN source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
     && mamba activate Code-Eval \
-    && pip install wild-code --upgrade \
-    && python -c "from wildcode.data import get_wildcodebench; get_wildcodebench()"
+    && pip install bigcodebench --upgrade \
+    && python -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
 
-WORKDIR /wildcode
+WORKDIR /bigcodebench
 
 # Declare an argument for the huggingface token
 ARG HF_TOKEN
 RUN if [[ -n "$HF_TOKEN" ]] ; then /Miniforge/envs/Code-Eval/bin/huggingface-cli login --token $HF_TOKEN ; \
     else echo "No HuggingFace token specified. Access to gated or private models will be unavailable." ; fi
 
-ENTRYPOINT ["/Miniforge/envs/Code-Eval/bin/python", "-m", "wildcode.generate"]
+ENTRYPOINT ["/Miniforge/envs/Code-Eval/bin/python", "-m", "bigcodebench.generate"]

@@ -1,4 +1,4 @@
-from wildcode.data import get_wildcodebench
+from bigcodebench.data import get_bigcodebench
 import os
 import shutil
 import json
@@ -19,8 +19,8 @@ def inspection(args):
         shutil.rmtree(path, ignore_errors=True)
     if not os.path.exists(path):
         os.makedirs(path)
-    if args.dataset == "wildcodebench":
-        problems = get_wildcodebench()
+    if args.dataset == "bigcodebench":
+        problems = get_bigcodebench()
 
     eval_results = json.load(open(args.eval_results, "r"))
     for task_id, results in eval_results["eval"].items():
@@ -50,7 +50,7 @@ def inspection(args):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--dataset", required=True, type=str, choices=["wildcodebench"]
+        "--dataset", required=True, type=str, choices=["bigcodebench"]
     )
     parser.add_argument("--eval-results", required=True, type=str)
     parser.add_argument("--in-place", action="store_true")

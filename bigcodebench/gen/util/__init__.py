@@ -3,7 +3,7 @@ import sys
 import types
 import unittest
 
-from wildcode.eval.utils import (
+from bigcodebench.eval.utils import (
     create_tempdir,
     reliability_guard,
     swallow_io,

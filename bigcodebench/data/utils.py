@@ -8,18 +8,18 @@ import tempdir
 import wget
 from appdirs import user_cache_dir
 
-CACHE_DIR = user_cache_dir("wildcodebench")
+CACHE_DIR = user_cache_dir("bigcodebench")
 
 
 def get_dataset_metadata(name: str, version: str, mini: bool, noextreme: bool = False):
-    assert name in ["WildCodeBench"], f"Unknown/unsupported dataset: {name}"
+    assert name in ["BigCodeBench"], f"Unknown/unsupported dataset: {name}"
     extra = ""
     assert not (mini and noextreme), "Cannot have both mini and noextreme"
     if mini:
         extra = "-Mini"
     if noextreme:
         extra = "-NoExtreme"
-    url = f"https://github.com/bigcode-project/wildcodebench-annotation/releases/download/{version}/{name}{extra}.jsonl.gz"
+    url = f"https://github.com/bigcode-project/bigcodebench-annotation/releases/download/{version}/{name}{extra}.jsonl.gz"
     cache_path = os.path.join(CACHE_DIR, f"{name}{extra}-{version}.jsonl")
     return url, cache_path
 
@@ -27,7 +27,7 @@ def get_dataset_metadata(name: str, version: str, mini: bool, noextreme: bool = 
 def make_cache(gzip_url, cache_path):
     # Check if open eval file exists in CACHE_DIR
     if not os.path.exists(cache_path):
-        # Install WildCodeBench dataset and parse as jsonl
+        # Install BigCodeBench dataset and parse as jsonl
         print(f"Downloading dataset from {gzip_url}")
         with tempdir.TempDir() as tmpdir:
             gz_path = os.path.join(tmpdir, f"data.jsonl.gz")
@@ -90,7 +90,7 @@ def stream_jsonl(filename: str) -> Iterable[Dict]:
 
 def load_solutions(sample_path: PathLike) -> Iterable[Dict]:
     """We accept two formats of inputs.
-    + `sample.jsonl` which is the format from WildCodeBench, i.e., {task_id, completion or solution}.
+    + `sample.jsonl` which is the format from BigCodeBench, i.e., {task_id, completion or solution}.
     + A folder which contains sub-folders named after the task_id. Each sub-folder
     contains samples named in `[?].py` where `?` is the solution id starting with 0.
     Different from `sample.jsonl`, the solutions must be complete (with prompt prefix).

@@ -9,7 +9,7 @@ import openai
 try:
     import anthropic
 
-    from wildcode.gen.util import anthropic_request
+    from bigcodebench.gen.util import anthropic_request
 except ImportError:
     warn("Anthropic decoder will not work. Fix by `pip install anthropic`")
 
@@ -34,7 +34,7 @@ try:
 except ImportError:
     warn("VLLM decoder will not work. Fix by `pip install vllm`")
 
-from wildcode.gen.util import openai_request
+from bigcodebench.gen.util import openai_request
 
 EOS = [
     "<|endoftext|>",
@@ -47,7 +47,7 @@ EOS = [
 
 
 def extra_eos_for_direct_completion(dataset) -> List[str]:
-    if dataset.lower() == "wildcodebench":
+    if dataset.lower() == "bigcodebench":
         return ["\ndef ", "\nclass ", "\nimport ", "\nfrom ", "\nassert "]
     raise ValueError(f"Unknown dataset: {dataset}")
 
@@ -472,7 +472,7 @@ class GeminiDecoder(GoogleGenAIDecoder):
 def make_model(
     model: str,
     backend: str,
-    dataset: str,
+    dataset: str = "bigcodebench",
     batch_size: int = 1,
     temperature: float = 0.0,
     tp=1,

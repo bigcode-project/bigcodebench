@@ -15,19 +15,19 @@ import numpy as np
 from termcolor import cprint
 from tqdm import tqdm
 
-from wildcode.data import (
-    get_wildcodebench,
-    get_wildcodebench_hash,
+from bigcodebench.data import (
+    get_bigcodebench,
+    get_bigcodebench_hash,
     load_solutions,
 )
-from wildcode.data.utils import CACHE_DIR
-from wildcode.eval import (
+from bigcodebench.data.utils import CACHE_DIR
+from bigcodebench.eval import (
     PASS,
     compatible_eval_result,
     estimate_pass_at_k,
     untrusted_check,
 )
-from wildcode.gen.util import trusted_exec
+from bigcodebench.gen.util import trusted_exec
 
 # 1st item: the status
 # 2nd item (optional): the detailed pass/fail boolean for each input
@@ -116,9 +116,9 @@ def evaluate(flags):
 
         results = compatible_eval_result(results)
     else:
-        if flags.dataset == "wildcodebench":
-            problems = get_wildcodebench()
-            dataset_hash = get_wildcodebench_hash()       
+        if flags.dataset == "bigcodebench":
+            problems = get_bigcodebench()
+            dataset_hash = get_bigcodebench_hash()       
             expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
         
         if flags.check_gt_only:
@@ -243,7 +243,7 @@ def evaluate(flags):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--dataset", required=True, type=str, choices=["wildcodebench"]
+        "--dataset", required=True, type=str, choices=["bigcodebench"]
     )
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)

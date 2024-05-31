@@ -8,7 +8,7 @@ import traceback
 
 from termcolor import colored
 
-from wildcode.data import load_solutions
+from bigcodebench.data import load_solutions
 
 
 def syntax_check(code, verbose=False):
@@ -27,11 +27,11 @@ def script(
     # List[Dict{"task_id", "solution"}]
     solutions = load_solutions(samples)
 
-    if dataset == "wildcodebench":
-        from wildcode.data import get_wildcodebench
+    if dataset == "bigcodebench":
+        from bigcodebench.data import get_bigcodebench
 
-        dataset = get_wildcodebench()
-        dataset_name = "WildCodeBench"
+        dataset = get_bigcodebench()
+        dataset_name = "BigCodeBench"
 
     print(colored(f"Dataset: {dataset_name}", "blue"))
 

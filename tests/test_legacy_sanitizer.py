@@ -1,6 +1,6 @@
 import pytest
 
-from wildcode.lecacy_sanitize import sanitize
+from bigcodebench.lecacy_sanitize import sanitize
 
 
 def test_inline_fn():

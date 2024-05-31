@@ -7,14 +7,14 @@ body:
     id: version
     attributes:
       label: "EvalPlus version"
-      description: What is the version of EvalPlus? You can find it by running `pip show wildcode`.
+      description: What is the version of EvalPlus? You can find it by running `pip show bigcodebench`.
       placeholder: For example, 0.1.0
     validations:
       required: true
   - type: input
     id: cache
     attributes:
-      label: "Output of running `ls ~/.cache/wildcode`"
+      label: "Output of running `ls ~/.cache/bigcodebench`"
     validations:
       required: true
   - type: input

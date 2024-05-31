@@ -32,10 +32,10 @@ from typing import Any, Dict, List, Tuple, Union
 
 import numpy as np
 
-from wildcode.eval._special_oracle import (
+from bigcodebench.eval._special_oracle import (
     _poly,
 )
-from wildcode.eval.utils import (
+from bigcodebench.eval.utils import (
     create_tempdir,
     reliability_guard,
     swallow_io,

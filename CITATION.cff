@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this work and love it, consider citing it as below \U0001F917"
-title: WildCodeBench
+title: BigCodeBench
 authors:
-  - family-names: WildCodeBench Team
+  - family-names: BigCodeBench Team
 url: https://github.com/bigcode-project/open-eval
 doi: 
 date-released: 

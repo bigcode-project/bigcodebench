@@ -2,7 +2,8 @@ import os
 import json
 import argparse
 
-from wildcode.model import DecoderBase, make_model
+from bigcodebench.model import DecoderBase, make_model
+from bigcodebench.data import get_bigcodebench, write_jsonl
 from rich.progress import (
     BarColumn,
     MofNCompleteColumn,
@@ -15,8 +16,7 @@ from rich.progress import (
 def codegen(
     model: DecoderBase,
     save_path: str,
-    dataset: str,
-    nl2code=False,
+    subset: str,
     greedy=False,
     strip_newlines=False,
     n_samples=1,
@@ -24,17 +24,16 @@ def codegen(
     resume=True,
 ):
     with Progress(
-        TextColumn(f"{dataset} •" + "[progress.percentage]{task.percentage:>3.0f}%"),
+        TextColumn(f"BigCodeBench--{subset} •" + "[progress.percentage]{task.percentage:>3.0f}%"),
         BarColumn(),
         MofNCompleteColumn(),
         TextColumn("•"),
         TimeElapsedColumn(),
     ) as p:
-        if dataset == "wildcodebench":
-            from wildcode.data import get_wildcodebench, write_jsonl
-            dataset = get_wildcodebench()
+            
+        dataset = get_bigcodebench()
 
-        if model.is_direct_completion() and nl2code:
+        if model.is_direct_completion() and subset == "nl2c":
             raise Exception("Base model does not support direct completion for NL2Code tasks")
 
         # create save_path if it doesn't exist, e.g., a/b.jsonl
@@ -71,7 +70,7 @@ def codegen(
             sidx = n_samples - nsamples
             while sidx < n_samples:
                 prompt = task["prompt"]
-                if nl2code:
+                if subset == "nl2code":
                     prompt = task["instruction"]
                 if strip_newlines:
                     prompt = prompt.strip("\n")
@@ -105,9 +104,8 @@ def codegen(
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, type=str)
-    parser.add_argument("--dataset", required=True, type=str)
+    parser.add_argument("--subset", required=True, type=str)
     parser.add_argument("--save_path", default=None, type=str)
-    parser.add_argument("--nl2code", action='store_true')
     parser.add_argument("--bs", default=1, type=int)
     parser.add_argument("--n_samples", default=1, type=int)
     parser.add_argument("--temperature", default=0.0, type=float)
@@ -121,7 +119,7 @@ def main():
     args = parser.parse_args()
 
 
-    assert args.dataset in ["wildcodebench"], f"Invalid dataset {args.dataset}"
+    assert args.subset in ["c2c", "nl2c"], f"Invalid subset {args.subset}"
     assert args.backend in ["vllm", "hf", "openai", "mistral", "anthropic", "google"]
 
     if args.greedy and (args.temperature != 0 or args.bs != 1 or args.n_samples != 1)\
@@ -143,25 +141,19 @@ def main():
         backend=args.backend,
         batch_size=args.bs,
         temperature=args.temperature,
-        dataset=args.dataset,
         base_url=args.base_url,
         tp=args.tp,
     )
-    if args.nl2code:
-        task = "nl2c"
-    else:
-        task = "c2c"
 
     if not args.save_path:
-        save_path = args.model.replace("/", "--") + f"--{args.dataset}-{task}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
+        save_path = args.model.replace("/", "--") + f"--bigcodebench-{args.subset}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
     else:
         save_path = args.save_path
 
     codegen(
         model=model_runner,
         save_path=save_path,
-        dataset=args.dataset,
-        nl2code=args.nl2code,
+        subset=args.subset,
         greedy=args.greedy,
         strip_newlines=args.strip_newlines,
         n_samples=args.n_samples,

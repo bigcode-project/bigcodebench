@@ -7,20 +7,20 @@ RUN apt-get update && apt-get install -y git g++ python3-tk zip unzip procps r-b
 # upgrade to latest pip
 RUN pip install --upgrade pip
 
-# Add a new user "wildcodeuser"
-RUN adduser --disabled-password --gecos "" wildcodeuser
+# Add a new user "bigcodebenchuser"
+RUN adduser --disabled-password --gecos "" bigcodebenchuser
 
 # Acquire benchmark code to local
-RUN git clone https://github.com/bigcode-project/code-eval.git /wildcode
+RUN git clone https://github.com/bigcode-project/code-eval.git /bigcodebench
 
-RUN cd /wildcode && pip install . && pip install -U -I -r https://raw.githubusercontent.com/bigcode-project/wildcodebench-annotation/main/requirements.txt
+RUN cd /bigcodebench && pip install . && pip install -I -r https://raw.githubusercontent.com/bigcode-project/bigcodebench-annotation/main/requirements.txt
 
 # Pre-install the dataset
-RUN python3 -c "from wildcode.data import get_wildcodebench; get_wildcodebench()"
+RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
 
-RUN chown -R wildcodeuser:wildcodeuser /wildcode
-USER wildcodeuser
+RUN chown -R bigcodebenchuser:bigcodebenchuser /bigcodebench
+USER bigcodebenchuser
 
-WORKDIR /wildcode
+WORKDIR /bigcodebench
 
-ENTRYPOINT ["python3", "-m", "wildcode.evaluate"]
+ENTRYPOINT ["python3", "-m", "bigcodebench.evaluate"]

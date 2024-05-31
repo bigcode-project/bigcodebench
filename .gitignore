@@ -166,7 +166,7 @@ OpenPlus/
 backup/
 passrate.p*
 min_cov_dir/
-wildcode/_version.py
+bigcodebench/_version.py
 *.jsonl
 inspect/
 *.zip

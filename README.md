@@ -7,9 +7,9 @@
 > Please use WildCode with caution. Different from [EvalPlus](https://github.com/evalplus/evalplus), WildCode has a much less constrained execution environment to support tasks with diverse library dependencies. This may lead to security risks. We recommend using a sandbox such as [Docker](https://docs.docker.com/get-docker/) to run the evaluation.
 
 <p align="center">
-    <a href="https://pypi.org/project/wild-code/"><img src="https://img.shields.io/pypi/v/wild-code?color=g"></a>
-    <a href="https://hub.docker.com/r/terryzho/wildcode" title="Docker"><img src="https://img.shields.io/docker/image-size/terryzho/wildcode"></a>
-    <a href="https://github.com/evalplus/evalplus/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/wild-code"></a>
+    <a href="https://pypi.org/project/bigcodebench/"><img src="https://img.shields.io/pypi/v/bigcodebench?color=g"></a>
+    <a href="https://hub.docker.com/r/terryzho/bigcodebench" title="Docker"><img src="https://img.shields.io/docker/image-size/terryzho/bigcodebench"></a>
+    <a href="https://github.com/evalplus/evalplus/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/bigcodebench"></a>
 </p>
 
 <p align="center">
@@ -24,45 +24,45 @@
 
 ## About
 
-### WildCodeBench
+### BigCodeBench
 
-WildCodeBench is a rigorous benchmark for code generation with realistic constraints in the wild. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more fine-grained descriptions and diverse tool use.
+BigCodeBench is a rigorous benchmark for code generation with realistic constraints in the wild. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more fine-grained descriptions and diverse tool use.
 
 ### WildCode
 
-To facilitate the evaluation of LLMs on WildCodeBench, we provide a Python package `wild-code` that includes the dataset, generation scripts, and evaluation scripts. The package is built on top of the [EvalPlus](https://github.com/evalplus/evalplus) framework, which is a flexible and extensible evaluation framework for code generation tasks.
+To facilitate the evaluation of LLMs on BigCodeBench, we provide a Python package `bigcodebench` that includes the dataset, generation scripts, and evaluation scripts. The package is built on top of the [EvalPlus](https://github.com/evalplus/evalplus) framework, which is a flexible and extensible evaluation framework for code generation tasks.
 
 ### Why WildCode?
 
 WildCode is a rigorous evaluation framework for LLM4Code, with:
 
-* ✨ **Precise evaluation & ranking**: See [our leaderboard](https://wildcodebench.github.io/leaderboard.html) for latest LLM rankings before & after rigorous evaluation.
+* ✨ **Precise evaluation & ranking**: See [our leaderboard](https://bigcodebench.github.io/leaderboard.html) for latest LLM rankings before & after rigorous evaluation.
 * ✨ **Pre-generated samples**: WildCode accelerates code intelligence research by open-sourcing [LLM-generated samples](#-LLM-generated-code) for various models -- no need to re-run the expensive benchmarks!
 
 ### Main Differences from EvalPlus
 
 We inherit the design of the EvalPlus framework, which is a flexible and extensible evaluation framework for code generation tasks. However, WildCode has the following differences:
 * Execution Environment: The execution environment in WildCode is less bounded than EvalPlus to support tasks with diverse library dependencies.
-* Test Evaluation: WildCode relies on `unittest` for evaluating the generated code, which is more suitable for the test harness in WildCodeBench.
+* Test Evaluation: WildCode relies on `unittest` for evaluating the generated code, which is more suitable for the test harness in BigCodeBench.
 
 ## 🔥 Quick Start
 
 > [!Tip]
 >
 > WildCode ❤️ [bigcode-evaluation-harness](https://github.com/bigcode-project/bigcode-evaluation-harness)!
-> WildCodeBench will be integrated to bigcode-evaluation-harness, and you can also run it there!
+> BigCodeBench will be integrated to bigcode-evaluation-harness, and you can also run it there!
 
 To get started, please first set up the environment:
 
 ```shell
-pip install wild-code --upgrade
+pip install bigcodebench --upgrade
 ```
 
 <details><summary>⏬ Install nightly version <i>:: click to expand ::</i></summary>
 <div>
 
 ```shell
-pip install "git+https://github.com/bigcode-project/wild-code.git" --upgrade
+pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
 ```
 
 </div>
@@ -72,8 +72,8 @@ pip install "git+https://github.com/bigcode-project/wild-code.git" --upgrade
 <div>
 
 ```shell
-git clone https://github.com/bigcode-project/wild-code.git
-cd wild-code
+git clone https://github.com/bigcode-project/bigcodebench.git
+cd bigcodebench
 export PYTHONPATH=$PYTHONPATH:$(pwd)
 pip install -e .
 ```
@@ -91,9 +91,9 @@ pip install -U flash-attn
 To generate code samples from a model, you can use the following command:
 >
 ```shell
-wildcode.generate \
+bigcodebench.generate \
     --model [model_name] \
-    --dataset [wildcodebench] \
+    --dataset [bigcodebench] \
     --nl2code [False|True] \
     --greedy \
     --bs [bs] \
@@ -104,11 +104,11 @@ wildcode.generate \
     --tp [gpu_number]
 ```
 >
-The generated code samples will be stored in a file named `[model_name]--wildcodebench-[nl2c|c2c]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
+The generated code samples will be stored in a file named `[model_name]--bigcodebench-[nl2c|c2c]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
 >
 ```shell
-docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/wildcode -t codeeval/code-eval-generate-cu11:25052024 --model [model_name] \ 
-    --dataset [wildcodebench] \
+docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/bigcodebench -t codeeval/code-eval-generate-cu11:25052024 --model [model_name] \ 
+    --dataset [bigcodebench] \
     --nl2code [False|True] \
     --greedy \
     --bs [bs] \   
@@ -144,38 +144,38 @@ Following which, you can run the built container as shown in above.
 
 > [!Note]
 >
-> **Expected Schema of `[model_name]--wildcodebench-[task]--[backend]-[temp]-[n_samples].jsonl`**
+> **Expected Schema of `[model_name]--bigcodebench-[task]--[backend]-[temp]-[n_samples].jsonl`**
 >
-> 1. `task_id`: Task ID, which are the keys of `get_wildcodebench()`
+> 1. `task_id`: Task ID, which are the keys of `get_bigcodebench()`
 > 2. `solution` (optional): Self-contained solution (usually including the prompt)
->    * Example: `{"task_id": "WildCodeBench/?", "solution": "def f():\n    return 1"}`
+>    * Example: `{"task_id": "BigCodeBench/?", "solution": "def f():\n    return 1"}`
 
 ### Code Post-processing
 
 LLM-generated text may not be compilable code for including natural language lines or incomplete extra code.
-We provide a tool namely `wildcode.sanitize` to clean up the code:
+We provide a tool namely `bigcodebench.sanitize` to clean up the code:
 
 ```shell
 # 💡 If you are storing codes in jsonl:
-wildcode.sanitize --samples samples.jsonl
+bigcodebench.sanitize --samples samples.jsonl
 # Sanitized code will be produced to `samples-sanitized.jsonl`
 
 # 💡 If you are storing codes in directories:
-wildcode.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
+bigcodebench.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
 # Sanitized code will be produced to `/path/to/vicuna-[??]b_temp_[??]-sanitized`
 ```
 
 <details><summary>🔎 Checking the compilability of post-processed code<i>:: click to expand ::</i></summary>
 <div>
 
-To double-check the post-processing results, you can use `wildcode.syncheck` to check the code validity before and after sanitization, which will print erroneous code snippets and why they are wrong:
+To double-check the post-processing results, you can use `bigcodebench.syncheck` to check the code validity before and after sanitization, which will print erroneous code snippets and why they are wrong:
 
 ```shell
 # 💡 If you are storing codes in jsonl:
-wildcode.syncheck --samples samples.jsonl --dataset [wildcodebench]
+bigcodebench.syncheck --samples samples.jsonl --dataset [bigcodebench]
 
 # 💡 If you are storing codes in directories:
-wildcode.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [wildcodebench]
+bigcodebench.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [bigcodebench]
 ```
 
 </div>
@@ -188,23 +188,23 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```shell
 # mount the current directory to the container
-docker run -v $(pwd):/wildcode codeeval/code-eval-evaluate:latest --dataset wildcodebench --samples samples.jsonl
+docker run -v $(pwd):/bigcodebench codeeval/code-eval-evaluate:latest --dataset bigcodebench --samples samples.jsonl
 # ...Or locally ⚠️
-wildcode.evaluate --dataset wildcodebench --samples samples.jsonl
+bigcodebench.evaluate --dataset bigcodebench --samples samples.jsonl
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
 
-First, install the dependencies for WildCodeBench:
+First, install the dependencies for BigCodeBench:
 
 ```shell
-pip install -r https://raw.githubusercontent.com/bigcode-project/wildcodebench-annotation/main/requirements.txt
+pip install -r https://raw.githubusercontent.com/bigcode-project/bigcodebench-annotation/main/requirements.txt
 ```
 
 Then, run the evaluation:
 
 ```shell
-wildcode.evaluate --dataset [wildcodebench] --samples samples.jsonl
+bigcodebench.evaluate --dataset [bigcodebench] --samples samples.jsonl
 ```
 
 > [!Tip]
@@ -234,7 +234,7 @@ Reading samples...
 1140it [00:00, 1901.64it/s]
 Evaluating samples...
 100%|██████████████████████████████████████████| 1140/1140 [19:53<00:00, 6.75it/s]
-wildcodebench
+bigcodebench
 {'pass@1': 0.568}
 ```
 
@@ -259,7 +259,7 @@ Here are some tips to speed up the evaluation:
 You can inspect the failed samples by using the following command:
 
 ```shell
-wildcode.inspect --dataset [wildcodebench] --eval-results sample-sanitized_eval_results.json --in-place
+bigcodebench.inspect --dataset [bigcodebench] --eval-results sample-sanitized_eval_results.json --in-place
 ```
 
 ## Full script
@@ -272,7 +272,7 @@ bash run.sh
 
 ## 💻 LLM-generated Code
 
-We will share pre-generated code samples from LLMs we have [evaluated](https://wildcodebench.github.io/leaderboard.html):
+We will share pre-generated code samples from LLMs we have [evaluated](https://bigcodebench.github.io/leaderboard.html):
 
 ## Known Issues
 

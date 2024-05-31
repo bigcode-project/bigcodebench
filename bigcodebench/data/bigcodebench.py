@@ -3,7 +3,7 @@ import json
 import os
 from typing import Dict
 
-from wildcode.data.utils import (
+from bigcodebench.data.utils import (
     CACHE_DIR,
     completeness_check,
     get_dataset_metadata,
@@ -11,26 +11,26 @@ from wildcode.data.utils import (
     stream_jsonl,
 )
 
-WILDCODEBENCH_OVERRIDE_PATH = os.environ.get("WILDCODEBENCH_OVERRIDE_PATH", None)
-WILDCODEBENCH_VERSION = "v0.1.1"
+BIGCODEBENCH_OVERRIDE_PATH = os.environ.get("BIGCODEBENCH_OVERRIDE_PATH", None)
+BIGCODEBENCH_VERSION = "v0.1.1"
 
-def _ready_wildcodebench_path(mini=False, noextreme=False, version="default") -> str:
-    if WILDCODEBENCH_OVERRIDE_PATH:
-        return WILDCODEBENCH_OVERRIDE_PATH
+def _ready_bigcodebench_path(mini=False, noextreme=False, version="default") -> str:
+    if BIGCODEBENCH_OVERRIDE_PATH:
+        return BIGCODEBENCH_OVERRIDE_PATH
 
-    version = WILDCODEBENCH_VERSION if version == "default" else version
+    version = BIGCODEBENCH_VERSION if version == "default" else version
     url, path = get_dataset_metadata(
-        "WildCodeBench", WILDCODEBENCH_VERSION, mini, noextreme
+        "BigCodeBench", BIGCODEBENCH_VERSION, mini, noextreme
     )
     make_cache(url, path)
 
     return path
 
 
-def get_wildcodebench(
+def get_bigcodebench(
     err_incomplete=True, mini=False, noextreme=False, version="default"
     ) -> Dict[str, Dict]:
-    """Get WildCodeBench from BigCode's github repo and return as a list of parsed dicts.
+    """Get BigCodeBench from BigCode's github repo and return as a list of parsed dicts.
 
     Returns:
         List[Dict[str, str]]: List of dicts with keys "prompt", "test", "entry_point"
@@ -42,20 +42,20 @@ def get_wildcodebench(
         "entry_point" is the name of the function.
     """
     # Check if open eval file exists in CACHE_DIR
-    data_path = _ready_wildcodebench_path(
+    data_path = _ready_bigcodebench_path(
         mini=mini, noextreme=noextreme, version=version
     )
     data = {task["task_id"]: task for task in stream_jsonl(data_path)}
     if err_incomplete:
-        completeness_check("WildCodeBench", data)
+        completeness_check("BigCodeBench", data)
     return data
 
-def get_wildcodebench_hash(mini=False, noextreme=False, version="default") -> str:
-    """Get the hash of WildCodeBench.
+def get_bigcodebench_hash(mini=False, noextreme=False, version="default") -> str:
+    """Get the hash of BigCodeBench.
     Returns:
-        str: The hash of WildCodeBench
+        str: The hash of BigCodeBench
     """
-    data_path = _ready_wildcodebench_path(mini, noextreme, version="default")
+    data_path = _ready_bigcodebench_path(mini, noextreme, version="default")
     with open(data_path, "rb") as f:
         data = f.read()
     return hashlib.md5(data).hexdigest()

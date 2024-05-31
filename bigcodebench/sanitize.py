@@ -8,13 +8,13 @@ from tqdm import tqdm
 from tree_sitter import Node
 from tree_sitter_languages import get_parser
 
-from wildcode.data import (
-    get_wildcodebench,
+from bigcodebench.data import (
+    get_bigcodebench,
     load_solutions,
     write_directory,
     write_jsonl,
 )
-from wildcode.syncheck import syntax_check
+from bigcodebench.syncheck import syntax_check
 
 CLASS_TYPE = "class_definition"
 FUNCTION_TYPE = "function_definition"
@@ -184,7 +184,7 @@ def script(
     # task_id -> entry_point
     entry_point = {}
     # merge two datasets
-    dataset = {**get_wildcodebench()}
+    dataset = {**get_bigcodebench()}
 
     for task_id, problem in dataset.items():
         entry_point[task_id] = problem["entry_point"]
