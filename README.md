@@ -90,8 +90,7 @@ To generate code samples from a model, you can use the following command:
 ```shell
 bigcodebench.generate \
     --model [model_name] \
-    --dataset [bigcodebench] \
-    --nl2code [False|True] \
+    --subset [c2c|nl2c] \
     --greedy \
     --bs [bs] \
     --temperature [temp] \
@@ -105,8 +104,7 @@ The generated code samples will be stored in a file named `[model_name]--bigcode
 >
 ```shell
 docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/bigcodebench -t codeeval/code-eval-generate-cu11:25052024 --model [model_name] \ 
-    --dataset [bigcodebench] \
-    --nl2code [False|True] \
+    --subset [c2c|nl2c] \
     --greedy \
     --bs [bs] \   
     --temperature [temp] \
