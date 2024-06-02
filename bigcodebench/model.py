@@ -279,7 +279,7 @@ class OpenAIChatDecoder(DecoderBase):
         if fmt == "json_object":
             message = r'Please complete the following code snippet by generating JSON like {"code": ""}'
         else:
-            message = r"Please generate code to complete the following problem:"
+            message = r"Please generate self-contained code to complete the following problem:"
 
         message += f"\n```python\n{prompt.strip()}\n```"
 
