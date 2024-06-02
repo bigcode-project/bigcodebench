@@ -12,7 +12,7 @@ from bigcodebench.data.utils import (
 )
 
 BIGCODEBENCH_OVERRIDE_PATH = os.environ.get("BIGCODEBENCH_OVERRIDE_PATH", None)
-BIGCODEBENCH_VERSION = "v0.1.1"
+BIGCODEBENCH_VERSION = "v0.1.0"
 
 def _ready_bigcodebench_path(mini=False, noextreme=False, version="default") -> str:
     if BIGCODEBENCH_OVERRIDE_PATH:
