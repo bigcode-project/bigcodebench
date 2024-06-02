@@ -8,7 +8,9 @@
 
 <p align="center">
     <a href="https://pypi.org/project/bigcodebench/"><img src="https://img.shields.io/pypi/v/bigcodebench?color=g"></a>
-    <a href="https://hub.docker.com/r/terryzho/bigcodebench" title="Docker"><img src="https://img.shields.io/docker/image-size/terryzho/bigcodebench"></a>
+    <a href="https://hub.docker.com/r/terryzho/bigcodebench-evaluate" title="Docker"><img src="https://img.shields.io/docker/image-size/terryzho/bigcodebench-evaluate"></a>
+    <a href="https://hub.docker.com/r/terryzho/bigcodebench-generate-cu11" title="Docker"><img src="https://img.shields.io/docker/image-size/terryzho/bigcodebench-generate-cu11"></a>
+    <a href="https://hub.docker.com/r/terryzho/bigcodebench-generate-cu12" title="Docker"><img src="https://img.shields.io/docker/image-size/terryzho/bigcodebench-generate-cu12"></a>
     <a href="https://github.com/evalplus/evalplus/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/bigcodebench"></a>
 </p>
 
