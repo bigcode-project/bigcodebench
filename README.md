@@ -103,7 +103,7 @@ bigcodebench.generate \
 The generated code samples will be stored in a file named `[model_name]--bigcodebench-[nl2c|c2c]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
 >
 ```shell
-docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/bigcodebench -t codeeval/code-eval-generate-cu11:25052024 --model [model_name] \ 
+docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/bigcodebench -t terryzho/bigcodebench-generate-cu11:25052024 --model [model_name] \ 
     --subset [c2c|nl2c] \
     --greedy \
     --bs [bs] \   
@@ -119,7 +119,7 @@ We make available `cuda 11.8.0` and `cuda 12.1.1` pre-built docker images with t
 If you wish to use gated or private HuggingFace models and datasets, you need to build the container yourself with `--build-arg` flags as follows:
 >
 ```shell
-docker build --build-arg HF_TOKEN=<YOUR_HF_TOKEN> -t codeeval/code-eval-generate-cu11:latest - < Docker/Generate_Cuda11.Dockerfile
+docker build --build-arg HF_TOKEN=<YOUR_HF_TOKEN> -t terryzho/bigcodebench-generate-cu11:latest - < Docker/Generate_Cuda11.Dockerfile
 ```
 >
 Following which, you can run the built container as shown in above.
@@ -160,7 +160,7 @@ bigcodebench.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
 # Sanitized code will be produced to `/path/to/vicuna-[??]b_temp_[??]-sanitized`
 ```
 
-<details><summary>🔎 Checking the compilability of post-processed code<i>:: click to expand ::</i></summary>
+<details><summary>🔎 Checking the compatibility of post-processed code<i>:: click to expand ::</i></summary>
 <div>
 
 To double-check the post-processing results, you can use `bigcodebench.syncheck` to check the code validity before and after sanitization, which will print erroneous code snippets and why they are wrong:
@@ -183,9 +183,9 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```shell
 # mount the current directory to the container
-docker run -v $(pwd):/bigcodebench codeeval/code-eval-evaluate:latest --dataset bigcodebench --samples samples.jsonl
+docker run -v $(pwd):/bigcodebench terryzho/bigcodebench-evaluate:latest --subset [c2c|nl2c] --samples samples.jsonl
 # ...Or locally ⚠️
-bigcodebench.evaluate --dataset bigcodebench --samples samples.jsonl
+bigcodebench.evaluate --subset [c2c|nl2c] --samples samples.jsonl
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -199,7 +199,7 @@ pip install -r https://raw.githubusercontent.com/bigcode-project/bigcodebench-an
 Then, run the evaluation:
 
 ```shell
-bigcodebench.evaluate --dataset [bigcodebench] --samples samples.jsonl
+bigcodebench.evaluate --subset [c2c|nl2c] --samples samples.jsonl
 ```
 
 > [!Tip]
