@@ -103,7 +103,8 @@ bigcodebench.generate \
 The generated code samples will be stored in a file named `[model_name]--bigcodebench-[nl2c|c2c]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
 >
 ```shell
-docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/bigcodebench -t terryzho/bigcodebench-generate-cu11:25052024 --model [model_name] \ 
+docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/bigcodebench -t terryzho/bigcodebench-generate-cu11:latest \
+    --model [model_name] \ 
     --subset [c2c|nl2c] \
     --greedy \
     --bs [bs] \   
