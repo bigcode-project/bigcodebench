@@ -20,8 +20,6 @@ fi
 
 export PYTHONPATH=$PWD pytest tests
 
-git tag $version
-
 docker build
 docker build -f Docker/Evaluate.Dockerfile . -t terryzho/bigcodebench-evaluate:$version
 docker tag terryzho/bigcodebench-evaluate:$version terryzho/bigcodebench-evaluate:latest
