@@ -86,8 +86,8 @@ RUN wget -O /tmp/Miniforge.sh https://github.com/conda-forge/miniforge/releases/
     && source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
     && mamba update -y -q -n base -c defaults mamba \
-    && mamba create -y -q -n Code-Eval python=3.11 setuptools=69.5.1 \
-    && mamba activate Code-Eval \
+    && mamba create -y -q -n BigCodeBench python=3.11 setuptools=69.5.1 \
+    && mamba activate BigCodeBench \
     && mamba install -y -q -c conda-forge \
         charset-normalizer \
         gputil \
@@ -106,33 +106,35 @@ RUN wget -O /tmp/Miniforge.sh https://github.com/conda-forge/miniforge/releases/
 # Install VLLM precompiled with appropriate CUDA and ensure PyTorch is installed form the same version channel
 RUN source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
-    && mamba activate Code-Eval \
+    && mamba activate BigCodeBench \
     && pip install https://github.com/vllm-project/vllm/releases/download/v0.4.0/vllm-0.4.0-cp311-cp311-manylinux1_x86_64.whl \
         --extra-index-url https://download.pytorch.org/whl/cu121
 
 # Install Flash Attention
 RUN source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
-    && mamba activate Code-Eval \
+    && mamba activate BigCodeBench \
     && export MAX_JOBS=$(($(nproc) - 2)) \
     && pip install --no-cache-dir ninja packaging psutil \
     && pip install flash-attn==2.5.8 --no-build-isolation
 
-# Acquire benchmark code to local
-RUN git clone https://github.com/bigcode-project/code-eval.git /bigcodebench
+RUN rm -rf /bigcodebench
 
-# Install Code-Eval and pre-load the dataset
+# Acquire benchmark code to local
+RUN git clone https://github.com/bigcode-project/BigCodeBench.git /bigcodebench
+
+# Install BigCodeBench and pre-load the dataset
 RUN source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
-    && mamba activate Code-Eval \
-    && pip install bigcodebench --upgrade \
+    && mamba activate BigCodeBench \
+    && cd /bigcodebench && pip install .[generate] \
     && python -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
 
 WORKDIR /bigcodebench
 
 # Declare an argument for the huggingface token
 ARG HF_TOKEN
-RUN if [[ -n "$HF_TOKEN" ]] ; then /Miniforge/envs/Code-Eval/bin/huggingface-cli login --token $HF_TOKEN ; \
+RUN if [[ -n "$HF_TOKEN" ]] ; then /Miniforge/envs/BigCodeBench/bin/huggingface-cli login --token $HF_TOKEN ; \
     else echo "No HuggingFace token specified. Access to gated or private models will be unavailable." ; fi
 
-ENTRYPOINT ["/Miniforge/envs/Code-Eval/bin/python", "-m", "bigcodebench.generate"]
+ENTRYPOINT ["/Miniforge/envs/BigCodeBench/bin/python", "-m", "bigcodebench.generate"]

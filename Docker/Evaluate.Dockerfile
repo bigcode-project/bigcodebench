@@ -10,12 +10,14 @@ RUN pip install --upgrade pip
 # Add a new user "bigcodebenchuser"
 RUN adduser --disabled-password --gecos "" bigcodebenchuser
 
+RUN rm -rf /bigcodebench
+
 # Acquire benchmark code to local
 RUN git clone https://github.com/bigcode-project/bigcodebench.git /bigcodebench
 
 RUN cd /bigcodebench && pip install .
 
-RUN pip install -I -r https://raw.githubusercontent.com/bigcode-project/bigcodebench-annotation/main/requirements.txt
+RUN pip install -I --timeout 2000 -r https://raw.githubusercontent.com/bigcode-project/bigcodebench-annotation/main/requirements.txt
 
 # Pre-install the dataset
 RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
