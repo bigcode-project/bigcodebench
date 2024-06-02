@@ -106,7 +106,6 @@ def is_floats(x) -> bool:
 
 
 def unsafe_execute(
-    dataset: str,
     entry_point: str,
     code: str,
     test_code: str,
@@ -168,7 +167,6 @@ def unsafe_execute(
 
 
 def untrusted_check(
-    dataset: str,
     code: str,
     test_code: str,
     entry_point: str,
@@ -185,7 +183,6 @@ def untrusted_check(
     p = multiprocessing.Process(
         target=unsafe_execute,
         args=(
-            dataset,
             entry_point,
             code,
             test_code,
@@ -217,7 +214,6 @@ def untrusted_check(
 
 
 def evaluate_files(
-    dataset: str,
     files: List[str],
     inputs: List,
     entry_point: str,
@@ -230,7 +226,6 @@ def evaluate_files(
     for file in files:
         code = open(file, "r").read()
         stat, det = untrusted_check(
-            dataset,
             code,
             inputs,
             entry_point,

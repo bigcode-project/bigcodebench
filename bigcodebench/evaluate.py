@@ -62,7 +62,6 @@ def get_groundtruth(problems, hashcode, check_gt_only):
     return expected_time
 
 def check_correctness(
-    dataset: str,
     completion_id: int,
     problem: Dict[str, Any],
     solution: str,
@@ -77,7 +76,6 @@ def check_correctness(
         "solution": solution,
     }
     ret["base"] = untrusted_check(
-        dataset,
         solution,
         problem["test"],
         problem["entry_point"],
@@ -119,10 +117,9 @@ def evaluate(flags):
 
         results = compatible_eval_result(results)
     else:
-        if flags.dataset == "bigcodebench":
-            problems = get_bigcodebench()
-            dataset_hash = get_bigcodebench_hash()       
-            expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
+        problems = get_bigcodebench()
+        dataset_hash = get_bigcodebench_hash()       
+        expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
         
         if flags.check_gt_only:
             return
@@ -157,7 +154,6 @@ def evaluate(flags):
                     solution = problems[task_id]["prompt_wo_doc"] + "\n    pass\n" + solution
                 remainings.add(sample["_identifier"])
                 args = (
-                    flags.dataset,
                     completion_id[task_id],
                     problems[task_id],
                     solution,
@@ -219,7 +215,7 @@ def evaluate(flags):
         for k in [1, 5, 10, 25, 100]
         if total.min() >= k
     }
-    cprint(f"{flags.dataset}", "green")
+    cprint(f"BigCodeBench-{flags.subset}", "green")
     for k, v in pass_at_k.items():
         cprint(f"{k}:\t{v:.3f}", "green")
 
@@ -246,7 +242,7 @@ def evaluate(flags):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--dataset", required=True, type=str, choices=["bigcodebench"]
+        "--subset", required=True, type=str, choices=["c2c", "nl2c"]
     )
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)
