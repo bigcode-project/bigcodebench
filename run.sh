@@ -5,7 +5,7 @@ BACKEND=openai
 TEMP=0
 N_SAMPLES=1
 NUM_GPU=1
-SUBSET=nl2c
+SUBSET=instruct
 if [[ $MODEL == *"/"* ]]; then
   ORG=$(echo $MODEL | cut -d'/' -f1)--
   BASE_MODEL=$(echo $MODEL | cut -d'/' -f2)

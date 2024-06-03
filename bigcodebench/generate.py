@@ -33,8 +33,8 @@ def codegen(
             
         dataset = get_bigcodebench()
 
-        if model.is_direct_completion() and subset == "nl2c":
-            raise Exception("Base model does not support direct completion for NL2Code tasks")
+        if model.is_direct_completion() and subset == "instruct":
+            raise Exception("Base model does not support direct completion for instructode tasks")
 
         # create save_path if it doesn't exist, e.g., a/b.jsonl
         dirname = os.path.dirname(save_path)
@@ -70,7 +70,7 @@ def codegen(
             sidx = n_samples - nsamples
             while sidx < n_samples:
                 prompt = task["prompt"]
-                if subset == "nl2code":
+                if subset == "instructode":
                     prompt = task["instruction"]
                 if strip_newlines:
                     prompt = prompt.strip("\n")
@@ -119,7 +119,7 @@ def main():
     args = parser.parse_args()
 
 
-    assert args.subset in ["c2c", "nl2c"], f"Invalid subset {args.subset}"
+    assert args.subset in ["complete", "instruct"], f"Invalid subset {args.subset}"
     assert args.backend in ["vllm", "hf", "openai", "mistral", "anthropic", "google"]
 
     if args.greedy and (args.temperature != 0 or args.bs != 1 or args.n_samples != 1)\

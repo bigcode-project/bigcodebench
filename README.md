@@ -92,7 +92,7 @@ To generate code samples from a model, you can use the following command:
 ```shell
 bigcodebench.generate \
     --model [model_name] \
-    --subset [c2c|nl2c] \
+    --subset [complete|instruct] \
     --greedy \
     --bs [bs] \
     --temperature [temp] \
@@ -102,12 +102,12 @@ bigcodebench.generate \
     --tp [gpu_number]
 ```
 >
-The generated code samples will be stored in a file named `[model_name]--bigcodebench-[nl2c|c2c]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
+The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
 >
 ```shell
 docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/bigcodebench -t terryzho/bigcodebench-generate-cu11:latest \
     --model [model_name] \ 
-    --subset [c2c|nl2c] \
+    --subset [complete|instruct] \
     --greedy \
     --bs [bs] \   
     --temperature [temp] \
@@ -186,9 +186,9 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```shell
 # mount the current directory to the container
-docker run -v $(pwd):/bigcodebench terryzho/bigcodebench-evaluate:latest --subset [c2c|nl2c] --samples samples.jsonl
+docker run -v $(pwd):/bigcodebench terryzho/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples.jsonl
 # ...Or locally ⚠️
-bigcodebench.evaluate --subset [c2c|nl2c] --samples samples.jsonl
+bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -202,7 +202,7 @@ pip install -r https://raw.githubusercontent.com/bigcode-project/bigcodebench-an
 Then, run the evaluation:
 
 ```shell
-bigcodebench.evaluate --subset [c2c|nl2c] --samples samples.jsonl
+bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl
 ```
 
 > [!Tip]

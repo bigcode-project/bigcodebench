@@ -242,7 +242,7 @@ def evaluate(flags):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--subset", required=True, type=str, choices=["c2c", "nl2c"]
+        "--subset", required=True, type=str, choices=["complete", "instruct"]
     )
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)
