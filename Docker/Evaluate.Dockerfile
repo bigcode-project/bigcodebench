@@ -17,7 +17,7 @@ RUN git clone https://github.com/bigcode-project/bigcodebench.git /bigcodebench
 
 RUN cd /bigcodebench && pip install .
 
-RUN pip install -I --timeout 2000 -r https://raw.githubusercontent.com/bigcode-project/bigcodebench-annotation/main/requirements.txt
+RUN pip install -I --timeout 2000 -r https://github.com/bigcode-project/bigcodebench-annotation/releases/download/v0.1.0/requirements.txt
 
 # Pre-install the dataset
 RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
