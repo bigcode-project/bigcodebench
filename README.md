@@ -189,6 +189,8 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 docker run -v $(pwd):/bigcodebench terryzho/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples.jsonl
 # ...Or locally ⚠️
 bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl
+# ...If the ground truth is working
+bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl --no-gt
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
