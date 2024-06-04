@@ -1,8 +1,5 @@
 # BigCodeBench
 
-> [!WARNING] 
-> The project is under active development. Please check back later for more updates.
-
 > [!WARNING]
 > Please use BigCodeBench with caution. Different from [EvalPlus](https://github.com/evalplus/evalplus), BigCodeBench has a much less constrained execution environment to support tasks with diverse library dependencies. This may lead to security risks. We recommend using a sandbox such as [Docker](https://docs.docker.com/get-docker/) to run the evaluation.
 
@@ -54,7 +51,13 @@ We inherit the design of the EvalPlus framework, which is a flexible and extensi
 To get started, please first set up the environment:
 
 ```shell
+# Install to use bigcodebench.evaluate
 pip install bigcodebench --upgrade
+pip install -I -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/main/Requirements/requirements-eval.txt
+
+# Install to use bigcodebench.generate
+# You are strongly recommended to install the generate dependencies in a separate environment
+pip install bigcodebench[generate] --upgrade
 ```
 
 <details><summary>⏬ Install nightly version <i>:: click to expand ::</i></summary>
@@ -157,6 +160,10 @@ We provide a tool namely `bigcodebench.sanitize` to clean up the code:
 # 💡 If you are storing codes in jsonl:
 bigcodebench.sanitize --samples samples.jsonl
 # Sanitized code will be produced to `samples-sanitized.jsonl`
+
+# 💡 If you want to get the calibrated results:
+bigcodebench.sanitize --samples samples.jsonl --calibrate
+# Sanitized code will be produced to `samples-sanitized-calibrate.jsonl`
 
 # 💡 If you are storing codes in directories:
 bigcodebench.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
