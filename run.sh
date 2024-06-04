@@ -28,6 +28,5 @@ bigcodebench.generate \
   --subset $SUBSET \
   --backend $BACKEND
 
-
 bigcodebench.sanitize --samples $FILE_HEADER.jsonl
 bigcodebench.evaluate --dataset $DATASET --samples $FILE_HEADER-sanitized.jsonl
