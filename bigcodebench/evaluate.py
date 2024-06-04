@@ -95,20 +95,11 @@ def evaluate(flags):
         # bypass the samples
         flags.samples = "__dummy__.jsonl"
     
-    if flags.calibrate:
-        assert "calibrate" in flags.samples, "Calibration is only supported for calibrated samples"
-    
     if os.path.isdir(flags.samples):
-        if flags.calibrate:
-            result_path = os.path.join(flags.samples, "calibrate_eval_results.json")
-        else:
-            result_path = os.path.join(flags.samples, "eval_results.json")
+        result_path = os.path.join(flags.samples, "eval_results.json")
     else:
         assert flags.samples.endswith(".jsonl")
-        if flags.calibrate:
-            result_path = flags.samples.replace(".jsonl", "_calibrate_eval_results.json")
-        else:
-            result_path = flags.samples.replace(".jsonl", "_eval_results.json")
+        result_path = flags.samples.replace(".jsonl", "_eval_results.json")
 
     if os.path.isfile(result_path):
         print(f"Load from previous results from {result_path}")
@@ -153,7 +144,7 @@ def evaluate(flags):
                     if "solution" in sample
                     else problems[task_id]["prompt"] + sample["completion"]
                 )
-                if flags.calibrate:
+                if "sanitized-calibrate" in flags.samples:
                     solution = problems[task_id]["prompt_wo_doc"] + "\n    pass\n" + solution
                 remainings.add(sample["_identifier"])
                 args = (
@@ -250,9 +241,6 @@ def main():
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
-    parser.add_argument(
-        "--calibrate", action="store_true", help="Calibrate the evaluation results"
-    )
     parser.add_argument(
         "--check-gt-only", action="store_true", help="Check the groundtruth"
     )
