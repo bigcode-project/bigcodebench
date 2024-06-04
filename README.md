@@ -53,6 +53,7 @@ To get started, please first set up the environment:
 ```shell
 # Install to use bigcodebench.evaluate
 pip install bigcodebench --upgrade
+# If you want to use the evaluate locally, you need to install the requirements
 pip install -I -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/main/Requirements/requirements-eval.txt
 
 # Install to use bigcodebench.generate
