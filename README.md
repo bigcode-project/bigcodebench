@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-    <a href="#-about">🌳About</a> •
+    <a href="#-about">🌸About</a> •
     <a href="#-quick-start">🔥Quick Start</a> •
     <a href="#-llm-generated-code">💻LLM code</a> •
     <a href="#-failure-inspection">🔍Failure inspection</a> •
