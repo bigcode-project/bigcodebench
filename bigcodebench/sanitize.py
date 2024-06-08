@@ -195,12 +195,12 @@ def script(
     if not inplace:
         if is_folder:
             if calibrate:
-                new_name = target_path.name + "-sanitized-calibrate"
+                new_name = target_path.name + "-sanitized-calibrated"
             else:
                 new_name = target_path.name + "-sanitized"
         else:
             if calibrate:
-                new_name = target_path.name.replace(".jsonl", "-sanitized-calibrate.jsonl")
+                new_name = target_path.name.replace(".jsonl", "-sanitized-calibrated.jsonl")
             else:
                 new_name = target_path.name.replace(".jsonl", "-sanitized.jsonl")
         target_path = target_path.parent / new_name

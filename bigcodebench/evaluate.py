@@ -144,7 +144,7 @@ def evaluate(flags):
                     if "solution" in sample
                     else problems[task_id]["prompt"] + sample["completion"]
                 )
-                if "sanitized-calibrate" in flags.samples:
+                if "sanitized-calibrated" in flags.samples:
                     solution = problems[task_id]["prompt_wo_doc"] + "\n    pass\n" + solution
                 remainings.add(sample["_identifier"])
                 args = (
