@@ -280,7 +280,8 @@ bash run.sh
 
 ## 💻 LLM-generated Code
 
-We will share pre-generated code samples from LLMs we have [evaluated](https://bigcodebench.github.io/leaderboard.html):
+We share pre-generated code samples from LLMs we have [evaluated](https://bigcodebench.github.io/leaderboard.html):
+*  See the attachment of our [v0.1.2](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.1.2). We include both `sanitized_samples.zip` and `sanitized_samples_calibrated.zip` for your convenience.
 
 ## Known Issues
 
