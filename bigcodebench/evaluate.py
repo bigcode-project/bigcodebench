@@ -230,7 +230,7 @@ def evaluate(flags):
 
     if not os.path.isfile(result_path):
         with open(result_path, "w") as f:
-            json.dump(results, f)
+            json.dump(results, f, indent=2)
 
 
 def main():
