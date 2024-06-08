@@ -164,7 +164,7 @@ bigcodebench.sanitize --samples samples.jsonl
 
 # 💡 If you want to get the calibrated results:
 bigcodebench.sanitize --samples samples.jsonl --calibrate
-# Sanitized code will be produced to `samples-sanitized-calibrate.jsonl`
+# Sanitized code will be produced to `samples-sanitized-calibrated.jsonl`
 
 # 💡 If you are storing codes in directories:
 bigcodebench.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
@@ -197,7 +197,7 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 docker run -v $(pwd):/bigcodebench terryzho/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples.jsonl
 # ...Or locally ⚠️
 bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl
-# ...If the ground truth is working
+# ...If the ground truth is working locally
 bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl --no-gt
 ```
 
@@ -287,6 +287,8 @@ We will share pre-generated code samples from LLMs we have [evaluated](https://b
 - [ ] We notice that some tasks heavily use memory for scientific modeling during testing. It will lead to timeout issues on some machines. If you get an error message like `Check failed: ret == 0 (11 vs. 0)Thread creation via pthread_create() failed.` in Tensorflow, it is very likely due to the memory issue. Try to allocate more memory to the process or reduce the number of parallel processes.
 
 - [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.5%) between runs. We are working on improving the evaluation stability.
+
+- [ ] We are aware of the issue that some users may need to use a proxy to access the internet. We are working on a subset of the tasks that do not require internet access to evaluate the code.
 
 ## 📜 Citation
 
