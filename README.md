@@ -1,4 +1,7 @@
 # BigCodeBench
+<center>
+<img src="https://github.com/bigcode-bench/bigcode-bench.github.io/blob/main/asset/bigcodebench_banner.png?raw=true" alt="BigCodeBench">
+</center>
 
 > [!WARNING]
 > Please use BigCodeBench with caution. Different from [EvalPlus](https://github.com/evalplus/evalplus), BigCodeBench has a much less constrained execution environment to support tasks with diverse library dependencies. This may lead to security risks. We recommend using a sandbox such as [Docker](https://docs.docker.com/get-docker/) to run the evaluation.
