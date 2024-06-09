@@ -130,7 +130,7 @@ class VllmDecoder(DecoderBase):
             "trust_remote_code": self.trust_remote_code,
         }
 
-        self.tokenizer = AutoTokenizer.from_pretrained(self.name)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.name, **kwargs)
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
         self.llm = LLM(model=name, max_model_len=2048, **kwargs)
@@ -187,7 +187,7 @@ class HfTorchDecoder(DecoderBase):
 
         print(f"{kwargs = }")
 
-        self.tokenizer = AutoTokenizer.from_pretrained(name)
+        self.tokenizer = AutoTokenizer.from_pretrained(name, **kwargs)
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
 
@@ -253,7 +253,7 @@ class GenenralHfTorchDecoder(HfTorchDecoder):
         super().__init__(name=name, **kwargs)
         self.eos += ["\n```\n"]
         print(f"EOS strings: {self.eos}")
-        self.tokenizer = AutoTokenizer.from_pretrained(self.name)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.name, **kwargs)
 
     def codegen(
         self, prompt: str, do_sample: bool = True, num_samples: int = 200
@@ -477,6 +477,7 @@ def make_model(
     temperature: float = 0.0,
     tp=1,
     base_url=None,
+    trust_remote_code=False,
 ):
     if backend == "vllm":
         return GeneralVllmDecoder(
@@ -485,6 +486,7 @@ def make_model(
             temperature=temperature,
             dataset=dataset,
             tp=tp,
+            trust_remote_code=trust_remote_code,
         )
     elif backend == "hf":
         return GenenralHfTorchDecoder(
@@ -492,6 +494,7 @@ def make_model(
             batch_size=batch_size,
             temperature=temperature,
             dataset=dataset,
+            trust_remote_code=trust_remote_code,
         )
     elif backend == "openai":
         return OpenAIChatDecoder(

@@ -116,6 +116,7 @@ def main():
     parser.add_argument("--backend", default="vllm", type=str)
     parser.add_argument("--base_url", default=None, type=str)
     parser.add_argument("--tp", default=1, type=int)
+    parser.add_argument("--trust_remote_code", action="store_true")
     args = parser.parse_args()
 
 
@@ -143,6 +144,7 @@ def main():
         temperature=args.temperature,
         base_url=args.base_url,
         tp=args.tp,
+        trust_remote_code=args.trust_remote_code
     )
 
     if not args.save_path:
