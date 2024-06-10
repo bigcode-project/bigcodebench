@@ -29,4 +29,4 @@ bigcodebench.generate \
   --backend $BACKEND
 
 bigcodebench.sanitize --samples $FILE_HEADER.jsonl
-bigcodebench.evaluate --dataset $DATASET --samples $FILE_HEADER-sanitized.jsonl
+bigcodebench.evaluate --subset $SUBSET --samples $FILE_HEADER-sanitized.jsonl
