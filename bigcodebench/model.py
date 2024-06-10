@@ -464,7 +464,15 @@ class GeminiDecoder(GoogleGenAIDecoder):
                 + f"\n```python\n{prompt.strip()}\n```",
                 generation_config=genai_config
             )
-            outputs.append(response.candidates[0].content.parts[0].text)
+            try:
+                output = response.candidates[0].content.parts[0].text
+                outputs.append(output)
+            except Exception as e:
+                if "list index out of range" in str(e):
+                    # append dummy response
+                    outputs.append("NO_RESPONSE")
+                else:
+                    raise e
 
         return outputs
 
