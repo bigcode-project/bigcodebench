@@ -73,7 +73,8 @@ def get_results():
             else:
                 results[model]["lazy"] = False
             results[model]["pass@1"][task] = calibrate
-        result["pass@1"].pop(f"instruct-cal")
+        calibrate_instruct = result["pass@1"].pop(f"instruct-cal")
+        result["pass@1"]["instruct"] = calibrate_instruct
     return results
 
            
@@ -294,23 +295,23 @@ def push_ds(ds, path, local=False):
 
 if __name__ == "__main__":
     results = get_results()
-    complete_data = read_task_perf("complete")
-    instruct_data = read_task_perf("instruct")
-    complete_solve_rate = get_solve_rate(complete_data, task="complete")
-    instruct_solve_rate = get_solve_rate(instruct_data, task="instruct")
-    push_ds(complete_solve_rate, "bigcode/bigcodebench-complete-solve-rate")
-    push_ds(instruct_solve_rate, "bigcode/bigcodebench-instruct-solve-rate")
+    # complete_data = read_task_perf("complete")
+    # instruct_data = read_task_perf("instruct")
+    # complete_solve_rate = get_solve_rate(complete_data, task="complete")
+    # instruct_solve_rate = get_solve_rate(instruct_data, task="instruct")
+    # push_ds(complete_solve_rate, "bigcode/bigcodebench-complete-solve-rate")
+    # push_ds(instruct_solve_rate, "bigcode/bigcodebench-instruct-solve-rate")
     
-    battles = get_winner_df(complete_data, "complete")
-    elo_mle_bootstrap = get_bootstrap_result(battles, get_elo_mle, 500)
-    bootstrap_lu_median = elo_mle_bootstrap.median().reset_index().set_axis(["model", "Elo rating"], axis=1)
-    bootstrap_lu_median["Elo rating"] = (bootstrap_lu_median["Elo rating"] + 0.5).astype(int)
-    bootstrap_lu_median_dict = bootstrap_lu_median.set_index("model")["Elo rating"].to_dict()
-    elo = get_bootstrap_scores(elo_mle_bootstrap)
-    push_ds(elo, "bigcode/bigcodebench-elo")
+    # battles = get_winner_df(complete_data, "complete")
+    # elo_mle_bootstrap = get_bootstrap_result(battles, get_elo_mle, 500)
+    # bootstrap_lu_median = elo_mle_bootstrap.median().reset_index().set_axis(["model", "Elo rating"], axis=1)
+    # bootstrap_lu_median["Elo rating"] = (bootstrap_lu_median["Elo rating"] + 0.5).astype(int)
+    # bootstrap_lu_median_dict = bootstrap_lu_median.set_index("model")["Elo rating"].to_dict()
+    # elo = get_bootstrap_scores(elo_mle_bootstrap)
+    # push_ds(elo, "bigcode/bigcodebench-elo")
     
-    results = update_elo_rating(results, bootstrap_lu_median_dict)
+    # results = update_elo_rating(results, bootstrap_lu_median_dict)
     with open("results.json", "w") as f:
         json.dump(results, f, indent=4)
-    ds = get_hf_ds(results)
-    push_ds(ds, "bigcode/bigcodebench-results")
+    # ds = get_hf_ds(results)
+    # push_ds(ds, "bigcode/bigcodebench-results")
