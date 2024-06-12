@@ -161,13 +161,13 @@ LLM-generated text may not be compilable code for including natural language lin
 We provide a tool namely `bigcodebench.sanitize` to clean up the code:
 
 ```shell
-# 💡 If you are storing codes in jsonl:
-bigcodebench.sanitize --samples samples.jsonl
-# Sanitized code will be produced to `samples-sanitized.jsonl`
-
-# 💡 If you want to get the calibrated results:
+# 💡 If you want to store calibrated codes in jsonl for evaluation:
 bigcodebench.sanitize --samples samples.jsonl --calibrate
 # Sanitized code will be produced to `samples-sanitized-calibrated.jsonl`
+
+# 💡 If you are doing without calibration:
+bigcodebench.sanitize --samples samples.jsonl
+# Sanitized code will be produced to `samples-sanitized.jsonl`
 
 # 💡 If you are storing codes in directories:
 bigcodebench.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
@@ -181,7 +181,7 @@ To double-check the post-processing results, you can use `bigcodebench.syncheck`
 
 ```shell
 # 💡 If you are storing codes in jsonl:
-bigcodebench.syncheck --samples samples.jsonl --dataset [bigcodebench]
+bigcodebench.syncheck --samples samples-calibrated.jsonl --dataset [bigcodebench]
 
 # 💡 If you are storing codes in directories:
 bigcodebench.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [bigcodebench]
@@ -197,11 +197,7 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```shell
 # mount the current directory to the container
-docker run -v $(pwd):/bigcodebench terryzho/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples.jsonl
-# ...Or locally ⚠️
-bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl
-# ...If the ground truth is working locally
-bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl --no-gt
+docker run -v $(pwd):/bigcodebench terryzho/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-calibrated.jsonl
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -215,7 +211,10 @@ pip install -r https://raw.githubusercontent.com/bigcode-project/bigcodebench-an
 Then, run the evaluation:
 
 ```shell
-bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl
+# ...Or locally ⚠️
+bigcodebench.evaluate --subset [complete|instruct] --samples samples-calibrated.jsonl
+# ...If the ground truth is not working locally
+bigcodebench.evaluate --subset [complete|instruct] --samples samples-calibrated.jsonl --no-gt
 ```
 
 > [!Tip]
