@@ -53,7 +53,7 @@ We inherit the design of the EvalPlus framework, which is a flexible and extensi
 
 To get started, please first set up the environment:
 
-```shell
+```bash
 # Install to use bigcodebench.evaluate
 pip install bigcodebench --upgrade
 # If you want to use the evaluate locally, you need to install the requirements
@@ -67,7 +67,7 @@ pip install bigcodebench[generate] --upgrade
 <details><summary>⏬ Install nightly version <i>:: click to expand ::</i></summary>
 <div>
 
-```shell
+```bash
 pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
 ```
 
@@ -77,7 +77,7 @@ pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
 <details><summary>⏬ Using BigCodeBench as a local repo? <i>:: click to expand ::</i></summary>
 <div>
 
-```shell
+```bash
 git clone https://github.com/bigcode-project/bigcodebench.git
 cd bigcodebench
 export PYTHONPATH=$PYTHONPATH:$(pwd)
@@ -90,13 +90,13 @@ pip install -e .
 ### Code Generation
 
 You are suggested to use `flash-attn` for generating code samples.
-```shell
+```bash
 pip install -U flash-attn
 ```
 
 To generate code samples from a model, you can use the following command:
 >
-```shell
+```bash
 bigcodebench.generate \
     --model [model_name] \
     --subset [complete|instruct] \
@@ -111,7 +111,7 @@ bigcodebench.generate \
 >
 The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
 >
-```shell
+```bash
 docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/bigcodebench -t terryzho/bigcodebench-generate-cu11:latest \
     --model [model_name] \ 
     --subset [complete|instruct] \
@@ -128,7 +128,7 @@ We make available `cuda 11.8.0` and `cuda 12.1.1` pre-built docker images with t
 >
 If you wish to use gated or private HuggingFace models and datasets, you need to build the container yourself with `--build-arg` flags as follows:
 >
-```shell
+```bash
 docker build --build-arg HF_TOKEN=<YOUR_HF_TOKEN> -t terryzho/bigcodebench-generate-cu11:latest - < Docker/Generate_Cuda11.Dockerfile
 ```
 >
@@ -160,7 +160,7 @@ Following which, you can run the built container as shown in above.
 LLM-generated text may not be compilable code for including natural language lines or incomplete extra code.
 We provide a tool namely `bigcodebench.sanitize` to clean up the code:
 
-```shell
+```bash
 # 💡 If you want to store calibrated codes in jsonl for evaluation:
 bigcodebench.sanitize --samples samples.jsonl --calibrate
 # Sanitized code will be produced to `samples-sanitized-calibrated.jsonl`
@@ -179,7 +179,7 @@ bigcodebench.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
 
 To double-check the post-processing results, you can use `bigcodebench.syncheck` to check the code validity before and after sanitization, which will print erroneous code snippets and why they are wrong:
 
-```shell
+```bash
 # 💡 If you are storing codes in jsonl:
 bigcodebench.syncheck --samples samples-calibrated.jsonl --dataset [bigcodebench]
 
@@ -195,7 +195,7 @@ bigcodebench.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [bigco
 
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
-```shell
+```bash
 # mount the current directory to the container
 docker run -v $(pwd):/bigcodebench terryzho/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-calibrated.jsonl
 ```
@@ -204,13 +204,13 @@ docker run -v $(pwd):/bigcodebench terryzho/bigcodebench-evaluate:latest --subse
 
 First, install the dependencies for BigCodeBench:
 
-```shell
+```bash
 pip install -r https://raw.githubusercontent.com/bigcode-project/bigcodebench-annotation/main/requirements.txt
 ```
 
 Then, run the evaluation:
 
-```shell
+```bash
 # ...Or locally ⚠️
 bigcodebench.evaluate --subset [complete|instruct] --samples samples-calibrated.jsonl
 # ...If the ground truth is not working locally
@@ -268,7 +268,7 @@ Here are some tips to speed up the evaluation:
 
 You can inspect the failed samples by using the following command:
 
-```shell
+```bash
 bigcodebench.inspect --dataset [bigcodebench] --eval-results sample-sanitized_eval_results.json --in-place
 ```
 
@@ -276,7 +276,7 @@ bigcodebench.inspect --dataset [bigcodebench] --eval-results sample-sanitized_ev
 
 We provide a sample script to run the full pipeline:
 
-```shell
+```bash
 bash run.sh
 ```
 
