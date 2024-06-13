@@ -144,8 +144,6 @@ docker run -v $(pwd):/app -t terryzho/bigcodebench-generate-cu11:latest \
     --backend [vllm|hf|openai|mistral|anthropic|google]
 ```
 >
-We make available `cuda 11.8.0` and `cuda 12.1.1` pre-built docker images with the Dockerfiles available in the `Docker` directory.
->
 ```shell
 # If you wish to use gated or private HuggingFace models and datasets
 docker run -e HUGGING_FACE_HUB_TOKEN=$token -v $(pwd):/app -t terryzho/bigcodebench-generate-cu11:latest # omit other arguments4
