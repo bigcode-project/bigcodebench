@@ -19,6 +19,8 @@
     <a href="#-quick-start">🔥Quick Start</a> •
     <a href="#-llm-generated-code">💻LLM code</a> •
     <a href="#-failure-inspection">🔍Failure inspection</a> •
+    <a href="#-full-script">🚀Full Script</a> •
+    <a href="#-result-analysis">📊Result Analysis</a> •
     <a href="#-known-issues">🐞Known issues</a> •
     <a href="#-citation">📜Citation</a> •
     <a href="#-acknowledgement">🙏Acknowledgement</a>
@@ -28,8 +30,8 @@
 
 ### BigCodeBench
 
-BigCodeBench is a rigorous benchmark for code generation with realistic constraints in the wild. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more fine-grained descriptions and diverse tool use.
-To facilitate the evaluation of LLMs on BigCodeBench, we provide a Python package `bigcodebench` that includes the dataset, generation scripts, and evaluation scripts. The package is built on top of the [EvalPlus](https://github.com/evalplus/evalplus) framework, which is a flexible and extensible evaluation framework for code generation tasks.
+BigCodeBench is an **_easy-to-use_** benchmark for code generation with **_practical_** and **_challenging_** programming tasks. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more complex instructions and diverse function calls.
+To facilitate the evaluation of LLMs on BigCodeBench, we provide this Python package `bigcodebench` that includes the dataset, generation scripts, and evaluation scripts. The package is built on top of the [EvalPlus](https://github.com/evalplus/evalplus) framework, which is a flexible and extensible evaluation framework for code generation tasks.
 
 ### Why BigCodeBench?
 
@@ -122,7 +124,7 @@ The generated code samples will be stored in a file named `[model_name]--bigcode
 docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/app -t terryzho/bigcodebench-generate-cu11:latest \
     --model [model_name] \ 
     --subset [complete|instruct] \
-    --greedy \
+    [--greedy] \
     --bs [bs] \   
     --temperature [temp] \
     --n_samples [n_samples] \
@@ -134,7 +136,7 @@ docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/app -t terryzho/bi
 docker run -v $(pwd):/app -t terryzho/bigcodebench-generate-cu11:latest \
     --model [model_name] \ 
     --subset [complete|instruct] \
-    --greedy \
+    [--greedy] \
     --bs [bs] \   
     --temperature [temp] \
     --n_samples [n_samples] \
