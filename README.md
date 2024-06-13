@@ -68,6 +68,7 @@ pip install bigcodebench[generate] --upgrade
 <div>
 
 ```shell
+# Install to use bigcodebench.evaluate
 pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
 ```
 
@@ -81,7 +82,10 @@ pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
 git clone https://github.com/bigcode-project/bigcodebench.git
 cd bigcodebench
 export PYTHONPATH=$PYTHONPATH:$(pwd)
+# Install to use bigcodebench.evaluate
 pip install -e .
+# Install to use bigcodebench.generate
+pip install -e .[generate]
 ```
 
 </div>
@@ -106,13 +110,16 @@ bigcodebench.generate \
     --n_samples [n_samples] \
     --resume \
     --backend [vllm|hf|openai|mistral|anthropic|google] \
-    --tp [gpu_number]
+    --tp [gpu_number] \
+    [--trust_remote_code] \
+    [--base_url [base_url]]
 ```
 >
 The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
 >
 ```shell
-docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/bigcodebench -t terryzho/bigcodebench-generate-cu11:latest \
+# If you are using GPUs
+docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/app -t terryzho/bigcodebench-generate-cu11:latest \
     --model [model_name] \ 
     --subset [complete|instruct] \
     --greedy \
@@ -122,14 +129,29 @@ docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/bigcodebench -t te
     --resume \
     --backend [vllm|hf|openai|mistral|anthropic|google] \
     --tp [gpu_number]
+
+# ...Or if you are using CPUs
+docker run -v $(pwd):/app -t terryzho/bigcodebench-generate-cu11:latest \
+    --model [model_name] \ 
+    --subset [complete|instruct] \
+    --greedy \
+    --bs [bs] \   
+    --temperature [temp] \
+    --n_samples [n_samples] \
+    --resume \
+    --backend [vllm|hf|openai|mistral|anthropic|google]
 ```
 >
 We make available `cuda 11.8.0` and `cuda 12.1.1` pre-built docker images with the Dockerfiles available in the `Docker` directory.
 >
-If you wish to use gated or private HuggingFace models and datasets, you need to build the container yourself with `--build-arg` flags as follows:
->
 ```shell
-docker build --build-arg HF_TOKEN=<YOUR_HF_TOKEN> -t terryzho/bigcodebench-generate-cu11:latest - < Docker/Generate_Cuda11.Dockerfile
+# If you wish to use gated or private HuggingFace models and datasets
+docker run -e HUGGING_FACE_HUB_TOKEN=$token -v $(pwd):/app -t terryzho/bigcodebench-generate-cu11:latest # omit other arguments4
+
+# Similarly, to use other backends that require authentication
+docker run -e OPENAI_API_KEY=$OPENAI_API_KEY -v $(pwd):/app -t terryzho/bigcodebench-generate-cu11:latest # omit other arguments
+docker run -e GOOGLE_API_KEY=$OPENAI_API_KEY -v $(pwd):/app -t terryzho/bigcodebench-generate-cu11:latest # omit other arguments
+docker run -e ANTHROPIC_KEY=$ANTHROPIC_KEY -v $(pwd):/app -t terryzho/bigcodebench-generate-cu11:latest # omit other arguments
 ```
 >
 Following which, you can run the built container as shown in above.
@@ -139,10 +161,10 @@ Following which, you can run the built container as shown in above.
 
 * `task_id` is the identifier string for the task
 * `entry_point` is the name of the function
-* `prompt` is the function signature with docstring
-* `instruction` is the instruction for the task completion
+* `prompt` is the prompt for BigCodeBench-Complete
+* `instruction` is the prompt for BigCodeBench-Instruct
 + `canonical_solution` is the ground-truth implementation
-+ `test` is the `unittest` test case
++ `test` is the `unittest.TestCase` class
 
 </div>
 </details>
@@ -161,17 +183,24 @@ LLM-generated text may not be compilable code for including natural language lin
 We provide a tool namely `bigcodebench.sanitize` to clean up the code:
 
 ```shell
-# 💡 If you are storing codes in jsonl:
-bigcodebench.sanitize --samples samples.jsonl
-# Sanitized code will be produced to `samples-sanitized.jsonl`
-
 # 💡 If you want to get the calibrated results:
 bigcodebench.sanitize --samples samples.jsonl --calibrate
 # Sanitized code will be produced to `samples-sanitized-calibrated.jsonl`
 
+# 💡 If you want to get the original results:
+bigcodebench.sanitize --samples samples.jsonl
+# Sanitized code will be produced to `samples-sanitized.jsonl`
+
 # 💡 If you are storing codes in directories:
 bigcodebench.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
 # Sanitized code will be produced to `/path/to/vicuna-[??]b_temp_[??]-sanitized`
+```
+
+If you want to use the pre-built docker images for post-processing, you can use the following command:
+
+```shell
+# Change the entrypoint to bigcodebench.sanitize in any pre-built docker image, like terryzho/bigcodebench-evaluate:latest
+docker run -it --entrypoint bigcodebench.sanitize -v $(pwd):/app terryzho/bigcodebench-evaluate:latest --samples samples.jsonl
 ```
 
 <details><summary>🔎 Checking the compatibility of post-processed code<i>:: click to expand ::</i></summary>
@@ -181,10 +210,13 @@ To double-check the post-processing results, you can use `bigcodebench.syncheck`
 
 ```shell
 # 💡 If you are storing codes in jsonl:
-bigcodebench.syncheck --samples samples.jsonl --dataset [bigcodebench]
+bigcodebench.syncheck --samples samples.jsonl
 
 # 💡 If you are storing codes in directories:
-bigcodebench.syncheck --samples /path/to/vicuna-[??]b_temp_[??] --dataset [bigcodebench]
+bigcodebench.syncheck --samples /path/to/vicuna-[??]b_temp_[??]
+
+# 💡 Or change the entrypoint to bigcodebench.syncheck in any pre-built docker image, like 
+docker run -it --entrypoint bigcodebench.syncheck -v $(pwd):/app terryzho/bigcodebench-evaluate:latest --samples samples.jsonl
 ```
 
 </div>
@@ -197,7 +229,7 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```shell
 # mount the current directory to the container
-docker run -v $(pwd):/bigcodebench terryzho/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples.jsonl
+docker run -v $(pwd):/app terryzho/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples.jsonl
 # ...Or locally ⚠️
 bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl
 # ...If the ground truth is working locally
@@ -209,7 +241,7 @@ bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl --no-
 First, install the dependencies for BigCodeBench:
 
 ```shell
-pip install -r https://raw.githubusercontent.com/bigcode-project/bigcodebench-annotation/main/requirements.txt
+pip install -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/main/Requirements/requirements-eval.txt
 ```
 
 Then, run the evaluation:
@@ -250,13 +282,12 @@ bigcodebench
 ```
 
 - The "k" includes `[1, 5, 10]` where k values `<=` the sample size will be used
-- A cache file named like `samples_eval_results.jsonl` will be cached. Remove it to re-run the evaluation
+- A cache file named like `samples_eval_results.json` will be cached. Remove it to re-run the evaluation
 
 <details><summary>🤔 How long it would take? <i>:: click to expand ::</i></summary>
 <div>
 
-If you do greedy decoding where there is only one sample for each task, the evaluation should take just a few seconds.
-When running 1 sample x 964 tasks x all tests, it can take around ??-?? minutes by using `--parallel 64` and `--test-details`.
+If you do greedy decoding where there is only one sample for each task, the evaluation should take just a few minutes on Intel(R) Xeon(R) Gold 6150 CPU @ 2.70GHz, composed of 2 sockets, with 18 cores per socket. However, if you have multiple samples for each task, the evaluation will take longer.
 Here are some tips to speed up the evaluation:
 
 * Use `--parallel $(nproc)`
@@ -270,15 +301,27 @@ Here are some tips to speed up the evaluation:
 You can inspect the failed samples by using the following command:
 
 ```shell
-bigcodebench.inspect --dataset [bigcodebench] --eval-results sample-sanitized_eval_results.json --in-place
+bigcodebench.inspect --eval-results sample-sanitized_eval_results.json --in-place
 ```
 
-## Full script
+## Full Script
 
 We provide a sample script to run the full pipeline:
 
 ```shell
 bash run.sh
+```
+
+## Result Analysis
+
+We provide a script to replicate the analysis like Elo Rating and Task Solve Rate, which helps you understand the performance of the models further.
+
+```shell
+To run the analysis, you need to put all the `samples_eval_results.json` files in a `results` folder, which is in the same directory as the script.
+
+```shell
+cd analysis
+python get_results.py
 ```
 
 ## 💻 LLM-generated Code

@@ -111,21 +111,7 @@ model_info = {
         "size": 7,
         "open-data": "None",
         },
-    "codellama--7b-instruct": {
-        "name": "CodeLlama-7B-Instruct",
-        "link": "https://huggingface.co/codellama/CodeLlama-7b-Instruct-hf",
-        "prompted": True,
-        "size": 7,
-        "open-data": "None",
-        },
     "codellama/CodeLlama-13b-Instruct-hf": {
-        "name": "CodeLlama-13B-Instruct",
-        "link": "https://huggingface.co/codellama/CodeLlama-13b-Instruct-hf",
-        "prompted": True,
-        "size": 13,
-        "open-data": "None",
-        },
-    "codellama--13b-instruct": {
         "name": "CodeLlama-13B-Instruct",
         "link": "https://huggingface.co/codellama/CodeLlama-13b-Instruct-hf",
         "prompted": True,
@@ -146,105 +132,70 @@ model_info = {
         "size": None,
         "open-data": "None",
         },
-    "mixtral--8x22b-base-v0.1": {
+    "mistralai/Mixtral-8x22B-v0.1": {
         "name": "Mixtral-8x22B-Base",
         "link": "https://huggingface.co/mistralai/Mixtral-8x22B-v0.1",
         "prompted": False,
         "size": 44,
         "open-data": "None",
         },
-    "mixtral--8x22b-instruct-v0.1": {
+    "mistralai/Mixtral-8x22B-Instruct-v0.1": {
         "name": "Mixtral-8x22B-Instruct",
         "link": "https://huggingface.co/mistralai/Mixtral-8x22B-Instruct-v0.1",
         "prompted": True,
         "size": 44,
         "open-data": "None",
         },
-    "codellama--34b-base": {
+    "codellama/CodeLlama-34b-hf": {
         "name": "CodeLlama-34B-Base",
         "link": "https://huggingface.co/codellama/CodeLlama-34b-hf",
         "prompted": False,
         "size": 34,
         "open-data": "None",
         },
-    "codellama--34b-instruct": {
+    "codellama/CodeLlama-34b-Instruct-hf": {
         "name": "CodeLlama-34B-Instruct",
         "link": "https://huggingface.co/codellama/CodeLlama-34b-Instruct-hf",
         "prompted": True,
         "size": 34,
         "open-data": "None",
         },
-    "codellama--70b-base": {
+    "codellama/CodeLlama-70b-hf": {
         "name": "CodeLlama-70B-Base",
         "link": "https://huggingface.co/codellama/CodeLlama-70b-hf",
         "prompted": False,
         "size": 70,
         "open-data": "None",
         },
-    "codellama--70b-instruct": {
+    "codellama/CodeLlama-70b-Instruct-hf": {
         "name": "CodeLlama-70B-Instruct",
         "link": "https://huggingface.co/codellama/CodeLlama-70b-Instruct-hf",
         "prompted": True,
         "size": 70,
         "open-data": "None",
         },
-    "codeqwen1.5-chat--7b": {
+    "Qwen/CodeQwen1.5-7B-Chat": {
         "name": "CodeQwen1.5-7B-Chat",
         "link": "https://huggingface.co/Qwen/CodeQwen1.5-7B-Chat",
         "prompted": True,
         "size": 7,
         "open-data": "None",
         },
-    "codeqwen--7b": {
-        "name": "CodeQwen1.5-7B-Chat",
-        "link": "https://huggingface.co/Qwen/CodeQwen1.5-7B-Chat",
-        "prompted": True,
-        "size": 7,
-        "open-data": "None",
-        },
-    # "qwen-max-0428": {
-    #     "name": "Qwen-Max-0428",
-    #     "link": "",
-    #     "prompted": True,
-    #     "size": None,
-    #     "open-data": "None",
-    #     },
-    "qwen-110b-chat": {
+    "Qwen/Qwen1.5-110B-Chat": {
         "name": "Qwen1.5-110B-Chat",
         "link": "https://huggingface.co/Qwen/Qwen1.5-110B-Chat",
         "prompted": True,
         "size": 110,
         "open-data": "None",
         },
-    "qwen110b": {
-        "name": "Qwen1.5-110B-Chat",
-        "link": "https://huggingface.co/Qwen/Qwen1.5-110B-Chat",
-        "prompted": True,
-        "size": 110,
-        "open-data": "None",
-        },
-    "qwen-72b-chat": {
+    "Qwen/Qwen1.5-72B-Chat": {
         "name": "Qwen1.5-72B-Chat",
         "link": "https://huggingface.co/Qwen/Qwen1.5-72B-Chat",
         "prompted": True,
         "size": 72,
         "open-data": "None",
         },
-    "qwen72b": {
-        "name": "Qwen1.5-72B-Chat",
-        "link": "https://huggingface.co/Qwen/Qwen1.5-72B-Chat",
-        "prompted": True,
-        "size": 72,
-        "open-data": "None",
-        },
-    "qwen-32b-chat": {
-        "name": "Qwen1.5-32B-Chat",
-        "link": "https://huggingface.co/Qwen/Qwen1.5-32B-Chat",
-        "prompted": True,
-        "size": 32,
-        "open-data": "None",
-        },
-    "qwen32b": {
+    "Qwen/Qwen1.5-32B-Chat": {
         "name": "Qwen1.5-32B-Chat",
         "link": "https://huggingface.co/Qwen/Qwen1.5-32B-Chat",
         "prompted": True,
@@ -258,70 +209,70 @@ model_info = {
         "size": 21,
         "open-data": "None",
         },
-    "deepseek-coder--1.3b-base": {
+    "deepseek-ai/deepseek-coder-1.3b-base": {
         "name": "DeepSeek-Coder-1.3B-Base",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-1.3b-base",
         "prompted": False,
         "size": 1.3,
         "open-data": "None",
         },
-    "deepseek-coder--1.3b-instruct": {
+    "deepseek-ai/deepseek-coder-1.3b-instruct": {
         "name": "DeepSeek-Coder-1.3B-Instruct",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-1.3b-instruct",
         "prompted": True,
         "size": 1.3,
         "open-data": "None",
         },
-    "deepseek-coder--33b-base": {
+    "deepseek-ai/deepseek-coder-33b-base": {
         "name": "DeepSeek-Coder-33B-Base",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-33b-base",
         "prompted": False,
         "size": 33,
         "open-data": "None",
         },
-    "deepseek-coder--33b-instruct": {
+    "deepseek-ai/deepseek-coder-33b-instruct": {
         "name": "DeepSeek-Coder-33B-Instruct",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-33b-instruct",
         "prompted": True,
         "size": 33,
         "open-data": "None",
         },
-    "deepseek-coder--6.7b-base": {
+    "deepseek-ai/deepseek-coder-6.7b-base": {
         "name": "DeepSeek-Coder-6.7B-Base",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-6.7b-base",
         "prompted": False,
         "size": 6.7,
         "open-data": "None",
         },
-    "deepseek-coder--6.7b-instruct": {
+    "deepseek-ai/deepseek-coder-6.7b-instruct": {
         "name": "DeepSeek-Coder-6.7B-Instruct",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-6.7b-instruct",
         "prompted": True,
         "size": 6.7,
         "open-data": "None",
         },
-    "llama-3--70b-base": {
+    "meta-llama/Meta-Llama-3-70B": {
         "name": "Llama-3-70B-Base",
         "link": "https://huggingface.co/meta-llama/Meta-Llama-3-70B",
         "prompted": False,
         "size": 70,
         "open-data": "None",
         },
-    "llama-3--70b-instruct": {
+    "meta-llama/Meta-Llama-3-70B-Instruct": {
         "name": "Llama-3-70B-Instruct",
         "link": "https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct",
         "prompted": True,
         "size": 70,
         "open-data": "None",
         },
-    "llama-3--8b-base": {
+    "meta-llama/Meta-Llama-3-8B": {
         "name": "Llama-3-8B-Base",
         "link": "https://huggingface.co/meta-llama/Meta-Llama-3-8B",
         "prompted": False,
         "size": 8,
         "open-data": "None",
         },
-    "llama-3--8b-instruct": {
+    "meta-llama/Meta-Llama-3-8B-Instruct": {
         "name": "Llama-3-8B-Instruct",
         "link": "https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct",
         "prompted": True,
@@ -447,21 +398,21 @@ model_info = {
         "size": 9,
         "open-data": "None",
         },
-    "Qwen2moe": {
+    "Qwen/Qwen2-57B-A14B": {
         "name": "Qwen2-57B-A14B",
         "link": "https://huggingface.co/Qwen/Qwen2-57B-A14B",
         "prompted": True,
         "size": 14,
         "open-data": "None",
         },
-    "Qwen2-7b-instruct": {
+    "Qwen/Qwen2-7B-Instruct": {
         "name": "Qwen2-7B-Instruct",
         "link": "https://huggingface.co/Qwen/Qwen2-7B-Instruct",
         "prompted": True,
         "size": 7,
         "open-data": "None",
         },
-    "Qwen2-72B-Chat": {
+    "Qwen/Qwen2-72B-Chat": {
         "name": "Qwen2-72B-Chat",
         "link": "https://huggingface.co/Qwen/Qwen2-72B-Chat",
         "prompted": True,
