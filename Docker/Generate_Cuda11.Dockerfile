@@ -103,24 +103,10 @@ RUN wget -O /tmp/Miniforge.sh https://github.com/conda-forge/miniforge/releases/
     && mamba install -y -q -c pytorch magma-cuda118 \
     && mamba clean -a -f -y
 
-# Install VLLM precompiled with appropriate CUDA and ensure PyTorch is installed form the same version channel
-RUN source /Miniforge/etc/profile.d/conda.sh \
-    && source /Miniforge/etc/profile.d/mamba.sh \
-    && mamba activate BigCodeBench \
-    && pip install https://github.com/vllm-project/vllm/releases/download/v0.4.0/vllm-0.4.0+cu118-cp311-cp311-manylinux1_x86_64.whl \
-        --extra-index-url https://download.pytorch.org/whl/cu118
-
-# Install Flash Attention
-RUN source /Miniforge/etc/profile.d/conda.sh \
-    && source /Miniforge/etc/profile.d/mamba.sh \
-    && mamba activate BigCodeBench \
-    && export MAX_JOBS=$(($(nproc) - 2)) \
-    && pip install --no-cache-dir ninja packaging psutil \
-    && pip install flash-attn==2.5.8 --no-build-isolation
-
 RUN rm -rf /bigcodebench
 
 # Acquire benchmark code to local
+ADD "https://api.github.com/repos/bigcode-project/bigcodebench/commits?per_page=1" latest_commit
 RUN git clone https://github.com/bigcode-project/bigcodebench.git /bigcodebench
 
 # Install BigCodeBench and pre-load the dataset
@@ -130,7 +116,15 @@ RUN source /Miniforge/etc/profile.d/conda.sh \
     && cd /bigcodebench && pip install .[generate] \
     && python -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
 
-WORKDIR /bigcodebench
+# Install Flash Attention and VLLM
+RUN source /Miniforge/etc/profile.d/conda.sh \
+    && source /Miniforge/etc/profile.d/mamba.sh \
+    && mamba activate BigCodeBench \
+    && export MAX_JOBS=$(($(nproc) - 2)) \
+    && pip install --no-cache-dir ninja packaging psutil \
+    && pip install flash-attn==2.5.8 --no-build-isolation
+
+WORKDIR /app
 
 # Declare an argument for the huggingface token
 ARG HF_TOKEN

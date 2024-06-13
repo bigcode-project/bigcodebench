@@ -106,9 +106,7 @@ RUN wget -O /tmp/Miniforge.sh https://github.com/conda-forge/miniforge/releases/
 # Install VLLM precompiled with appropriate CUDA and ensure PyTorch is installed form the same version channel
 RUN source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
-    && mamba activate BigCodeBench \
-    && pip install https://github.com/vllm-project/vllm/releases/download/v0.4.0/vllm-0.4.0-cp311-cp311-manylinux1_x86_64.whl \
-        --extra-index-url https://download.pytorch.org/whl/cu121
+    && mamba activate BigCodeBench
 
 # Install Flash Attention
 RUN source /Miniforge/etc/profile.d/conda.sh \
@@ -121,6 +119,7 @@ RUN source /Miniforge/etc/profile.d/conda.sh \
 RUN rm -rf /bigcodebench
 
 # Acquire benchmark code to local
+ADD "https://api.github.com/repos/bigcode-project/bigcodebench/commits?per_page=1" latest_commit
 RUN git clone https://github.com/bigcode-project/BigCodeBench.git /bigcodebench
 
 # Install BigCodeBench and pre-load the dataset
@@ -130,7 +129,7 @@ RUN source /Miniforge/etc/profile.d/conda.sh \
     && cd /bigcodebench && pip install .[generate] \
     && python -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
 
-WORKDIR /bigcodebench
+WORKDIR /app
 
 # Declare an argument for the huggingface token
 ARG HF_TOKEN
