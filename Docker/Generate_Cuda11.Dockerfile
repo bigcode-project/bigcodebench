@@ -116,7 +116,7 @@ RUN source /Miniforge/etc/profile.d/conda.sh \
     && cd /bigcodebench && pip install .[generate] \
     && python -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
 
-# Install Flash Attention and VLLM
+# Install Flash Attention
 RUN source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
     && mamba activate BigCodeBench \
