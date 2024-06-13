@@ -22,16 +22,15 @@ def syntax_check(code, verbose=False):
 
 
 def script(
-    samples: str, dataset: str, nsample_check: int = None, verbose: bool = False
+    samples: str, nsample_check: int = None, verbose: bool = False
 ):
     # List[Dict{"task_id", "solution"}]
     solutions = load_solutions(samples)
 
-    if dataset == "bigcodebench":
-        from bigcodebench.data import get_bigcodebench
+    from bigcodebench.data import get_bigcodebench
 
-        dataset = get_bigcodebench()
-        dataset_name = "BigCodeBench"
+    dataset = get_bigcodebench()
+    dataset_name = "BigCodeBench"
 
     print(colored(f"Dataset: {dataset_name}", "blue"))
 
