@@ -55,7 +55,7 @@ We inherit the design of the EvalPlus framework, which is a flexible and extensi
 
 To get started, please first set up the environment:
 
-```shell
+```bash
 # Install to use bigcodebench.evaluate
 pip install bigcodebench --upgrade
 # If you want to use the evaluate locally, you need to install the requirements
@@ -80,7 +80,7 @@ pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
 <details><summary>⏬ Using BigCodeBench as a local repo? <i>:: click to expand ::</i></summary>
 <div>
 
-```shell
+```bash
 git clone https://github.com/bigcode-project/bigcodebench.git
 cd bigcodebench
 export PYTHONPATH=$PYTHONPATH:$(pwd)
@@ -96,13 +96,13 @@ pip install -e .[generate]
 ### Code Generation
 
 You are suggested to use `flash-attn` for generating code samples.
-```shell
+```bash
 pip install -U flash-attn
 ```
 
 To generate code samples from a model, you can use the following command:
 >
-```shell
+```bash
 bigcodebench.generate \
     --model [model_name] \
     --subset [complete|instruct] \
@@ -210,7 +210,7 @@ docker run -it --entrypoint bigcodebench.sanitize -v $(pwd):/app terryzho/bigcod
 
 To double-check the post-processing results, you can use `bigcodebench.syncheck` to check the code validity before and after sanitization, which will print erroneous code snippets and why they are wrong:
 
-```shell
+```bash
 # 💡 If you are storing codes in jsonl:
 bigcodebench.syncheck --samples samples.jsonl
 
@@ -229,7 +229,7 @@ docker run -it --entrypoint bigcodebench.syncheck -v $(pwd):/app terryzho/bigcod
 
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
-```shell
+```bash
 # mount the current directory to the container
 docker run -v $(pwd):/app terryzho/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples.jsonl
 # ...Or locally ⚠️
@@ -248,8 +248,11 @@ pip install -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/ma
 
 Then, run the evaluation:
 
-```shell
-bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl
+```bash
+# ...Or locally ⚠️
+bigcodebench.evaluate --subset [complete|instruct] --samples samples-calibrated.jsonl
+# ...If the ground truth is not working locally
+bigcodebench.evaluate --subset [complete|instruct] --samples samples-calibrated.jsonl --no-gt
 ```
 
 > [!Tip]
@@ -310,7 +313,7 @@ bigcodebench.inspect --eval-results sample-sanitized_eval_results.json --in-plac
 
 We provide a sample script to run the full pipeline:
 
-```shell
+```bash
 bash run.sh
 ```
 
