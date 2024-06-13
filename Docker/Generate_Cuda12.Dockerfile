@@ -108,14 +108,6 @@ RUN source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
     && mamba activate BigCodeBench
 
-# Install Flash Attention
-RUN source /Miniforge/etc/profile.d/conda.sh \
-    && source /Miniforge/etc/profile.d/mamba.sh \
-    && mamba activate BigCodeBench \
-    && export MAX_JOBS=$(($(nproc) - 2)) \
-    && pip install --no-cache-dir ninja packaging psutil \
-    && pip install flash-attn==2.5.8 --no-build-isolation
-
 RUN rm -rf /bigcodebench
 
 # Acquire benchmark code to local
@@ -128,6 +120,14 @@ RUN source /Miniforge/etc/profile.d/conda.sh \
     && mamba activate BigCodeBench \
     && cd /bigcodebench && pip install .[generate] \
     && python -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
+
+# Install Flash Attention
+RUN source /Miniforge/etc/profile.d/conda.sh \
+    && source /Miniforge/etc/profile.d/mamba.sh \
+    && mamba activate BigCodeBench \
+    && export MAX_JOBS=$(($(nproc) - 2)) \
+    && pip install --no-cache-dir ninja packaging psutil \
+    && pip install flash-attn==2.5.8 --no-build-isolation
 
 WORKDIR /app
 
