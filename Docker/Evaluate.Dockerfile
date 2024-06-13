@@ -26,6 +26,6 @@ RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench
 RUN chown -R bigcodebenchuser:bigcodebenchuser /bigcodebench
 USER bigcodebenchuser
 
-WORKDIR /bigcodebench
+WORKDIR /app
 
 ENTRYPOINT ["python3", "-m", "bigcodebench.evaluate"]
