@@ -227,12 +227,12 @@ docker run -it --entrypoint bigcodebench.syncheck -v $(pwd):/app bigcodebench/bi
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
 ```bash
-# mount the current directory to the container
-docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples.jsonl
+# Mount the current directory to the container
+docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-sanitized-calibrated
 # ...Or locally ⚠️
-bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl
+bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated
 # ...If the ground truth is working locally (due to some flaky tests)
-bigcodebench.evaluate --subset [complete|instruct] --samples samples.jsonl --no-gt
+bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated --no-gt
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -247,9 +247,9 @@ Then, run the evaluation:
 
 ```bash
 # ...Or locally ⚠️
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-calibrated.jsonl
+bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
 # ...If the ground truth is not working locally
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-calibrated.jsonl --no-gt
+bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated --no-gt
 ```
 
 > [!Tip]
@@ -303,7 +303,7 @@ Here are some tips to speed up the evaluation:
 You can inspect the failed samples by using the following command:
 
 ```bash
-bigcodebench.inspect --eval-results sample-sanitized_eval_results.json --in-place
+bigcodebench.inspect --eval-results sample-sanitized-calibrated_eval_results.json --in-place
 ```
 
 ## Full Script
