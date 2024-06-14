@@ -1,5 +1,5 @@
 name: "🤗 Model Evaluation Request"
-description: Request EvalPlus maintainers to evaluate your model independently and update it on our leaderboard.
+description: Request BigCodeBench maintainers to evaluate your model independently and update it on our leaderboard.
 title: "🤗 [REQUEST] - <MODEL_NAME>"
 labels: ["model eval"]
 body:
@@ -17,19 +17,6 @@ body:
       label: "Model URL"
       description: Indicate the URL (e.g., huggingface or other release pages) of the model
       placeholder: https://huggingface.co/[???]/[???]
-    validations:
-      required: true
-  - type: dropdown
-    id: dtype
-    attributes:
-      label: "Data type"
-      description: What is the intended data type for running the model?
-      multiple: false
-      options:
-        - "float16"
-        - "bfloat16"
-        - "float32"
-        - "None of above: specify the details in the 'Other context' section"
     validations:
       required: true
   - type: textarea
