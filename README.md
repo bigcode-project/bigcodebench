@@ -1,6 +1,6 @@
 # BigCodeBench
 <center>
-<img src="https://github.com/bigcode-bench/bigcode-bench.github.io/blob/main/asset/bigcodebench_banner.png?raw=true" alt="BigCodeBench">
+<img src="https://github.com/bigcode-bench/bigcode-bench.github.io/blob/main/asset/bigcodebench_banner.svg?raw=true" alt="BigCodeBench">
 </center>
 
 > [!WARNING]
