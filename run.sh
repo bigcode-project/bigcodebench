@@ -28,5 +28,13 @@ bigcodebench.generate \
   --subset $SUBSET \
   --backend $BACKEND
 
-bigcodebench.sanitize --samples $FILE_HEADER.jsonl
-bigcodebench.evaluate --subset $SUBSET --samples $FILE_HEADER-sanitized.jsonl
+bigcodebench.sanitize --samples $FILE_HEADER.jsonl --calibrate
+
+# Check if the ground truth works on your machine
+bigcodebench.evaluate --subset $SUBSET --samples $FILE_HEADER-sanitized-calibrated.jsonl
+
+# If the ground truth does not work, you can skip it:
+bigcodebench.evaluate --subset $SUBSET --samples $FILE_HEADER-sanitized-calibrated.jsonl --no-gt
+
+# If not the execution is slow:
+bigcodebench.evaluate --subset $SUBSET --samples $FILE_HEADER-sanitized-calibrated.jsonl --parallel 32
