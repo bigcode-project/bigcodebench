@@ -83,6 +83,7 @@ RUN pip install --upgrade pip
 # Setup optimized Mamba environment with required PyTorch dependencies
 RUN wget -O /tmp/Miniforge.sh https://github.com/conda-forge/miniforge/releases/download/24.3.0-0/Mambaforge-24.3.0-0-Linux-x86_64.sh \
     && bash /tmp/Miniforge.sh -b -p /Miniforge \
+    && echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-12.1/compat/" >> /Miniforge/etc/profile.d/mamba.sh \
     && source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
     && mamba update -y -q -n base -c defaults mamba \
@@ -119,21 +120,11 @@ RUN source /Miniforge/etc/profile.d/conda.sh \
     && source /Miniforge/etc/profile.d/mamba.sh \
     && mamba activate BigCodeBench \
     && cd /bigcodebench && pip install .[generate] \
-    && python -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
-
-# Install Flash Attention
-RUN source /Miniforge/etc/profile.d/conda.sh \
-    && source /Miniforge/etc/profile.d/mamba.sh \
-    && mamba activate BigCodeBench \
+    && python -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()" \
     && export MAX_JOBS=$(($(nproc) - 2)) \
     && pip install --no-cache-dir ninja packaging psutil \
     && pip install flash-attn==2.5.8 --no-build-isolation
 
 WORKDIR /app
-
-# Declare an argument for the huggingface token
-ARG HF_TOKEN
-RUN if [[ -n "$HF_TOKEN" ]] ; then /Miniforge/envs/BigCodeBench/bin/huggingface-cli login --token $HF_TOKEN ; \
-    else echo "No HuggingFace token specified. Access to gated or private models will be unavailable." ; fi
 
 ENTRYPOINT ["/Miniforge/envs/BigCodeBench/bin/python", "-m", "bigcodebench.generate"]
