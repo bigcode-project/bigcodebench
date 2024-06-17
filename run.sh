@@ -36,5 +36,5 @@ bigcodebench.evaluate --subset $SUBSET --samples $FILE_HEADER-sanitized-calibrat
 # If the ground truth does not work, you can skip it:
 bigcodebench.evaluate --subset $SUBSET --samples $FILE_HEADER-sanitized-calibrated.jsonl --no-gt
 
-# If not the execution is slow:
+# If the execution is slow:
 bigcodebench.evaluate --subset $SUBSET --samples $FILE_HEADER-sanitized-calibrated.jsonl --parallel 32
