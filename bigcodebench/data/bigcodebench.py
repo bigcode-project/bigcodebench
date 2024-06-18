@@ -27,9 +27,9 @@ def _ready_bigcodebench_path(mini=False, noextreme=False, version="default") -> 
     
     try:
         dataset = load_dataset(BIGCODEBENCH_HF, split=BIGCODEBENCH_VERSION)
-        dataset.to_json(path)
+        make_cache(url, dataset, path)
     except:
-        make_cache(url, path)
+        make_cache(url, None, path, gh=True)
 
     return path
 
