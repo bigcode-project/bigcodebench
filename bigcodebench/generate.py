@@ -71,7 +71,7 @@ def codegen(
             while sidx < n_samples:
                 try:
                     prompt = task[f"{subset}_prompt"]
-                else:
+                except:
                     raise Exception(f"Invalid subset {subset}")
                 if strip_newlines:
                     prompt = prompt.strip("\n")
