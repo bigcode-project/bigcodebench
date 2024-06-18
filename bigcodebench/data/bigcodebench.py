@@ -26,10 +26,8 @@ def _ready_bigcodebench_path(mini=False, noextreme=False, version="default") -> 
     )
     
     try:
-        raise Exception("Download from HuggingFace")
         dataset = load_dataset(BIGCODEBENCH_HF, split=BIGCODEBENCH_VERSION)
         dataset.to_json(path)
-        print(f"Downloaded BigCodeBench from HuggingFace to {path}")
     except:
         make_cache(url, path)
 
