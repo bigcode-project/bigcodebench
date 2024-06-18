@@ -152,7 +152,7 @@ def evaluate(flags):
                     solution,
                     sample["_identifier"],
                     flags.min_time_limit,
-                    expected_time[task_id] if not flags.no_gt else 20
+                    expected_time[task_id] if not expected_time else 20
                 )
                 futures.append(executor.submit(check_correctness, *args))
                 completion_id[task_id] += 1
