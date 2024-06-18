@@ -69,10 +69,7 @@ def codegen(
 
             sidx = n_samples - nsamples
             while sidx < n_samples:
-                if subset == "instruct":
-                    prompt = task["instruct_prompt"]
-                elif subset == "complete":
-                    prompt = task["complete_prompt"]
+                prompt = task[f"{subset}_prompt"]
                 else:
                     raise Exception(f"Invalid subset {subset}")
                 if strip_newlines:

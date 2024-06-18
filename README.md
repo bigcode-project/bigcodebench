@@ -160,8 +160,8 @@ Following which, you can run the built container as shown in above.
 
 * `task_id` is the identifier string for the task
 * `entry_point` is the name of the function
-* `prompt` is the prompt for BigCodeBench-Complete
-* `instruction` is the prompt for BigCodeBench-Instruct
+* `complete_prompt` is the prompt for BigCodeBench-Complete
+* `instruct_prompt` is the prompt for BigCodeBench-Instruct
 + `canonical_solution` is the ground-truth implementation
 + `test` is the `unittest.TestCase` class
 

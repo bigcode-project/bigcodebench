@@ -30,7 +30,7 @@ def inspection(args):
             os.makedirs(task_path)
         task_id_data = problems[task_id]
         with open(os.path.join(task_path, "ground_truth.py"), "w") as f:
-            f.write(task_id_data["complete_prompt"] + "\n\n" + task_id_data["canonical_solution"])
+            f.write(task_id_data[f"{args.subset}_prompt"] + "\n\n" + task_id_data["canonical_solution"])
         
         # write test
         with open(os.path.join(task_path, "test_case.py"), "w") as f:
@@ -49,6 +49,7 @@ def inspection(args):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--eval-results", required=True, type=str)
+    parser.add_argument("--subset", required=True, type=str)
     parser.add_argument("--in-place", action="store_true")
     args = parser.parse_args()
     

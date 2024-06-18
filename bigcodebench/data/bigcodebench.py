@@ -40,12 +40,14 @@ def get_bigcodebench(
     """Get BigCodeBench from BigCode's github repo and return as a list of parsed dicts.
 
     Returns:
-        List[Dict[str, str]]: List of dicts with keys "prompt", "test", "entry_point"
+        List[Dict[str, str]]: List of dicts with keys "complete_prompt", "instruct_prompt", "canonical_solution", "test", "entry_point"
 
     Notes:
         "task_id" is the identifier string for the task.
-        "prompt" is the prompt to be used for the task (function signature with docstrings).
-        "test" is test-cases wrapped in a `check` function.
+        "complete_prompt" is the prompt to be used for BigCodeBench-Complete.
+        "instruct_prompt" is the prompt to be used for BigCodeBench-Instruct.
+        "canonical_solution" is the ground-truth implementation
+        "test" is the `unittest.TestCase` class.
         "entry_point" is the name of the function.
     """
     # Check if open eval file exists in CACHE_DIR
