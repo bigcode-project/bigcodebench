@@ -24,25 +24,29 @@ def get_dataset_metadata(name: str, version: str, mini: bool, noextreme: bool = 
     return url, cache_path
 
 
-def make_cache(gzip_url, cache_path):
+def make_cache(gzip_url, hf_data, cache_path, gh=False):
     # Check if open eval file exists in CACHE_DIR
     if not os.path.exists(cache_path):
-        # Install BigCodeBench dataset and parse as jsonl
-        print(f"Downloading dataset from {gzip_url}")
-        with tempdir.TempDir() as tmpdir:
-            gz_path = os.path.join(tmpdir, f"data.jsonl.gz")
-            wget.download(gzip_url, gz_path)
+        
+        if gh:
+            # Install BigCodeBench dataset and parse as jsonl
+            print(f"Downloading dataset from {gzip_url}")
+            with tempdir.TempDir() as tmpdir:
+                gz_path = os.path.join(tmpdir, f"data.jsonl.gz")
+                wget.download(gzip_url, gz_path)
 
-            with gzip.open(gz_path, "rb") as f:
-                data = f.read().decode("utf-8")
+                with gzip.open(gz_path, "rb") as f:
+                    data = f.read().decode("utf-8")
 
-        # create CACHE_DIR if not exists
-        if not os.path.exists(CACHE_DIR):
-            os.makedirs(CACHE_DIR)
+            # create CACHE_DIR if not exists
+            if not os.path.exists(CACHE_DIR):
+                os.makedirs(CACHE_DIR)
 
-        # Write the original open eval file to CACHE_DIR
-        with open(cache_path, "w") as f:
-            f.write(data)
+            # Write the original open eval file to CACHE_DIR
+            with open(cache_path, "w") as f:
+                f.write(data)
+        else:
+            hf_data.to_json(cache_path)
 
 
 def write_jsonl(
@@ -152,10 +156,12 @@ def write_directory(directory: PathLike, data: Iterable[Dict]):
 def completeness_check(name, data):
     for task_id, task in data.items():
         for key in [
-            "prompt",
+            "complete_prompt",
+            "instruct_prompt",
             "canonical_solution",
+            "code_prompt",
             "test",
-            "instruction"
+            "entry_point"
         ]:
             assert key in task, f"{key} not found in {name} #{task_id}!"
 
