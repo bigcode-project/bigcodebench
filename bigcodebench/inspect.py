@@ -30,7 +30,7 @@ def inspection(args):
             os.makedirs(task_path)
         task_id_data = problems[task_id]
         with open(os.path.join(task_path, "ground_truth.py"), "w") as f:
-            f.write(task_id_data["prompt"] + "\n\n" + task_id_data["canonical_solution"])
+            f.write(task_id_data["complete_prompt"] + "\n\n" + task_id_data["canonical_solution"])
         
         # write test
         with open(os.path.join(task_path, "test_case.py"), "w") as f:

@@ -10,9 +10,11 @@ from bigcodebench.data.utils import (
     make_cache,
     stream_jsonl,
 )
+from datasets import load_dataset
 
 BIGCODEBENCH_OVERRIDE_PATH = os.environ.get("BIGCODEBENCH_OVERRIDE_PATH", None)
-BIGCODEBENCH_VERSION = "v0.1.0"
+BIGCODEBENCH_HF = "bigcode/bigcodebench"
+BIGCODEBENCH_VERSION = "v0.1.0_hf"
 
 def _ready_bigcodebench_path(mini=False, noextreme=False, version="default") -> str:
     if BIGCODEBENCH_OVERRIDE_PATH:
@@ -22,7 +24,14 @@ def _ready_bigcodebench_path(mini=False, noextreme=False, version="default") -> 
     url, path = get_dataset_metadata(
         "BigCodeBench", BIGCODEBENCH_VERSION, mini, noextreme
     )
-    make_cache(url, path)
+    
+    try:
+        raise Exception("Download from HuggingFace")
+        dataset = load_dataset(BIGCODEBENCH_HF, split=BIGCODEBENCH_VERSION)
+        dataset.to_json(path)
+        print(f"Downloaded BigCodeBench from HuggingFace to {path}")
+    except:
+        make_cache(url, path)
 
     return path
 

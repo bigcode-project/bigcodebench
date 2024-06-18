@@ -50,7 +50,7 @@ def get_groundtruth(problems, hashcode, check_gt_only):
     expected_time = {}
     for task_id, problem in tqdm(problems.items()):
         expected_time[task_id] = trusted_exec(
-            problem["prompt"] + "\n" + problem["clean_canonical_solution"],
+            problem["complete_prompt"] + "\n" + problem["clean_canonical_solution"],
             problem["test"],
             problem["task_id"],
         )
@@ -141,10 +141,10 @@ def evaluate(flags):
                 solution = (
                     sample["solution"]
                     if "solution" in sample
-                    else problems[task_id]["prompt"] + sample["completion"]
+                    else problems[task_id]["complete_prompt"] + sample["completion"]
                 )
                 if "sanitized-calibrated" in flags.samples:
-                    solution = problems[task_id]["prompt_wo_doc"] + "\n    pass\n" + solution
+                    solution = problems[task_id]["code_prompt"] + "\n    pass\n" + solution
                 remainings.add(sample["_identifier"])
                 args = (
                     completion_id[task_id],

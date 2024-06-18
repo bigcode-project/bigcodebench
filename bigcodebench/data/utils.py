@@ -152,10 +152,12 @@ def write_directory(directory: PathLike, data: Iterable[Dict]):
 def completeness_check(name, data):
     for task_id, task in data.items():
         for key in [
-            "prompt",
+            "complete_prompt",
+            "instruct_prompt",
             "canonical_solution",
+            "code_prompt",
             "test",
-            "instruction"
+            "entry_point"
         ]:
             assert key in task, f"{key} not found in {name} #{task_id}!"
 

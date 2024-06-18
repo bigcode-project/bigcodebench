@@ -228,10 +228,10 @@ def script(
         if "solution" in solution:
             old_code = solution["solution"]
             if calibrate:
-                old_code = solution["solution"].replace("```python\n    ", "```python\n"+dataset[task_id]["prompt"]+"    ")
+                old_code = solution["solution"].replace("```python\n    ", "```python\n"+dataset[task_id]["complete_prompt"]+"    ")
         else:
             assert "completion" in solution
-            old_code = dataset[task_id]["prompt"] + "\n" + solution["completion"]
+            old_code = dataset[task_id]["complete_prompt"] + "\n" + solution["completion"]
 
         new_code = sanitize(code=old_code, entrypoint=function_name)
         # if changed, print the message
