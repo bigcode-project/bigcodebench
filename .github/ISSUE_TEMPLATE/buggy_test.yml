@@ -1,6 +1,6 @@
 name: "🐛 Report Bad Test Inputs"
 description: Report to us that certain test inputs should be removed.
-title: "🐛 [TestRemoval] - <TASK_ID> <WHY>"
+title: "🐛 [TestRemoval/TestRepair] - <TASK_ID> <WHY>"
 labels: ["bug"]
 body:
   - type: input
@@ -21,14 +21,21 @@ body:
     id: task_id
     attributes:
       label: "Task ID of the programming task"
-      placeholder: HumanEval/[??]
+      placeholder: BigCodeBench/[??]
     validations:
       required: true
   - type: textarea
-    id: test_input
+    id: original
     attributes:
-      label: "Test input"
-      description: The text form of the test input that you think should be removed
+      label: "The original test"
+      description: You can run `python -c "from bigcodebench.data import get_bigcodebench print(get_bigcodebench['BigCodeBench/❓']['test'])"`
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: new
+    attributes:
+      label: "Your proposed new test"
       render: python
     validations:
       required: true

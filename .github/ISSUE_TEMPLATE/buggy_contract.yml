@@ -1,14 +1,14 @@
-name: "🐛 Report Bad Contract"
-description: Report to us that certain program contract should be repaired.
-title: "🐛 [TestRemoval] - <TASK_ID> <WHY>"
-labels: ["program contract"]
+name: "🐛 Report Bad Task"
+description: Report to us that certain programming task should be repaired.
+title: "🐛 [TaskRemoval/TaskRepair] - <TASK_ID> <WHY>"
+labels: ["programming task"]
 body:
   - type: input
     id: version
     attributes:
       label: "BigCodeBench version"
       description: What is the version of BigCodeBench? You can find it by running `pip show bigcodebench`.
-      placeholder: For example, 0.1.0
+      placeholder: For example, 0.1.5
     validations:
       required: true
   - type: input
@@ -27,15 +27,15 @@ body:
   - type: textarea
     id: original
     attributes:
-      label: "The original wrong contract"
-      description: You can run `python -c "from bigcodebench.data import get_bigcodebench print(get_bigcodebench['BigCodeBench/❓']['contract'])"`
+      label: "The original complete prompt"
+      description: You can run `python -c "from bigcodebench.data import get_bigcodebench print(get_bigcodebench['BigCodeBench/❓']['complete_prompt'])"`
       render: python
     validations:
       required: true
   - type: textarea
     id: new
     attributes:
-      label: "Your proposed new contract"
+      label: "Your proposed new complete prompt"
       render: python
     validations:
       required: true
