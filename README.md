@@ -36,7 +36,7 @@ To facilitate the evaluation of LLMs on BigCodeBench, we provide this Python pac
 
 BigCodeBench focuses on the evaluation of LLM4Code with *diverse function calls* and *complex instruction*, with:
 
-* ✨ **Precise evaluation & ranking**: See [our leaderboard](https://bigcode-bench.github.io/leaderboard.html) for latest LLM rankings before & after rigorous evaluation.
+* ✨ **Precise evaluation & ranking**: See [our leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard) for latest LLM rankings before & after rigorous evaluation.
 * ✨ **Pre-generated samples**: BigCodeBench accelerates code intelligence research by open-sourcing [LLM-generated samples](#-LLM-generated-code) for various models -- no need to re-run the expensive benchmarks!
 
 ### Main Differences from EvalPlus
