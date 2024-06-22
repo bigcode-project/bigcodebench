@@ -9,7 +9,7 @@ from tqdm import tqdm
 import pandas as pd
 import itertools
 import math
-from datasets import Dataset
+from datasets import Dataset, DatasetDict
 from transformers import AutoTokenizer
 
 
@@ -317,21 +317,27 @@ if __name__ == "__main__":
     instruct_data = read_task_perf("instruct")
     complete_solve_rate = get_solve_rate(complete_data, task="complete")
     instruct_solve_rate = get_solve_rate(instruct_data, task="instruct")
-    push_ds(complete_solve_rate, "bigcode/bigcodebench-complete-solve-rate")
-    push_ds(instruct_solve_rate, "bigcode/bigcodebench-instruct-solve-rate")
+    solve_rate_ds = DatasetDict({"complete": complete_solve_rate, "instruct": instruct_solve_rate})
+    push_ds(solve_rate_ds, "bigcode/bigcodebench-solve-rate")
     
-    task_level = True
-    no_tie = True
-    battles = get_winner_df(complete_data, "complete", task_level=task_level, no_tie=no_tie)
-    elo_mle_bootstrap = get_bootstrap_result(battles, get_elo_mle, 500)
-    bootstrap_lu_median = elo_mle_bootstrap.median().reset_index().set_axis(["model", "Elo rating"], axis=1)
-    bootstrap_lu_median["Elo rating"] = (bootstrap_lu_median["Elo rating"] + 0.5).astype(int)
-    bootstrap_lu_median_dict = bootstrap_lu_median.set_index("model")["Elo rating"].to_dict()
-    elo = get_bootstrap_scores(elo_mle_bootstrap)
-    push_ds(elo, "bigcode/bigcodebench-elo")
-    # push_ds(elo, "bigcode/bigcodebench-elo-model-with-tie")
+    elo_config = {
+        "task_no_tie": (True, True),
+        "benchmark_tie": (False, False),
+    }
+    elo_ds = dict()
+    for config, (task_level, no_tie) in elo_config.items():
+        battles = get_winner_df(complete_data, "complete", task_level=task_level, no_tie=no_tie)
+        elo_mle_bootstrap = get_bootstrap_result(battles, get_elo_mle, 500)
+        bootstrap_lu_median = elo_mle_bootstrap.median().reset_index().set_axis(["model", "Elo rating"], axis=1)
+        bootstrap_lu_median["Elo rating"] = (bootstrap_lu_median["Elo rating"] + 0.5).astype(int)
+        bootstrap_lu_median_dict = bootstrap_lu_median.set_index("model")["Elo rating"].to_dict()
+        if config == "task_no_tie":
+            task_elo = bootstrap_lu_median_dict
+        elo = get_bootstrap_scores(elo_mle_bootstrap)
+        elo_ds[config] = elo
+    push_ds(DatasetDict(elo_ds), "bigcode/bigcodebench-elo")
 
-    results = update_elo_rating(results, bootstrap_lu_median_dict)
+    results = update_elo_rating(results, task_elo)
     with open("results.json", "w") as f:
         json.dump(results, f, indent=4)
     ds = get_hf_ds(results)
