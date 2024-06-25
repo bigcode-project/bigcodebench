@@ -333,19 +333,20 @@ We share pre-generated code samples from LLMs we have [evaluated](https://huggin
 
 ## Known Issues
 
-- [ ] We notice that some tasks heavily use memory for scientific modeling during testing. It will lead to timeout issues on some machines. If you get an error message like `Check failed: ret == 0 (11 vs. 0)Thread creation via pthread_create() failed.` in Tensorflow, it is very likely due to the memory issue. Try to allocate more memory to the process or reduce the number of parallel processes.
+- [ ] We notice that some tasks heavily use memory for scientific modeling during testing. This will lead to timeout issues for some machines. If you get an error message like `Check failed: ret == 0 (11 vs. 0)Thread creation via pthread_create() failed.` in Tensorflow, it is very likely due to the memory issue. Try to allocate more memory to the process or reduce the number of parallel processes.
 
 - [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.2%) between runs. We are working on improving the evaluation stability.
 
-- [ ] We are aware of the issue that some users may need to use a proxy to access the internet. We are working on a subset of the tasks that do not require internet access to evaluate the code.
+- [ ] We are aware of the issue of some users needing to use a proxy to access the internet. We are working on a subset of the tasks that do not require internet access to evaluate the code.
 
 ## 📜 Citation
 
 ```bibtex
-@article{bigcodebench,
-  title={BigCodeBench: Benchmarking Code Generation with Diverse Function Calls and Complex Instructions},
-  author={Zhuo, Terry Yue and Vu, Minh Chien and Chim, Jenny and Hu, Han and Yu, Wenhao and Widyasari, Ratnadira and Yusuf, Imam Nur Bani and Zhan, Haolan and He, Junda and Paul, Indraneil and Brunner, Simon and Gong, Chen and Hoang, Thong and Zebaze, Armel Randy and Hong, Xiaoheng and Li, Wen-Ding and Kaddour, Jean and Xu, Ming and Zhang, Zhihan and Yadav, Prateek and Jain, Naman and Gu, Alex and Cheng, Zhoujun and Liu, Jiawei and Liu, Qian and Wang, Zijian and Lo, David and Hui, Binyuan and Muennighoff, Niklas and Fried, Daniel and Du, Xiaoning and de Vries, Harm and Von Werra, Leandro},
-  year={2024}
+@article{zhuo2024bigcodebench,
+    title={BigCodeBench: Benchmarking Code Generation with Diverse Function Calls and Complex Instructions}, 
+    author={Terry Yue Zhuo and Minh Chien Vu and Jenny Chim and Han Hu and Wenhao Yu and Ratnadira Widyasari and Imam Nur Bani Yusuf and Haolan Zhan and Junda He and Indraneil Paul and Simon Brunner and Chen Gong and Thong Hoang and Armel Randy Zebaze and Xiaoheng Hong and Wen-Ding Li and Jean Kaddour and Ming Xu and Zhihan Zhang and Prateek Yadav and Naman Jain and Alex Gu and Zhoujun Cheng and Jiawei Liu and Qian Liu and Zijian Wang and David Lo and Binyuan Hui and Niklas Muennighoff and Daniel Fried and Xiaoning Du and Harm de Vries and Leandro Von Werra},
+    journal={arXiv preprint arXiv:2406.15877},
+    year={2024}
 }
 ```
 
