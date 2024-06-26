@@ -238,7 +238,7 @@ def evaluate(flags):
     }
     
     mode = "-calibrated" if "sanitized-calibrated" in flags.samples else ""
-    
+    flags.subset = flags.subset[0].upper() + flags.subset[1:]
     cprint(f"BigCodeBench-{flags.subset}{mode}", "green")
     
     gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
