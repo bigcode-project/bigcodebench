@@ -248,7 +248,7 @@ Then, run the evaluation:
 # ...Or locally ⚠️
 bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
 # ...If you really don't want to check the ground truths
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated --no-gt
+bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl --no-gt
 ```
 
 > [!Tip]
