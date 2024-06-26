@@ -27,14 +27,14 @@ from bigcodebench.eval import (
     estimate_pass_at_k,
     untrusted_check,
 )
-from bigcodebench.gen.util import trusted_exec
+from bigcodebench.gen.util import trusted_check
 
 # 1st item: the status
 # 2nd item (optional): the detailed pass/fail boolean for each input
 Result = Tuple[str, List[bool]]
 
 
-def get_groundtruth(problems, hashcode, check_gt_only):
+def get_groundtruth(n_workers, problems, hashcode, check_gt_only, max_as_limit, max_data_limit, max_stack_limit):
     cache_file = os.path.join(CACHE_DIR, f"{hashcode}.pkl")
     if os.path.exists(cache_file):
         if check_gt_only:
@@ -47,13 +47,29 @@ def get_groundtruth(problems, hashcode, check_gt_only):
     os.makedirs(CACHE_DIR, exist_ok=True)
     print("\nAsserting the groundtruth...")
     tbegin = time.time()
-    expected_time = {}
-    for task_id, problem in tqdm(problems.items()):
-        expected_time[task_id] = trusted_exec(
-            problem["complete_prompt"] + "\n" + problem["canonical_solution"],
-            problem["test"],
-            problem["task_id"],
-        )
+    
+    with ProcessPoolExecutor(max_workers=n_workers) as executor:
+        futures = []
+        n_samples = 0
+        expected_time = dict()
+        
+        for problem in problems.values():
+            args = (
+                problem["complete_prompt"] + "\n" + problem["canonical_solution"],
+                problem["test"],
+                problem["task_id"],
+                max_as_limit,
+                max_data_limit,
+                max_stack_limit
+            )
+            
+            futures.append(executor.submit(trusted_check, *args))
+            n_samples += 1
+
+        for future in tqdm(as_completed(futures), total=n_samples):
+            result = future.result()
+            expected_time[result["task_id"]] = result["time"]
+    
     print(f"Expected outputs computed in {time.time() - tbegin:.2f}s")
     
     with open(cache_file, "wb") as f:
@@ -65,9 +81,12 @@ def check_correctness(
     completion_id: int,
     problem: Dict[str, Any],
     solution: str,
+    max_as_limit: float,
+    max_data_limit: float,
+    max_stack_limit: float,
     identifier=None,
     min_time_limit: float = 0.1,
-    gt_time_limit: float = 2.0
+    gt_time_limit: float = 2.0,
 ) -> Dict[str, Result]:  # {...}, "base" | "plus" -> (status, details)
     ret = {
         "completion_id": completion_id,
@@ -79,8 +98,11 @@ def check_correctness(
         solution,
         problem["test"],
         problem["entry_point"],
+        max_as_limit,
+        max_data_limit,
+        max_stack_limit,
         min_time_limit,
-        gt_time_limit
+        gt_time_limit,
     )
     return ret
 
@@ -101,6 +123,14 @@ def evaluate(flags):
         assert flags.samples.endswith(".jsonl")
         result_path = flags.samples.replace(".jsonl", "_eval_results.json")
 
+    problems = get_bigcodebench()
+    dataset_hash = get_bigcodebench_hash()
+    
+    if not flags.no_gt:
+        expected_time = get_groundtruth(n_workers, problems, dataset_hash, flags.check_gt_only, flags.max_as_limit, flags.max_data_limit, flags.max_stack_limit)
+    else:
+        expected_time = {task_id: None for task_id in problems}
+    
     if os.path.isfile(result_path):
         print(f"Load from previous results from {result_path}")
         with open(result_path, "r") as f:
@@ -108,11 +138,6 @@ def evaluate(flags):
 
         results = compatible_eval_result(results)
     else:
-        problems = get_bigcodebench()
-        dataset_hash = get_bigcodebench_hash()
-        expected_time = None
-        if not flags.no_gt:
-            expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
         
         if flags.check_gt_only:
             return
@@ -150,9 +175,12 @@ def evaluate(flags):
                     completion_id[task_id],
                     problems[task_id],
                     solution,
+                    flags.max_as_limit,
+                    flags.max_data_limit,
+                    flags.max_stack_limit,
                     sample["_identifier"],
                     flags.min_time_limit,
-                    expected_time[task_id] if expected_time else 20
+                    expected_time[task_id] if expected_time[task_id] else 20
                 )
                 futures.append(executor.submit(check_correctness, *args))
                 completion_id[task_id] += 1
@@ -208,7 +236,21 @@ def evaluate(flags):
         for k in [1, 5, 10, 25, 100]
         if total.min() >= k
     }
-    cprint(f"BigCodeBench-{flags.subset}", "green")
+    
+    mode = "-calibrated" if "sanitized-calibrated" in flags.samples else ""
+    flags.subset = flags.subset[0].upper() + flags.subset[1:]
+    cprint(f"BigCodeBench-{flags.subset}{mode}", "green")
+    
+    gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
+    
+    if flags.no_gt:
+        cprint(f"Groundtruth is not checked", "yellow")
+    else:
+        if gt_pass_rate > 0.95:
+            cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}", "green")
+        else:
+            cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}\nPlease be cautious!", "red")
+    
     for k, v in pass_at_k.items():
         cprint(f"{k}:\t{v:.3f}", "green")
 
@@ -240,6 +282,9 @@ def main():
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
+    parser.add_argument("--max-as-limit", default=128*1024, type=float)
+    parser.add_argument("--max-data-limit", default=4*1024, type=float)
+    parser.add_argument("--max-stack-limit", default=5, type=float)
     parser.add_argument(
         "--check-gt-only", action="store_true", help="Check the groundtruth"
     )

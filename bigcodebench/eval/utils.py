@@ -258,7 +258,7 @@ class redirect_stdin(contextlib._RedirectStream):  # type: ignore
     _stream = "stdin"
 
 
-def reliability_guard(maximum_memory_bytes: Optional[int] = None):
+def reliability_guard(max_as_limit, max_data_limit, max_stack_limit):
     """
     This disables various destructive functions and prevents the generated code
     from interfering with the test (e.g. fork bomb, killing other processes,
@@ -282,18 +282,22 @@ def reliability_guard(maximum_memory_bytes: Optional[int] = None):
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3" 
     os.environ['TF_ENABLE_ONEDNN_OPTS'] = "0"
     
-    if maximum_memory_bytes is not None:
+    if max_as_limit and max_data_limit and max_stack_limit:
         import resource
-
+        
+        max_as_limit = max_as_limit * 1024 * 1024
+        max_data_limit = max_data_limit * 1024 * 1024
+        max_stack_limit = max_stack_limit * 1024 * 1024
+        
         resource.setrlimit(
-            resource.RLIMIT_AS, (maximum_memory_bytes, maximum_memory_bytes)
+            resource.RLIMIT_AS, (max_as_limit, max_as_limit)
         )
         resource.setrlimit(
-            resource.RLIMIT_DATA, (maximum_memory_bytes, maximum_memory_bytes)
+            resource.RLIMIT_DATA, (max_data_limit, max_data_limit)
         )
         if not platform.uname().system == "Darwin":
             resource.setrlimit(
-                resource.RLIMIT_STACK, (maximum_memory_bytes, maximum_memory_bytes)
+                resource.RLIMIT_STACK, (max_stack_limit, max_stack_limit)
             )
 
     faulthandler.disable()

@@ -1,8 +1,10 @@
+import os
 import time
 import sys
 import types
 import unittest
-
+import multiprocessing
+from multiprocessing import Array, Value, Manager
 from bigcodebench.eval.utils import (
     create_tempdir,
     reliability_guard,
@@ -12,7 +14,7 @@ from bigcodebench.eval.utils import (
 )
 
 
-def trusted_exec(code, test_code, task_id):
+def trusted_exec(code, test_code, task_id, max_as_limit, max_data_limit, max_stack_limit, times):
     """Execute trusted code in place."""
 
     with create_tempdir():
@@ -25,8 +27,7 @@ def trusted_exec(code, test_code, task_id):
         chdir = os.chdir
         module_name = "__test__"
         new_module = types.ModuleType(module_name)
-        maximum_memory_bytes = 128 * 1024 * 1024 * 1024
-        reliability_guard(maximum_memory_bytes=maximum_memory_bytes)
+        reliability_guard(max_as_limit, max_data_limit, max_stack_limit)
         # Set necessary attributes for the module
         new_module.__dict__.update({
             '__builtins__': builtins,
@@ -50,19 +51,19 @@ def trusted_exec(code, test_code, task_id):
         suite = loader.loadTestsFromTestCase(TestCases)
         test_result = unittest.TestResult()
         start = time.time()
-        with safe_environment(), swallow_io():
+        with safe_environment(), swallow_io(), time_limit(seconds=120):
             suite.run(test_result)
-        for test, trace in test_result.failures + test_result.errors:
-            print(trace)
+
+        if len(test_result.failures + test_result.errors) > 0:
+            times.value = -1
+        else:
+            times.value = time.time() - start
+        
         # Needed for cleaning up.
         shutil.rmtree = rmtree
         os.rmdir = rmdir
         os.chdir = chdir
-        assert len(
-            test_result.failures + test_result.errors
-        ) == 0, f"{task_id} failed with errors: {test_result.errors} and failures: {test_result.failures}"
 
-        return time.time() - start
 
 def trusted_check_exec(code, inputs):
     """Check trusted_exec success."""
@@ -72,3 +73,45 @@ def trusted_check_exec(code, inputs):
     except Exception:
         return False
     return True
+
+
+def trusted_check(
+    code: str,
+    test_code: str,
+    task_id: str,
+    max_as_limit: float,
+    max_data_limit: float,
+    max_stack_limit: float,
+):
+    timeout = os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", 120) + 1
+    # shared memory objects
+    times = Value("d")
+    manager = Manager()
+
+    p = multiprocessing.Process(
+        target=trusted_exec,
+        args=(
+            code,
+            test_code,
+            task_id,
+            max_as_limit,
+            max_data_limit,
+            max_stack_limit,
+            times,
+        ),
+    )
+    p.start()
+    p.join(timeout=timeout+1)
+    if p.is_alive():
+        p.terminate()
+        time.sleep(0.1)
+    if p.is_alive():
+        p.kill()
+        time.sleep(0.1)
+
+    if times.value == -1:
+        times = -1
+    else:
+        times = times.value
+    
+    return {"task_id": task_id, "time": times}

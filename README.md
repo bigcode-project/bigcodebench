@@ -225,11 +225,13 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```bash
 # Mount the current directory to the container
-docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-sanitized-calibrated
-# ...Or locally ⚠️
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated
-# ...If the ground truth is working locally (due to some flaky tests)
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated --no-gt
+# If you want to change the RAM address space limit (in MB, 128 GB by default): `--max-as-limit XXX`
+# If you want to change the RAM data segment limit (in MB, 4 GB by default): `--max-data-limit`
+# If you want to change the RAM stack limit (in MB, 4 MB by default): `--max-stack-limit`
+docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
+
+# If you only want to check the ground truths
+docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl --check-gt-only
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -245,8 +247,8 @@ Then, run the evaluation:
 ```bash
 # ...Or locally ⚠️
 bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
-# ...If the ground truth is not working locally
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated --no-gt
+# ...If you really don't want to check the ground truths
+bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl --no-gt
 ```
 
 > [!Tip]
@@ -276,8 +278,9 @@ Reading samples...
 1140it [00:00, 1901.64it/s]
 Evaluating samples...
 100%|██████████████████████████████████████████| 1140/1140 [19:53<00:00, 6.75it/s]
-bigcodebench
-{'pass@1': 0.568}
+BigCodeBench-instruct-calibrated
+Groundtruth pass rate: 1.000
+pass@1: 0.568
 ```
 
 - The "k" includes `[1, 5, 10]` where k values `<=` the sample size will be used
@@ -330,9 +333,7 @@ We share pre-generated code samples from LLMs we have [evaluated](https://huggin
 
 ## Known Issues
 
-- [ ] We notice that some tasks heavily use memory for scientific modeling during testing. This will lead to timeout issues for some machines. If you get an error message like `Check failed: ret == 0 (11 vs. 0)Thread creation via pthread_create() failed.` in Tensorflow, it is very likely due to the memory issue. Try to allocate more memory to the process or reduce the number of parallel processes.
-
-- [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.2%) between runs. We are working on improving the evaluation stability.
+- [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.1%) between runs. We are working on improving the evaluation stability.
 
 - [ ] We are aware of the issue of some users needing to use a proxy to access the internet. We are working on a subset of the tasks that do not require internet access to evaluate the code.
 
