@@ -110,6 +110,9 @@ def evaluate(flags):
         assert flags.samples.endswith(".jsonl")
         result_path = flags.samples.replace(".jsonl", "_eval_results.json")
 
+    problems = get_bigcodebench()
+    dataset_hash = get_bigcodebench_hash()
+    
     if not flags.no_gt:
         expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
     else:
@@ -122,8 +125,6 @@ def evaluate(flags):
 
         results = compatible_eval_result(results)
     else:
-        problems = get_bigcodebench()
-        dataset_hash = get_bigcodebench_hash()
         
         if flags.check_gt_only:
             return
