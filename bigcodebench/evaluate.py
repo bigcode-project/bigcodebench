@@ -34,7 +34,7 @@ from bigcodebench.gen.util import trusted_exec
 Result = Tuple[str, List[bool]]
 
 
-def get_groundtruth(problems, hashcode, check_gt_only):
+def get_groundtruth(problems, hashcode, check_gt_only, max_as_limit, max_data_limit, max_stack_limit):
     cache_file = os.path.join(CACHE_DIR, f"{hashcode}.pkl")
     if os.path.exists(cache_file):
         if check_gt_only:
@@ -53,6 +53,9 @@ def get_groundtruth(problems, hashcode, check_gt_only):
             problem["complete_prompt"] + "\n" + problem["canonical_solution"],
             problem["test"],
             problem["task_id"],
+            max_as_limit,
+            max_data_limit,
+            max_stack_limit
         )
     print(f"Expected outputs computed in {time.time() - tbegin:.2f}s")
     
@@ -65,9 +68,12 @@ def check_correctness(
     completion_id: int,
     problem: Dict[str, Any],
     solution: str,
+    max_as_limit: float,
+    max_data_limit: float,
+    max_stack_limit: float,
     identifier=None,
     min_time_limit: float = 0.1,
-    gt_time_limit: float = 2.0
+    gt_time_limit: float = 2.0,
 ) -> Dict[str, Result]:  # {...}, "base" | "plus" -> (status, details)
     ret = {
         "completion_id": completion_id,
@@ -79,8 +85,11 @@ def check_correctness(
         solution,
         problem["test"],
         problem["entry_point"],
+        max_as_limit,
+        max_data_limit,
+        max_stack_limit,
         min_time_limit,
-        gt_time_limit
+        gt_time_limit,
     )
     return ret
 
@@ -150,6 +159,9 @@ def evaluate(flags):
                     completion_id[task_id],
                     problems[task_id],
                     solution,
+                    flags.max_as_limit,
+                    flags.max_data_limit,
+                    flags.max_stack_limit,
                     sample["_identifier"],
                     flags.min_time_limit,
                     expected_time[task_id] if expected_time else 20
@@ -240,6 +252,9 @@ def main():
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
+    parser.add_argument("--max-as-limit", default=128*1024, type=float)
+    parser.add_argument("--max-data-limit", default=4*1024, type=float)
+    parser.add_argument("--max-stack-limit", default=5, type=float)
     parser.add_argument(
         "--check-gt-only", action="store_true", help="Check the groundtruth"
     )

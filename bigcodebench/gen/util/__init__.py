@@ -12,7 +12,7 @@ from bigcodebench.eval.utils import (
 )
 
 
-def trusted_exec(code, test_code, task_id):
+def trusted_exec(code, test_code, task_id, max_as_limit, max_data_limit, max_stack_limit):
     """Execute trusted code in place."""
 
     with create_tempdir():
@@ -25,8 +25,7 @@ def trusted_exec(code, test_code, task_id):
         chdir = os.chdir
         module_name = "__test__"
         new_module = types.ModuleType(module_name)
-        maximum_memory_bytes = 128 * 1024 * 1024 * 1024
-        reliability_guard(maximum_memory_bytes=maximum_memory_bytes)
+        reliability_guard(max_as_limit, max_data_limit, max_stack_limit)
         # Set necessary attributes for the module
         new_module.__dict__.update({
             '__builtins__': builtins,

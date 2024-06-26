@@ -110,6 +110,9 @@ def unsafe_execute(
     code: str,
     test_code: str,
     timeout: float,
+    max_as_limit: float,
+    max_data_limit: float,
+    max_stack_limit: float,
     stat,  # Value
     details,  # Array
 ):
@@ -123,9 +126,7 @@ def unsafe_execute(
         rmdir = os.rmdir
         chdir = os.chdir
         # Disable functionalities that can make destructive changes to the test.
-        # allow only 128GB memory usage
-        maximum_memory_bytes = 128 * 1024 * 1024 * 1024
-        reliability_guard(maximum_memory_bytes=maximum_memory_bytes)
+        reliability_guard(max_as_limit, max_data_limit, max_stack_limit)
         module_name = "__test__"
         new_module = types.ModuleType(module_name)
         # Set necessary attributes for the module
@@ -170,11 +171,14 @@ def untrusted_check(
     code: str,
     test_code: str,
     entry_point: str,
+    max_as_limit: float,
+    max_data_limit: float,
+    max_stack_limit: float,
     min_time_limit: float = 10,
     gt_time_limit: float = 60
 ) -> Tuple[str, np.ndarray]:
     time_limit = max(min_time_limit, gt_time_limit)
-    timeout = max(os.getenv("EVALPLUS_TIMEOUT_PER_TASK", 120), time_limit) + 1
+    timeout = max(os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", 120), time_limit) + 1
     # shared memory objects
     stat = Value("i", _UNKNOWN)
     manager = Manager()
@@ -187,6 +191,9 @@ def untrusted_check(
             code,
             test_code,
             timeout,
+            max_as_limit,
+            max_data_limit,
+            max_stack_limit,
             stat,
             details,
         ),
