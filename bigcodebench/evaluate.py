@@ -120,8 +120,11 @@ def evaluate(flags):
         problems = get_bigcodebench()
         dataset_hash = get_bigcodebench_hash()
         expected_time = None
+        
         if not flags.no_gt:
             expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
+        else:
+            expected_time = {task_id: None for task_id in problems}
         
         if flags.check_gt_only:
             return
@@ -164,7 +167,7 @@ def evaluate(flags):
                     flags.max_stack_limit,
                     sample["_identifier"],
                     flags.min_time_limit,
-                    expected_time[task_id] if expected_time else 20
+                    expected_time[task_id] if expected_time[task_id] else 20
                 )
                 futures.append(executor.submit(check_correctness, *args))
                 completion_id[task_id] += 1
@@ -220,7 +223,21 @@ def evaluate(flags):
         for k in [1, 5, 10, 25, 100]
         if total.min() >= k
     }
-    cprint(f"BigCodeBench-{flags.subset}", "green")
+    
+    mode = "-calibrated" if "sanitized-calibrated" in flags.samples else ""
+    
+    cprint(f"BigCodeBench-{flags.subset}{mode}", "green")
+    
+    gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
+    
+    if flags.no_gt:
+        cprint(f"Groundtruth is not checked", "yellow")
+    else:
+        if gt_pass_rate > 0.95:
+            cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}", "green")
+        else:
+            cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}\nPlease be cautious!", "red")
+    
     for k, v in pass_at_k.items():
         cprint(f"{k}:\t{v:.3f}", "green")
 

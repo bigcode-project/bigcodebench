@@ -284,7 +284,11 @@ def reliability_guard(max_as_limit, max_data_limit, max_stack_limit):
     
     if maximum_memory_bytes:
         import resource
-
+        
+        max_as_limit = max_as_limit * 1024 * 1024
+        max_data_limit = max_data_limit * 1024 * 1024
+        max_stack_limit = max_stack_limit * 1024 * 1024
+        
         resource.setrlimit(
             resource.RLIMIT_AS, (max_as_limit, max_as_limit)
         )
