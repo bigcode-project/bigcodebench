@@ -49,7 +49,7 @@ def get_groundtruth(problems, hashcode, check_gt_only, max_as_limit, max_data_li
     tbegin = time.time()
     expected_time = {}
     for task_id, problem in tqdm(problems.items()):
-        expected_time[task_id] = trusted_exec(
+        expected_time[task_id] = trusted_check(
             problem["complete_prompt"] + "\n" + problem["canonical_solution"],
             problem["test"],
             problem["task_id"],
