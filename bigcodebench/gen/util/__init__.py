@@ -114,4 +114,4 @@ def trusted_check(
     else:
         times = times.value
     
-    return times
+    return {"task_id": task_id, "time": times}

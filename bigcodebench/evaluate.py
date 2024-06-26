@@ -34,7 +34,7 @@ from bigcodebench.gen.util import trusted_check
 Result = Tuple[str, List[bool]]
 
 
-def get_groundtruth(problems, hashcode, check_gt_only, max_as_limit, max_data_limit, max_stack_limit):
+def get_groundtruth(n_workers, problems, hashcode, check_gt_only, max_as_limit, max_data_limit, max_stack_limit):
     cache_file = os.path.join(CACHE_DIR, f"{hashcode}.pkl")
     if os.path.exists(cache_file):
         if check_gt_only:
@@ -47,16 +47,29 @@ def get_groundtruth(problems, hashcode, check_gt_only, max_as_limit, max_data_li
     os.makedirs(CACHE_DIR, exist_ok=True)
     print("\nAsserting the groundtruth...")
     tbegin = time.time()
-    expected_time = {}
-    for task_id, problem in tqdm(problems.items()):
-        expected_time[task_id] = trusted_check(
-            problem["complete_prompt"] + "\n" + problem["canonical_solution"],
-            problem["test"],
-            problem["task_id"],
-            max_as_limit,
-            max_data_limit,
-            max_stack_limit
-        )
+    
+    with ProcessPoolExecutor(max_workers=n_workers) as executor:
+        futures = []
+        n_samples = 0
+        expected_time = dict()
+        
+        for problem in problems.values():
+            args = (
+                problem["complete_prompt"] + "\n" + problem["canonical_solution"],
+                problem["test"],
+                problem["task_id"],
+                max_as_limit,
+                max_data_limit,
+                max_stack_limit
+            )
+            
+            futures.append(executor.submit(trusted_check, *args))
+            n_samples += 1
+
+        for future in tqdm(as_completed(futures), total=n_samples):
+            result = future.result()
+            expected_time[result["task_id"]] = result["time"]
+    
     print(f"Expected outputs computed in {time.time() - tbegin:.2f}s")
     
     with open(cache_file, "wb") as f:
