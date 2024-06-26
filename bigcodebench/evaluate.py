@@ -114,7 +114,7 @@ def evaluate(flags):
     dataset_hash = get_bigcodebench_hash()
     
     if not flags.no_gt:
-        expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
+        expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only, flags.max_as_limit, flags.max_data_limit, flags.max_stack_limit)
     else:
         expected_time = {task_id: None for task_id in problems}
     
