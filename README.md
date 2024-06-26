@@ -333,9 +333,7 @@ We share pre-generated code samples from LLMs we have [evaluated](https://huggin
 
 ## Known Issues
 
-- [ ] We notice that some tasks heavily use memory for scientific modeling during testing. This will lead to timeout issues for some machines. If you get an error message like `Check failed: ret == 0 (11 vs. 0)Thread creation via pthread_create() failed.` in Tensorflow, it is very likely due to the memory issue. Try to allocate more memory to the process or reduce the number of parallel processes.
-
-- [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.2%) between runs. We are working on improving the evaluation stability.
+- [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.1%) between runs. We are working on improving the evaluation stability.
 
 - [ ] We are aware of the issue of some users needing to use a proxy to access the internet. We are working on a subset of the tasks that do not require internet access to evaluate the code.
 
