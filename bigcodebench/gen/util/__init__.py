@@ -49,7 +49,7 @@ def trusted_exec(code, test_code, task_id, max_as_limit, max_data_limit, max_sta
         suite = loader.loadTestsFromTestCase(TestCases)
         test_result = unittest.TestResult()
         start = time.time()
-        with safe_environment(), swallow_io():
+        with safe_environment(), swallow_io(), time_limit(seconds=120):
             suite.run(test_result)
         
         # Needed for cleaning up.
