@@ -51,16 +51,14 @@ def trusted_exec(code, test_code, task_id, max_as_limit, max_data_limit, max_sta
         start = time.time()
         with safe_environment(), swallow_io():
             suite.run(test_result)
-        for test, trace in test_result.failures + test_result.errors:
-            print(trace)
+        
         # Needed for cleaning up.
         shutil.rmtree = rmtree
         os.rmdir = rmdir
         os.chdir = chdir
-        assert len(
-            test_result.failures + test_result.errors
-        ) == 0, f"{task_id} failed with errors: {test_result.errors} and failures: {test_result.failures}"
 
+        if len(test_result.failures + test_result.errors) > 0:
+            return None
         return time.time() - start
 
 def trusted_check_exec(code, inputs):
