@@ -27,7 +27,7 @@ from bigcodebench.eval import (
     estimate_pass_at_k,
     untrusted_check,
 )
-from bigcodebench.gen.util import trusted_exec
+from bigcodebench.gen.util import trusted_check
 
 # 1st item: the status
 # 2nd item (optional): the detailed pass/fail boolean for each input
