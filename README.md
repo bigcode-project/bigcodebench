@@ -278,7 +278,7 @@ Reading samples...
 1140it [00:00, 1901.64it/s]
 Evaluating samples...
 100%|██████████████████████████████████████████| 1140/1140 [19:53<00:00, 6.75it/s]
-BigCodeBench-instruct-calibrated
+BigCodeBench-Instruct-calibrated
 Groundtruth pass rate: 1.000
 pass@1: 0.568
 ```
