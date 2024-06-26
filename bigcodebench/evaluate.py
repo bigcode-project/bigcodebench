@@ -110,6 +110,11 @@ def evaluate(flags):
         assert flags.samples.endswith(".jsonl")
         result_path = flags.samples.replace(".jsonl", "_eval_results.json")
 
+    if not flags.no_gt:
+        expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
+    else:
+        expected_time = {task_id: None for task_id in problems}
+    
     if os.path.isfile(result_path):
         print(f"Load from previous results from {result_path}")
         with open(result_path, "r") as f:
@@ -119,12 +124,6 @@ def evaluate(flags):
     else:
         problems = get_bigcodebench()
         dataset_hash = get_bigcodebench_hash()
-        expected_time = None
-        
-        if not flags.no_gt:
-            expected_time = get_groundtruth(problems, dataset_hash, flags.check_gt_only)
-        else:
-            expected_time = {task_id: None for task_id in problems}
         
         if flags.check_gt_only:
             return
