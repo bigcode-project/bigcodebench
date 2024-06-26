@@ -225,11 +225,10 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```bash
 # Mount the current directory to the container
+# If you want to change the RAM address space limit (in MB, 128 GB by default): `--max-as-limit XXX`
+# If you want to change the RAM data segment limit (in MB, 4 GB by default): `--max-data-limit`
+# If you want to change the RAM stack limit (in MB, 4 MB by default): `--max-stack-limit`
 docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-sanitized-calibrated
-# ...Or locally ⚠️
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated
-# ...If the ground truth is working locally (due to some flaky tests)
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated --no-gt
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -245,7 +244,7 @@ Then, run the evaluation:
 ```bash
 # ...Or locally ⚠️
 bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
-# ...If the ground truth is not working locally
+# ...If you really don't want to check the ground truths
 bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated --no-gt
 ```
 
@@ -276,8 +275,9 @@ Reading samples...
 1140it [00:00, 1901.64it/s]
 Evaluating samples...
 100%|██████████████████████████████████████████| 1140/1140 [19:53<00:00, 6.75it/s]
-bigcodebench
-{'pass@1': 0.568}
+BigCodeBench-instruct-calibrated
+Groundtruth pass rate: 1.000
+pass@1: 0.568
 ```
 
 - The "k" includes `[1, 5, 10]` where k values `<=` the sample size will be used
