@@ -81,7 +81,7 @@ def trusted_check(
     max_as_limit: float,
     max_data_limit: float,
     max_stack_limit: float,
-) -> Tuple[str, np.ndarray]:
+):
     timeout = os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", 120) + 1
     # shared memory objects
     times = Value("i")
