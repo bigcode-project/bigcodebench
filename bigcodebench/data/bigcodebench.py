@@ -29,6 +29,8 @@ def _ready_bigcodebench_path(mini=False, noextreme=False, version="default") -> 
         dataset = load_dataset(BIGCODEBENCH_HF, split=BIGCODEBENCH_VERSION)
         make_cache(url, dataset, path)
     except:
+        if os.path.exists(path):
+            os.remove(path)
         make_cache(url, None, path, gh=True)
 
     return path
