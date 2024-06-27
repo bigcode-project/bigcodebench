@@ -138,8 +138,10 @@ def evaluate(flags):
 
         results = compatible_eval_result(results)
     else:
+        gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
         
         if flags.check_gt_only:
+        
             if gt_pass_rate > 0.95:
                 cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}", "green")
             else:
@@ -244,9 +246,7 @@ def evaluate(flags):
     mode = "-calibrated" if "sanitized-calibrated" in flags.samples else ""
     flags.subset = flags.subset[0].upper() + flags.subset[1:]
     cprint(f"BigCodeBench-{flags.subset}{mode}", "green")
-    
-    gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
-    
+        
     if flags.no_gt:
         cprint(f"Groundtruth is not checked", "yellow")
     else:
