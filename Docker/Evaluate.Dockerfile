@@ -18,14 +18,17 @@ RUN git clone https://github.com/bigcode-project/bigcodebench.git /bigcodebench
 
 RUN cd /bigcodebench && pip install .
 
-RUN pip install -I --timeout 2000 -r https://github.com/bigcode-project/bigcodebench-annotation/releases/download/v0.1.0/requirements.txt
-
 # Pre-install the dataset
 RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
 
-RUN chown -R bigcodebenchuser:bigcodebenchuser /bigcodebench
-USER bigcodebenchuser
+RUN pip install -I --timeout 2000 -r https://github.com/bigcode-project/bigcodebench-annotation/releases/download/v0.1.0/requirements.txt
 
 WORKDIR /app
+
+RUN chown -R bigcodebenchuser:bigcodebenchuser /app
+
+RUN chmod -R 777 /app
+
+USER bigcodebenchuser
 
 ENTRYPOINT ["python3", "-m", "bigcodebench.evaluate"]
