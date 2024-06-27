@@ -140,6 +140,10 @@ def evaluate(flags):
     else:
         
         if flags.check_gt_only:
+            if gt_pass_rate > 0.95:
+                cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}", "green")
+            else:
+                cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}\nPlease be cautious!", "red")
             return
         
         results = {
