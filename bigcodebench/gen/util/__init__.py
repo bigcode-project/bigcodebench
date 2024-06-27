@@ -85,7 +85,7 @@ def trusted_check(
 ):
     timeout = os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", 120) + 1
     # shared memory objects
-    times = Value("d")
+    times = Value("d", -1)
     manager = Manager()
 
     p = multiprocessing.Process(
