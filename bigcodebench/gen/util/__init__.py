@@ -110,7 +110,7 @@ def trusted_check(
         time.sleep(0.1)
 
     if times.value == -1:
-        times = -1
+        times = None
     else:
         times = times.value
     
