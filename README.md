@@ -329,11 +329,13 @@ python get_results.py
 ## 💻 LLM-generated Code
 
 We share pre-generated code samples from LLMs we have [evaluated](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard):
-*  See the attachment of our [v0.1.2](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.1.5). We include both `sanitized_samples.zip` and `sanitized_samples_calibrated.zip` for your convenience.
+*  See the attachment of our [v0.1.5](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.1.5). We include both `sanitized_samples.zip` and `sanitized_samples_calibrated.zip` for your convenience.
 
 ## Known Issues
 
-- [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.1%) between runs. We are working on improving the evaluation stability.
+- [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.2%) between runs. We are working on improving the evaluation stability.
+
+- [ ] You may get errors like `ImportError: /usr/local/lib/python3.10/site-packages/matplotlib/_c_internal_utils.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object` when running the evaluation. This is due to the memory limit of the docker container. You can increase the memory limit of the docker container to solve this issue.
 
 - [ ] We are aware of the issue of some users needing to use a proxy to access the internet. We are working on a subset of the tasks that do not require internet access to evaluate the code.
 
