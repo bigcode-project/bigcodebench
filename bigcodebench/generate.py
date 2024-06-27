@@ -34,7 +34,7 @@ def codegen(
         dataset = get_bigcodebench()
 
         if model.is_direct_completion() and subset == "instruct":
-            raise Exception("Base model does not support direct completion for instructode tasks")
+            raise Exception("Base model does not support direct completion for instruct tasks")
 
         # create save_path if it doesn't exist, e.g., a/b.jsonl
         dirname = os.path.dirname(save_path)
