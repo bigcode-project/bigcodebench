@@ -140,7 +140,6 @@ def evaluate(flags):
 
         results = compatible_eval_result(results)
     else:
-        
         if flags.check_gt_only:
         
             if gt_pass_rate > 0.99:
