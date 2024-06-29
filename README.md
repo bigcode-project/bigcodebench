@@ -4,7 +4,12 @@
 </center>
 
 <p align="center">
+    <a href="https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard"><img src="https://img.shields.io/badge/🤗&nbsp&nbsp%F0%9F%8F%86-leaderboard-%23ff8811"></a>
+    <a href="https://huggingface.co/collections/bigcode/bigcodebench-666ed21a5039c618e608ab06"><img src="https://img.shields.io/badge/🤗&nbsp&nbsp%F0%9F%8F%86-collection-pink"></a>
+    <a href="https://bigcode-bench.github.io/"><img src="https://img.shields.io/badge/%F0%9F%8F%86-website-8A2BE2"></a>
+    <a href="https://openreview.net/forum?id=1qvx610Cu7"><img src="https://img.shields.io/badge/arXiv-2406.15877-b31b1b.svg"></a>
     <a href="https://pypi.org/project/bigcodebench/"><img src="https://img.shields.io/pypi/v/bigcodebench?color=g"></a>
+    <a href="https://pepy.tech/project/bigcodebench"><img src="https://static.pepy.tech/badge/bigcodebench"></a>
     <a href="https://hub.docker.com/r/bigcodebench/bigcodebench-evaluate" title="Docker-Eval"><img src="https://img.shields.io/docker/image-size/bigcodebench/bigcodebench-evaluate"></a>
     <a href="https://hub.docker.com/r/bigcodebench/bigcodebench-generate" title="Docker-Gen"><img src="https://img.shields.io/docker/image-size/bigcodebench/bigcodebench-generate"></a>
     <a href="https://github.com/bigcodebench/bigcodebench/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/bigcodebench"></a>
@@ -347,10 +352,10 @@ We share pre-generated code samples from LLMs we have [evaluated](https://huggin
 
 ```bibtex
 @article{zhuo2024bigcodebench,
-    title={BigCodeBench: Benchmarking Code Generation with Diverse Function Calls and Complex Instructions}, 
-    author={Terry Yue Zhuo and Minh Chien Vu and Jenny Chim and Han Hu and Wenhao Yu and Ratnadira Widyasari and Imam Nur Bani Yusuf and Haolan Zhan and Junda He and Indraneil Paul and Simon Brunner and Chen Gong and Thong Hoang and Armel Randy Zebaze and Xiaoheng Hong and Wen-Ding Li and Jean Kaddour and Ming Xu and Zhihan Zhang and Prateek Yadav and Naman Jain and Alex Gu and Zhoujun Cheng and Jiawei Liu and Qian Liu and Zijian Wang and David Lo and Binyuan Hui and Niklas Muennighoff and Daniel Fried and Xiaoning Du and Harm de Vries and Leandro Von Werra},
-    journal={arXiv preprint arXiv:2406.15877},
-    year={2024}
+  title={BigCodeBench: Benchmarking Code Generation with Diverse Function Calls and Complex Instructions},
+  author={Zhuo, Terry Yue and Vu, Minh Chien and Chim, Jenny and Hu, Han and Yu, Wenhao and Widyasari, Ratnadira and Yusuf, Imam Nur Bani and Zhan, Haolan and He, Junda and Paul, Indraneil and others},
+  journal={arXiv preprint arXiv:2406.15877},
+  year={2024}
 }
 ```
 
