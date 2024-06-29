@@ -249,6 +249,10 @@ Then, run the evaluation:
 bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
 # ...If you really don't want to check the ground truths
 bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl --no-gt
+
+# You are strongly recommended to use the following command to clean up the environment after evaluation:
+pids=$(ps -u $(id -u) -o pid,comm | grep '^ *[0-9]\\+ bigcodebench' | awk '{print $1}'); if [ -n \"$pids\" ]; then echo $pids | xargs -r kill; fi;
+rm -rf /tmp/*
 ```
 
 > [!Tip]
