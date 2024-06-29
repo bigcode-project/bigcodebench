@@ -531,4 +531,18 @@ model_info = {
         "size": 70,
         "open-data": "None",
     },
+    "microsoft/wavecoder-ultra-6.7b": {
+        "name": "WaveCoder-Ultra-6.7B",
+        "link": "https://huggingface.co/microsoft/wavecoder-ultra-6.7b",
+        "prompted": True,
+        "size": 6.7,
+        "open-data": "None",
+    },
+    "google/gemma-2-9b-it": {
+        "name": "Gemma-2-9B-Instruct",
+        "link": "https://huggingface.co/google/gemma-2-9b-it",
+        "prompted": True,
+        "size": 9,
+        "open-data": "None",
+    },
 }
