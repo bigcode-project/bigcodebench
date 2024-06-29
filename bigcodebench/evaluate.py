@@ -131,6 +131,8 @@ def evaluate(flags):
     else:
         expected_time = {task_id: None for task_id in problems}
     
+    gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
+    
     if os.path.isfile(result_path):
         print(f"Load from previous results from {result_path}")
         with open(result_path, "r") as f:
@@ -138,7 +140,6 @@ def evaluate(flags):
 
         results = compatible_eval_result(results)
     else:
-        gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
         
         if flags.check_gt_only:
         
