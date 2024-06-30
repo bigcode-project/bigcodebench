@@ -250,6 +250,7 @@ def evaluate(flags):
     if flags.no_gt:
         cprint(f"Groundtruth is not checked", "yellow")
     else:
+        gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
         if gt_pass_rate > 0.99:
             cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}", "green")
         else:
