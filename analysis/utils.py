@@ -566,4 +566,32 @@ model_info = {
         "size": 7,
         "open-data": "None",
     },
+    "SenseLLM/ReflectionCoder-DS-33B": {
+        "name": "ReflectionCoder-DS-33B",
+        "link": "https://huggingface.co/SenseLLM/ReflectionCoder-DS-33B",
+        "prompted": True,
+        "size": 33,
+        "open-data": "Partial",
+    },
+    "SenseLLM/ReflectionCoder-DS-6.7B": {
+        "name": "ReflectionCoder-DS-6.7B",
+        "link": "https://huggingface.co/SenseLLM/ReflectionCoder-DS-6.7B",
+        "prompted": True,
+        "size": 6.7,
+        "open-data": "Partial",
+    },
+    "SenseLLM/ReflectionCoder-CL-34B": {
+        "name": "ReflectionCoder-CL-34B",
+        "link": "https://huggingface.co/SenseLLM/ReflectionCoder-CL-34B",
+        "prompted": True,
+        "size": 34,
+        "open-data": "Partial",
+    },
+    "SenseLLM/ReflectionCoder-CL-7B": {
+        "name": "ReflectionCoder-CL-7B",
+        "link": "https://huggingface.co/SenseLLM/ReflectionCoder-CL-7B",
+        "prompted": True,
+        "size": 7,
+        "open-data": "Partial",
+    },
 }
