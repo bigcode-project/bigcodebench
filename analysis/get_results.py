@@ -269,9 +269,6 @@ def get_solve_rate(data_dict, task="complete"):
         for task_id in range(1140):
             task_solve_count[f"BigCodeBench/{task_id}"].append(task_perf[f"BigCodeBench/{task_id}"])
     solve_rate = {task_id: round(np.mean(perfs) * 100, 1) for task_id, perfs in task_solve_count.items()}
-    with open(f"{task}_solve_rate.txt", "w") as f:
-        f.write(f"Number of unsolved tasks: {sum([1 for task_id, solve_rate in solve_rate.items() if solve_rate == 0])}\n")
-        f.write(f"Number of fully solved tasks: {sum([1 for task_id, solve_rate in solve_rate.items() if solve_rate == 100])}\n")
     return Dataset.from_dict({"task_id": list(solve_rate.keys()), "solve_rate": list(solve_rate.values())})
 
 
