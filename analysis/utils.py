@@ -545,4 +545,25 @@ model_info = {
         "size": 9,
         "open-data": "None",
     },
+    "Bin12345/AutoCoder": {
+        "name": "AutoCoder",
+        "link": "https://huggingface.co/Bin12345/AutoCoder",
+        "prompted": True,
+        "size": 33,
+        "open-data": "None",
+    },
+    "Bin12345/AutoCoder_S_6.7B": {
+        "name": "AutoCoder-S-6.7B",
+        "link": "https://huggingface.co/Bin12345/AutoCoder_S_6.7B",
+        "prompted": True,
+        "size": 6.7,
+        "open-data": "None",
+    },
+    "Bin12345/AutoCoder_QW_7B": {
+        "name": "AutoCoder-QW-7B",
+        "link": "https://huggingface.co/Bin12345/AutoCoder_QW_7B",
+        "prompted": True,
+        "size": 7,
+        "open-data": "None",
+    },
 }
