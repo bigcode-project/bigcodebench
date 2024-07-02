@@ -72,8 +72,9 @@ def get_groundtruth(n_workers, problems, hashcode, check_gt_only, max_as_limit, 
     
     print(f"Expected outputs computed in {time.time() - tbegin:.2f}s")
     
-    with open(cache_file, "wb") as f:
-        pickle.dump(expected_time, f)
+    if any(expected_time.values()):
+        with open(cache_file, "wb") as f:
+            pickle.dump(expected_time, f)
 
     return expected_time
 
