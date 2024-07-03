@@ -17,6 +17,7 @@ def update_model_info(model_info):
     for model, info in model_info.items():
         if "https://huggingface.co/" in info["link"]:
             hf_model = info["link"].split("https://huggingface.co/")[-1]
+            print(hf_model)
             tokenizer = AutoTokenizer.from_pretrained(hf_model, trust_remote_code=True)
             if tokenizer.chat_template is None:
                 model_info[model]["direct_complete"] = True
@@ -315,6 +316,16 @@ if __name__ == "__main__":
     files = []
     complete_data, complete_files = read_task_perf("complete")
     instruct_data, instruct_files = read_task_perf("instruct")
+    
+    complete_map = {model.replace("-","_").replace("+","_plus").replace(" ","_"):
+        Dataset.from_dict({"task_id": list(task_perf.keys()), "status": list(task_perf.values())}) for model, task_perf in complete_data.items()}
+    instruct_map = {model.replace("-","_").replace("+","_plus").replace(" ","_"):
+        Dataset.from_dict({"task_id": list(task_perf.keys()), "status": list(task_perf.values())}) for model, task_perf in instruct_data.items()}
+    complete_ds = DatasetDict(complete_map)
+    instruct_ds = DatasetDict(instruct_map)
+    push_ds(complete_ds, "bigcode/bigcodebench-complete-perf")
+    push_ds(instruct_ds, "bigcode/bigcodebench-instruct-perf")
+    
     files.extend(complete_files)
     files.extend(instruct_files)
     shutil.rmtree("eval_results", ignore_errors=True)
