@@ -49,11 +49,11 @@ def get_results():
     for model, info in model_info.items():
         model = model.replace("/", "--")
         hf_model = ""
-        if "https://huggingface.co/" in info["link"]:
-            hf_model = info["link"].split("https://huggingface.co/")[-1]
-            model = hf_model.replace("/", "--")
         files = glob(f"results/{model}--bigcodebench-*.json")
         assert files, f"No files found for results/{model}--bigcodebench-*.json"
+        # if "https://huggingface.co/" in info["link"]:
+        #     hf_model = info["link"].split("https://huggingface.co/")[-1]
+        #     model = hf_model.replace("/", "--")
         for file in files:
             _, suffix = os.path.basename(file).split("--bigcodebench-")
             status = []
@@ -152,8 +152,8 @@ def read_task_perf(task="complete"):
 
         task_perf = {f"BigCodeBench/{task_id}": 0 for task_id in range(1140)}
         model = model.replace("/", "--")
-        if info["link"].startswith("https://huggingface.co/"):
-            model = info["link"].split("https://huggingface.co/")[-1].replace("/", "--")
+        # if info["link"].startswith("https://huggingface.co/"):
+        #     model = info["link"].split("https://huggingface.co/")[-1].replace("/", "--")
         try:
             if info["prompted"] and not info["direct_complete"]:
                 files = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized-calibrated_eval_results.json")
@@ -316,15 +316,15 @@ if __name__ == "__main__":
     files = []
     complete_data, complete_files = read_task_perf("complete")
     instruct_data, instruct_files = read_task_perf("instruct")
-    
-    complete_map = {model.replace("-","_").replace("+","_plus").replace(" ","_"):
-        Dataset.from_dict({"task_id": list(task_perf.keys()), "status": list(task_perf.values())}) for model, task_perf in complete_data.items()}
-    instruct_map = {model.replace("-","_").replace("+","_plus").replace(" ","_"):
-        Dataset.from_dict({"task_id": list(task_perf.keys()), "status": list(task_perf.values())}) for model, task_perf in instruct_data.items()}
-    complete_ds = DatasetDict(complete_map)
-    instruct_ds = DatasetDict(instruct_map)
-    push_ds(complete_ds, "bigcode/bigcodebench-complete-perf")
-    push_ds(instruct_ds, "bigcode/bigcodebench-instruct-perf")
+    assert len(model_info) == len(complete_data)
+    # complete_map = {model.replace("-","_").replace("+","_plus").replace(" ","_"):
+    #     Dataset.from_dict({"task_id": list(task_perf.keys()), "status": list(task_perf.values())}) for model, task_perf in complete_data.items()}
+    # instruct_map = {model.replace("-","_").replace("+","_plus").replace(" ","_"):
+    #     Dataset.from_dict({"task_id": list(task_perf.keys()), "status": list(task_perf.values())}) for model, task_perf in instruct_data.items()}
+    # complete_ds = DatasetDict(complete_map)
+    # instruct_ds = DatasetDict(instruct_map)
+    # push_ds(complete_ds, "bigcode/bigcodebench-complete-perf")
+    # push_ds(instruct_ds, "bigcode/bigcodebench-instruct-perf")
     
     files.extend(complete_files)
     files.extend(instruct_files)
