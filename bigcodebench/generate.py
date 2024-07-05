@@ -107,8 +107,8 @@ def codegen(
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, type=str)
-    parser.add_argument("--split", required=True, type=str)
-    parser.add_argument("--subset", default="full", type=str)
+    parser.add_argument("--split", required=True, type=str, choices=["complete", "instruct"])
+    parser.add_argument("--subset", default="full", type=str, choices=["full", "hard"])
     parser.add_argument("--save_path", default=None, type=str)
     parser.add_argument("--bs", default=1, type=int)
     parser.add_argument("--n_samples", default=1, type=int)
@@ -117,16 +117,11 @@ def main():
     parser.add_argument("--strip_newlines", action="store_true")
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--id_range", nargs=2, type=int)
-    parser.add_argument("--backend", default="vllm", type=str)
+    parser.add_argument("--backend", default="vllm", type=str, choices=["vllm", "hf", "openai", "mistral", "anthropic", "google"])
     parser.add_argument("--base_url", default=None, type=str)
     parser.add_argument("--tp", default=1, type=int)
     parser.add_argument("--trust_remote_code", action="store_true")
     args = parser.parse_args()
-
-
-    assert args.split in ["complete", "instruct"], f"Invalid split {args.split}"
-    assert args.subset in ["full", "hard"], f"Invalid subset {args.subset}"
-    assert args.backend in ["vllm", "hf", "openai", "mistral", "anthropic", "google"]
 
     if args.greedy and (args.temperature != 0 or args.bs != 1 or args.n_samples != 1)\
         or (args.temperature == 0 and args.n_samples == 1):

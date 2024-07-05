@@ -287,7 +287,7 @@ def main():
     parser.add_argument(
         "--split", required=True, type=str, choices=["complete", "instruct"]
     )
-    parser.add_argument("--subset", default="full", choices=["full", "hard"], type=str)
+    parser.add_argument("--subset", default="full", type=str, choices=["full", "hard"])
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
