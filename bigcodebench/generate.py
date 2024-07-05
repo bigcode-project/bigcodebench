@@ -25,7 +25,7 @@ def codegen(
     resume=True,
 ):
     with Progress(
-        TextColumn(f"BigCodeBench--{split} ({subset.capitalize()}) •" + "[progress.percentage]{task.percentage:>3.0f}%"),
+        TextColumn(f"BigCodeBench--{split.capitalize()} ({subset.capitalize()}) •" + "[progress.percentage]{task.percentage:>3.0f}%"),
         BarColumn(),
         MofNCompleteColumn(),
         TextColumn("•"),
