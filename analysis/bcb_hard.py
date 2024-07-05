@@ -6,7 +6,7 @@ from ast import literal_eval
 from glob import glob
 from sentence_transformers import SentenceTransformer, util
 import matplotlib.pyplot as plt
-from datasets import load_dataset, Dataset, Features, Value, Sequence
+from datasets import load_dataset, Dataset, Features, Value, Sequence, DatasetDict
 
 from utils import *
 
@@ -117,12 +117,27 @@ if __name__ == "__main__":
     top_tid = top_id.keys() & length_filter & rate_filter.keys() & lib_filter
     # hard_results = read_task_perf(top_tid)
 
-    hard_bcb = bcb.filter(lambda x: x["task_id"] in top_tid)
+    filtered_bcb = bcb.filter(lambda x: x["task_id"] in top_tid)
     hard_bcb_tid = hard_bcb["task_id"]
     se_qid = [top_id[_id][0] for _id in hard_bcb_tid]
     se_q = se.select(se_qid)
     se_scores = [top_id[_id][1] for _id in hard_bcb_tid]
-    hard_bcb = hard_bcb.add_column("qid", se_qid)
-    hard_bcb = hard_bcb.add_column("question", se_q["question"])
-    hard_bcb = hard_bcb.add_column("score", se_scores)
-    hard_bcb.push_to_hub("bigcode/bigcodebench-hard")
+    
+    hard_bcb_dict = {
+        "task_id": [f"BigCodeBenchHard/{i}" for i in range(len(hard_bcb))],
+        "complete_prompt": hard_bcb["complete_prompt"],
+        "instruct_prompt": hard_bcb["instruct_prompt"],
+        "canonical_solution": hard_bcb["canonical_solution"],
+        "code_prompt": hard_bcb["code_prompt"],
+        "test": hard_bcb["test"],
+        "entry_point": hard_bcb["entry_point"],
+        "doc_struct": hard_bcb["doc_struct"],
+        "libs": hard_bcb["libs"],
+        "q_idx": se_qid,
+        "question": se_q["question"],
+        "score": se_scores,
+        "_id": hard_bcb_tid
+    }
+    
+    hard_bcb = Dataset.from_dict(hard_bcb_dict)
+    DatasetDict({"v0.1.0_hf": hard_bcb}).push_to_hub("bigcode/bigcodebench-hard")
