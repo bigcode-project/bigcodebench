@@ -199,11 +199,11 @@ def evaluate(flags):
             def stucking_checker():
                 while remainings:
                     last_size = len(remainings)
-                    time.sleep(120)
+                    time.sleep(240)
                     if last_size != len(remainings) or len(remainings) == 0:
                         continue
                     # Potential stucking
-                    warn("No samples had finished testing in the last 120s")
+                    warn("No samples had finished testing in the last 240s")
                     warn(f"{len(remainings)} samples to be tested: {remainings}")
 
             threading.Thread(target=stucking_checker).start()
