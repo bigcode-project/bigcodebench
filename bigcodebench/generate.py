@@ -24,9 +24,8 @@ def codegen(
     id_range=None,
     resume=True,
 ):
-    extra = "-" + subset.capitalize()
     with Progress(
-        TextColumn(f"BigCodeBench--{split} ({extra}) •" + "[progress.percentage]{task.percentage:>3.0f}%"),
+        TextColumn(f"BigCodeBench--{split} ({subset.capitalize()}) •" + "[progress.percentage]{task.percentage:>3.0f}%"),
         BarColumn(),
         MofNCompleteColumn(),
         TextColumn("•"),
@@ -147,9 +146,9 @@ def main():
         trust_remote_code=args.trust_remote_code
     )
     
-    extra = "-"+args.subset if args.subset
+    extra = "-" + args.subset if args.subset else ""
     if not args.save_path:
-        save_path = args.model.replace("/", "--") + f"--bigcodebench{extra}-{args.split}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
+        save_path = args.model.replace("/", "--") + f"--bigcodebench-{args.split}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
     else:
         save_path = args.save_path
 
