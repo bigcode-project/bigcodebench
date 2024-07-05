@@ -41,9 +41,8 @@ def codegen(
         dirname = os.path.dirname(save_path)
         if not os.path.exists(dirname) and dirname != "":
             os.makedirs(dirname)
-        for task_id, task in p.track(dataset.items()):
+        for id_num, (task_id, task) in enumerate(p.track(dataset.items())):
             if id_range is not None:
-                id_num = int(task_id.split("/")[1])
                 low, high = id_range
                 if id_num < low or id_num >= high:
                     p.console.print(f"Skipping {task_id} as it is not in {id_range}")
