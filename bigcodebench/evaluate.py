@@ -124,15 +124,15 @@ def evaluate(flags):
         assert flags.samples.endswith(".jsonl")
         result_path = flags.samples.replace(".jsonl", "_eval_results.json")
 
-    problems = get_bigcodebench()
-    dataset_hash = get_bigcodebench_hash()
+    problems = get_bigcodebench(hard=flags.hard)
+    dataset_hash = get_bigcodebench_hash(hard=flags.hard)
     
     if not flags.no_gt:
         expected_time = get_groundtruth(n_workers, problems, dataset_hash, flags.check_gt_only, flags.max_as_limit, flags.max_data_limit, flags.max_stack_limit)
     else:
         expected_time = {task_id: None for task_id in problems}
     
-    gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
+    gt_pass_rate = np.mean([1 if v is not None else 0 for k, v in expected_time.items() if k in problems])
     
     if os.path.isfile(result_path):
         print(f"Load from previous results from {result_path}")
@@ -229,10 +229,12 @@ def evaluate(flags):
                 )
 
     # Calculate pass@k.
-    total = np.array([len(r) for r in results["eval"].values()])
+    total = np.array([len(r) for k, r in results["eval"].items() if k in problems])
     base_correct = []
 
-    for res in results["eval"].values():
+    for key, res in results["eval"].items():
+        if key not in problems:
+            continue
         bc = sum([r["status"] == PASS for r in res])
         base_correct.append(bc)
 
@@ -245,8 +247,9 @@ def evaluate(flags):
     }
     
     mode = "-calibrated" if "sanitized-calibrated" in flags.samples else ""
+    extra = "Full" if not flags.hard else "Hard"
     flags.subset = flags.subset[0].upper() + flags.subset[1:]
-    cprint(f"BigCodeBench-{flags.subset}{mode}", "green")
+    cprint(f"BigCodeBench-{flags.subset}{mode} ({extra})", "green")
         
     if flags.no_gt:
         cprint(f"Groundtruth is not checked", "yellow")
@@ -284,6 +287,7 @@ def main():
     parser.add_argument(
         "--subset", required=True, type=str, choices=["complete", "instruct"]
     )
+    parser.add_argument("--hard", action="store_true")
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
