@@ -17,21 +17,23 @@ def codegen(
     model: DecoderBase,
     save_path: str,
     subset: str,
+    hard=False,
     greedy=False,
     strip_newlines=False,
     n_samples=1,
     id_range=None,
     resume=True,
 ):
+    extra = "Full" if not hard else "Hard"
     with Progress(
-        TextColumn(f"BigCodeBench--{subset} •" + "[progress.percentage]{task.percentage:>3.0f}%"),
+        TextColumn(f"BigCodeBench--{subset} ({extra}) •" + "[progress.percentage]{task.percentage:>3.0f}%"),
         BarColumn(),
         MofNCompleteColumn(),
         TextColumn("•"),
         TimeElapsedColumn(),
     ) as p:
             
-        dataset = get_bigcodebench()
+        dataset = get_bigcodebench(hard=hard)
 
         if model.is_direct_completion() and subset == "instruct":
             raise Exception("Base model does not support direct completion for instruct tasks")
@@ -106,6 +108,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, type=str)
     parser.add_argument("--subset", required=True, type=str)
+    parser.add_argument("--hard", action="store_true")
     parser.add_argument("--save_path", default=None, type=str)
     parser.add_argument("--bs", default=1, type=int)
     parser.add_argument("--n_samples", default=1, type=int)
@@ -147,9 +150,10 @@ def main():
         tp=args.tp,
         trust_remote_code=args.trust_remote_code
     )
-
+    
+    extra = "" if not args.hard else "-hard"
     if not args.save_path:
-        save_path = args.model.replace("/", "--") + f"--bigcodebench-{args.subset}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
+        save_path = args.model.replace("/", "--") + f"--bigcodebench{extra}-{args.subset}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
     else:
         save_path = args.save_path
 
@@ -157,6 +161,7 @@ def main():
         model=model_runner,
         save_path=save_path,
         subset=args.subset,
+        hard=args.hard,
         greedy=args.greedy,
         strip_newlines=args.strip_newlines,
         n_samples=args.n_samples,
