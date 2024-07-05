@@ -124,7 +124,7 @@ if __name__ == "__main__":
     se_scores = [top_id[_id][1] for _id in hard_bcb_tid]
     
     hard_bcb_dict = {
-        "task_id": [f"BigCodeBenchHard/{i}" for i in range(len(hard_bcb))],
+        "task_id": hard_bcb_tid,
         "complete_prompt": hard_bcb["complete_prompt"],
         "instruct_prompt": hard_bcb["instruct_prompt"],
         "canonical_solution": hard_bcb["canonical_solution"],
