@@ -11,16 +11,12 @@ from appdirs import user_cache_dir
 CACHE_DIR = user_cache_dir("bigcodebench")
 
 
-def get_dataset_metadata(name: str, version: str, mini: bool, noextreme: bool = False):
-    assert name in ["BigCodeBench"], f"Unknown/unsupported dataset: {name}"
+def get_dataset_metadata(version: str, hard: bool = False):
     extra = ""
-    assert not (mini and noextreme), "Cannot have both mini and noextreme"
-    if mini:
-        extra = "-Mini"
-    if noextreme:
-        extra = "-NoExtreme"
-    url = f"https://github.com/bigcode-project/bigcodebench-annotation/releases/download/{version}/{name}{extra}.jsonl.gz"
-    cache_path = os.path.join(CACHE_DIR, f"{name}{extra}-{version}.jsonl")
+    if hard:
+        extra = "-Hard"
+    url = f"https://github.com/bigcode-project/bigcodebench-annotation/releases/download/{version}/BigCodeBench{extra}.jsonl.gz"
+    cache_path = os.path.join(CACHE_DIR, f"BigCodeBench{extra}-{version}.jsonl")
     return url, cache_path
 
 
