@@ -118,11 +118,12 @@ def evaluate(flags):
         # bypass the samples
         flags.samples = "__dummy__.jsonl"
     
+    extra = flags.subset + "_" if flags.subset != "full" else ""
     if os.path.isdir(flags.samples):
-        result_path = os.path.join(flags.samples, "eval_results.json")
+        result_path = os.path.join(flags.samples, f"{extra}eval_results.json")
     else:
         assert flags.samples.endswith(".jsonl")
-        result_path = flags.samples.replace(".jsonl", "_eval_results.json")
+        result_path = flags.samples.replace(".jsonl", f"_{extra}eval_results.json")
 
     problems = get_bigcodebench(subset=flags.subset)
     dataset_hash = get_bigcodebench_hash(subset=flags.subset)
