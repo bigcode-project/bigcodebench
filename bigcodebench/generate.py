@@ -148,7 +148,7 @@ def main():
     
     extra = "-" + args.subset if args.subset else ""
     if not args.save_path:
-        save_path = args.model.replace("/", "--") + f"--bigcodebench-{args.split}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
+        save_path = args.model.replace("/", "--") + f"--bigcodebench{extra}-{args.split}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
     else:
         save_path = args.save_path
 

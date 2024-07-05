@@ -27,13 +27,13 @@ def _ready_bigcodebench_path(subset="full", version="default") -> str:
     
     extra = "-" + subset if subset else ""
     
-    try:
-        dataset = load_dataset(BIGCODEBENCH_HF+extra, split=BIGCODEBENCH_VERSION)
-        make_cache(url, dataset, path)
-    except:
-        if os.path.exists(path):
-            os.remove(path)
-        make_cache(url, None, path, gh=True)
+    # try:
+    dataset = load_dataset(BIGCODEBENCH_HF+extra, split=BIGCODEBENCH_VERSION)
+    make_cache(url, dataset, path)
+    # except:
+    #     if os.path.exists(path):
+    #         os.remove(path)
+    #     make_cache(url, None, path, gh=True)
 
     return path
 

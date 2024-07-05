@@ -20,9 +20,8 @@ def get_dataset_metadata(version: str, subset: str="full"):
 
 def make_cache(gzip_url, hf_data, cache_path, gh=False):
     # Check if open eval file exists in CACHE_DIR
-    if not os.path.exists(cache_path):
-        
-        if gh:
+    if gh:
+        if not os.path.exists(cache_path):
             # Install BigCodeBench dataset and parse as jsonl
             print(f"Downloading dataset from {gzip_url}")
             with tempdir.TempDir() as tmpdir:
@@ -39,8 +38,8 @@ def make_cache(gzip_url, hf_data, cache_path, gh=False):
             # Write the original open eval file to CACHE_DIR
             with open(cache_path, "w") as f:
                 f.write(data)
-        else:
-            hf_data.to_json(cache_path)
+    else:
+        hf_data.to_json(cache_path)
 
 
 def write_jsonl(
