@@ -16,7 +16,7 @@ BIGCODEBENCH_OVERRIDE_PATH = os.environ.get("BIGCODEBENCH_OVERRIDE_PATH", None)
 BIGCODEBENCH_HF = "bigcode/bigcodebench"
 BIGCODEBENCH_VERSION = "v0.1.0_hf"
 
-def _ready_bigcodebench_path(subset="", version="default") -> str:
+def _ready_bigcodebench_path(subset="full", version="default") -> str:
     if BIGCODEBENCH_OVERRIDE_PATH:
         return BIGCODEBENCH_OVERRIDE_PATH
 
@@ -39,7 +39,7 @@ def _ready_bigcodebench_path(subset="", version="default") -> str:
 
 
 def get_bigcodebench(
-    err_incomplete=True, subset="", version="default"
+    err_incomplete=True, subset="full", version="default"
     ) -> Dict[str, Dict]:
     """Get BigCodeBench from BigCode's github repo and return as a list of parsed dicts.
 
@@ -63,7 +63,7 @@ def get_bigcodebench(
         completeness_check("BigCodeBench", data)
     return data
 
-def get_bigcodebench_hash(subset="", version="default") -> str:
+def get_bigcodebench_hash(subset="full", version="default") -> str:
     """Get the hash of BigCodeBench.
     Returns:
         str: The hash of BigCodeBench

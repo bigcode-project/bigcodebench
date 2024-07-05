@@ -11,8 +11,8 @@ from appdirs import user_cache_dir
 CACHE_DIR = user_cache_dir("bigcodebench")
 
 
-def get_dataset_metadata(version: str, subset: str=""):
-    extra = "-" + subset.capitalize() if subset else ""
+def get_dataset_metadata(version: str, subset: str="full"):
+    extra = "-" + subset.capitalize() if subset != "full" else ""
     url = f"https://github.com/bigcode-project/bigcodebench-annotation/releases/download/{version}/BigCodeBench{extra}.jsonl.gz"
     cache_path = os.path.join(CACHE_DIR, f"BigCodeBench{extra}-{version}.jsonl")
     return url, cache_path

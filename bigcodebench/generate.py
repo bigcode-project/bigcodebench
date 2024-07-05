@@ -24,7 +24,7 @@ def codegen(
     id_range=None,
     resume=True,
 ):
-    extra = "-" + subset.capitalize() if subset else ""
+    extra = "-" + subset.capitalize()
     with Progress(
         TextColumn(f"BigCodeBench--{split} ({extra}) •" + "[progress.percentage]{task.percentage:>3.0f}%"),
         BarColumn(),
@@ -108,7 +108,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, type=str)
     parser.add_argument("--split", required=True, type=str)
-    parser.add_argument("--subset", default="", type=str)
+    parser.add_argument("--subset", default="full", type=str)
     parser.add_argument("--save_path", default=None, type=str)
     parser.add_argument("--bs", default=1, type=int)
     parser.add_argument("--n_samples", default=1, type=int)
@@ -125,7 +125,7 @@ def main():
 
 
     assert args.split in ["complete", "instruct"], f"Invalid split {args.split}"
-    assert args.subset in ["", "hard"], f"Invalid subset {args.subset}"
+    assert args.subset in ["full", "hard"], f"Invalid subset {args.subset}"
     assert args.backend in ["vllm", "hf", "openai", "mistral", "anthropic", "google"]
 
     if args.greedy and (args.temperature != 0 or args.bs != 1 or args.n_samples != 1)\
