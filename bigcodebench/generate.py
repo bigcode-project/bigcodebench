@@ -125,6 +125,7 @@ def main():
 
 
     assert args.split in ["complete", "instruct"], f"Invalid split {args.split}"
+    assert args.subset in ["", "hard"], f"Invalid subset {args.subset}"
     assert args.backend in ["vllm", "hf", "openai", "mistral", "anthropic", "google"]
 
     if args.greedy and (args.temperature != 0 or args.bs != 1 or args.n_samples != 1)\

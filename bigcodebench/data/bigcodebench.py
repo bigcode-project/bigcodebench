@@ -25,7 +25,7 @@ def _ready_bigcodebench_path(subset="", version="default") -> str:
         BIGCODEBENCH_VERSION, subset
     )
     
-    extra = "-subset" if subset else ""
+    extra = "-" + subset if subset else ""
     
     try:
         dataset = load_dataset(BIGCODEBENCH_HF+extra, split=BIGCODEBENCH_VERSION)
@@ -39,7 +39,7 @@ def _ready_bigcodebench_path(subset="", version="default") -> str:
 
 
 def get_bigcodebench(
-    err_incomplete=True, subset="full", version="default"
+    err_incomplete=True, subset="", version="default"
     ) -> Dict[str, Dict]:
     """Get BigCodeBench from BigCode's github repo and return as a list of parsed dicts.
 

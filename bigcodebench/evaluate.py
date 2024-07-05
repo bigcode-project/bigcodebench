@@ -124,8 +124,8 @@ def evaluate(flags):
         assert flags.samples.endswith(".jsonl")
         result_path = flags.samples.replace(".jsonl", "_eval_results.json")
 
-    problems = get_bigcodebench(hard=flags.hard)
-    dataset_hash = get_bigcodebench_hash(hard=flags.hard)
+    problems = get_bigcodebench(subset=flags.subset)
+    dataset_hash = get_bigcodebench_hash(subset=flags.subset)
     
     if not flags.no_gt:
         expected_time = get_groundtruth(n_workers, problems, dataset_hash, flags.check_gt_only, flags.max_as_limit, flags.max_data_limit, flags.max_stack_limit)
@@ -287,7 +287,7 @@ def main():
     parser.add_argument(
         "--split", required=True, type=str, choices=["complete", "instruct"]
     )
-    parser.add_argument("--hard", action="store_true")
+    parser.add_argument("--subset", default="", choices=["", "hard"], type=str)
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
