@@ -16,26 +16,26 @@ from rich.progress import (
 def codegen(
     model: DecoderBase,
     save_path: str,
-    subset: str,
-    hard=False,
+    split: str,
+    subset="full",
     greedy=False,
     strip_newlines=False,
     n_samples=1,
     id_range=None,
     resume=True,
 ):
-    extra = "Full" if not hard else "Hard"
+    extra = "-" + subset.capitalize() if subset else ""
     with Progress(
-        TextColumn(f"BigCodeBench--{subset} ({extra}) •" + "[progress.percentage]{task.percentage:>3.0f}%"),
+        TextColumn(f"BigCodeBench--{split} ({extra}) •" + "[progress.percentage]{task.percentage:>3.0f}%"),
         BarColumn(),
         MofNCompleteColumn(),
         TextColumn("•"),
         TimeElapsedColumn(),
     ) as p:
             
-        dataset = get_bigcodebench(hard=hard)
+        dataset = get_bigcodebench(subset=subset)
 
-        if model.is_direct_completion() and subset == "instruct":
+        if model.is_direct_completion() and split == "instruct":
             raise Exception("Base model does not support direct completion for instruct tasks")
 
         # create save_path if it doesn't exist, e.g., a/b.jsonl
@@ -72,9 +72,9 @@ def codegen(
             sidx = n_samples - nsamples
             while sidx < n_samples:
                 try:
-                    prompt = task[f"{subset}_prompt"]
+                    prompt = task[f"{split}_prompt"]
                 except:
-                    raise Exception(f"Invalid subset {subset}")
+                    raise Exception(f"Invalid split {split}")
                 if strip_newlines:
                     prompt = prompt.strip("\n")
                 outputs = model.codegen(
@@ -107,8 +107,8 @@ def codegen(
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, type=str)
-    parser.add_argument("--subset", required=True, type=str)
-    parser.add_argument("--hard", action="store_true")
+    parser.add_argument("--split", required=True, type=str)
+    parser.add_argument("--subset", default="", type=str)
     parser.add_argument("--save_path", default=None, type=str)
     parser.add_argument("--bs", default=1, type=int)
     parser.add_argument("--n_samples", default=1, type=int)
@@ -124,7 +124,7 @@ def main():
     args = parser.parse_args()
 
 
-    assert args.subset in ["complete", "instruct"], f"Invalid subset {args.subset}"
+    assert args.split in ["complete", "instruct"], f"Invalid split {args.split}"
     assert args.backend in ["vllm", "hf", "openai", "mistral", "anthropic", "google"]
 
     if args.greedy and (args.temperature != 0 or args.bs != 1 or args.n_samples != 1)\
@@ -151,17 +151,17 @@ def main():
         trust_remote_code=args.trust_remote_code
     )
     
-    extra = "" if not args.hard else "-hard"
+    extra = "-"+args.subset if args.subset
     if not args.save_path:
-        save_path = args.model.replace("/", "--") + f"--bigcodebench{extra}-{args.subset}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
+        save_path = args.model.replace("/", "--") + f"--bigcodebench{extra}-{args.split}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
     else:
         save_path = args.save_path
 
     codegen(
         model=model_runner,
         save_path=save_path,
+        split=args.split,
         subset=args.subset,
-        hard=args.hard,
         greedy=args.greedy,
         strip_newlines=args.strip_newlines,
         n_samples=args.n_samples,

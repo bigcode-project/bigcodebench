@@ -247,9 +247,9 @@ def evaluate(flags):
     }
     
     mode = "-calibrated" if "sanitized-calibrated" in flags.samples else ""
-    extra = "Full" if not flags.hard else "Hard"
-    flags.subset = flags.subset[0].upper() + flags.subset[1:]
-    cprint(f"BigCodeBench-{flags.subset}{mode} ({extra})", "green")
+    extra = flags.subset.capitalize()
+    flags.split = flags.split.capitalize()
+    cprint(f"BigCodeBench-{flags.split}{mode} ({extra})", "green")
         
     if flags.no_gt:
         cprint(f"Groundtruth is not checked", "yellow")
@@ -285,7 +285,7 @@ def evaluate(flags):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--subset", required=True, type=str, choices=["complete", "instruct"]
+        "--split", required=True, type=str, choices=["complete", "instruct"]
     )
     parser.add_argument("--hard", action="store_true")
     parser.add_argument("--samples", required=True, type=str)
