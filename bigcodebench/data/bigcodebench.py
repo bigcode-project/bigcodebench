@@ -25,7 +25,7 @@ def _ready_bigcodebench_path(subset="full", version="default") -> str:
         BIGCODEBENCH_VERSION, subset
     )
     
-    extra = "-" + subset if subset else ""
+    extra = "-" + subset if subset != "full" else ""
     
     try:
         dataset = load_dataset(BIGCODEBENCH_HF+extra, split=BIGCODEBENCH_VERSION)
