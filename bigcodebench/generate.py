@@ -145,7 +145,7 @@ def main():
         trust_remote_code=args.trust_remote_code
     )
     
-    extra = "-" + args.subset if args.subset else ""
+    extra = "-" + args.subset if args.subset != "full" else ""
     if not args.save_path:
         save_path = args.model.replace("/", "--") + f"--bigcodebench{extra}-{args.split}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
     else:
