@@ -31,7 +31,7 @@ import subprocess
 import multiprocessing
 from typing import Optional
 
-TIMEOUT=240
+TIMEOUT=240.0
 
 @contextlib.contextmanager
 def swallow_subprocess_output():
