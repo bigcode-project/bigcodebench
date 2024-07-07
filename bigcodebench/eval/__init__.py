@@ -41,7 +41,7 @@ from bigcodebench.eval.utils import (
     swallow_io,
     time_limit,
     safe_environment,
-    TIMEOUT,
+    TIMEOUT_LIMIT,
 )
 
 
@@ -179,7 +179,7 @@ def untrusted_check(
     gt_time_limit: float = 60
 ) -> Tuple[str, np.ndarray]:
     time_limit = max(min_time_limit, gt_time_limit)
-    timeout = max(os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", TIMEOUT), time_limit) + 1
+    timeout = max(os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", TIMEOUT_LIMIT), time_limit) + 1
     # shared memory objects
     stat = Value("i", _UNKNOWN)
     manager = Manager()

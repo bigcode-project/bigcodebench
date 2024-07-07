@@ -29,8 +29,8 @@ def make_request(
         ],
         max_tokens=max_tokens,
         temperature=temperature,
-        n=n,
-        **kwargs
+        # n=n,
+        # **kwargs
     )
 
 
