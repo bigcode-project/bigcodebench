@@ -276,6 +276,12 @@ def evaluate(flags):
     if not os.path.isfile(result_path):
         with open(result_path, "w") as f:
             json.dump(results, f, indent=2)
+    
+    pass_at_k_path = result_path.replace("_eval_results.json", "_pass_at_k.json")
+    pass_at_k["model"] = flags.samples.split("/")[-1].replace(".jsonl", "")
+    pass_at_k["subset"] = flags.subset
+    with open(pass_at_k_path, "w") as f:
+        json.dump(pass_at_k, f, indent=2)
 
 
 def main():
