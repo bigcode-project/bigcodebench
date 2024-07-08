@@ -4,25 +4,30 @@
 </center>
 
 <p align="center">
+    <a href="https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard"><img src="https://img.shields.io/badge/🤗&nbsp&nbsp%F0%9F%8F%86-leaderboard-%23ff8811"></a>
+    <a href="https://huggingface.co/collections/bigcode/bigcodebench-666ed21a5039c618e608ab06"><img src="https://img.shields.io/badge/🤗-collection-pink"></a>
+    <a href="https://bigcode-bench.github.io/"><img src="https://img.shields.io/badge/%F0%9F%8F%86-website-8A2BE2"></a>
+    <a href="https://arxiv.org/abs/2406.15877"><img src="https://img.shields.io/badge/arXiv-2406.15877-b31b1b.svg"></a>
     <a href="https://pypi.org/project/bigcodebench/"><img src="https://img.shields.io/pypi/v/bigcodebench?color=g"></a>
+    <a href="https://pepy.tech/project/bigcodebench"><img src="https://static.pepy.tech/badge/bigcodebench"></a>
+    <a href="https://github.com/bigcodebench/bigcodebench/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/bigcodebench"></a>
     <a href="https://hub.docker.com/r/bigcodebench/bigcodebench-evaluate" title="Docker-Eval"><img src="https://img.shields.io/docker/image-size/bigcodebench/bigcodebench-evaluate"></a>
     <a href="https://hub.docker.com/r/bigcodebench/bigcodebench-generate" title="Docker-Gen"><img src="https://img.shields.io/docker/image-size/bigcodebench/bigcodebench-generate"></a>
-    <a href="https://github.com/bigcodebench/bigcodebench/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/bigcodebench"></a>
 </p>
 
 <p align="center">
     <a href="#-about">🌸About</a> •
     <a href="#-quick-start">🔥Quick Start</a> •
-    <a href="#-llm-generated-code">💻LLM code</a> •
-    <a href="#-failure-inspection">🔍Failure inspection</a> •
+    <a href="#-failure-inspection">🔍Failure Inspection</a> •
     <a href="#-full-script">🚀Full Script</a> •
     <a href="#-result-analysis">📊Result Analysis</a> •
-    <a href="#-known-issues">🐞Known issues</a> •
+    <a href="#-llm-generated-code">💻LLM-generated Code</a> •
+    <a href="#-known-issues">🐞Known Issues</a> •
     <a href="#-citation">📜Citation</a> •
     <a href="#-acknowledgement">🙏Acknowledgement</a>
 </p>
 
-## About
+## 🌸 About
 
 ### BigCodeBench
 
@@ -249,6 +254,10 @@ Then, run the evaluation:
 bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
 # ...If you really don't want to check the ground truths
 bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl --no-gt
+
+# You are strongly recommended to use the following command to clean up the environment after evaluation:
+pids=$(ps -u $(id -u) -o pid,comm | grep '^ *[0-9]\\+ bigcodebench' | awk '{print $1}'); if [ -n \"$pids\" ]; then echo $pids | xargs -r kill; fi;
+rm -rf /tmp/*
 ```
 
 > [!Tip]
@@ -298,7 +307,7 @@ Here are some tips to speed up the evaluation:
 </div>
 </details>
 
-## Failure Inspection
+## 🔍 Failure Inspection
 
 You can inspect the failed samples by using the following command:
 
@@ -306,7 +315,7 @@ You can inspect the failed samples by using the following command:
 bigcodebench.inspect --eval-results sample-sanitized-calibrated_eval_results.json --in-place
 ```
 
-## Full Script
+## 🚀 Full Script
 
 We provide a sample script to run the full pipeline:
 
@@ -314,7 +323,7 @@ We provide a sample script to run the full pipeline:
 bash run.sh
 ```
 
-## Result Analysis
+## 📊 Result Analysis
 
 We provide a script to replicate the analysis like Elo Rating and Task Solve Rate, which helps you understand the performance of the models further.
 
@@ -331,7 +340,7 @@ python get_results.py
 We share pre-generated code samples from LLMs we have [evaluated](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard):
 *  See the attachment of our [v0.1.5](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.1.5). We include both `sanitized_samples.zip` and `sanitized_samples_calibrated.zip` for your convenience.
 
-## Known Issues
+## 🐞 Known Issues
 
 - [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.2%) between runs. We are working on improving the evaluation stability.
 
@@ -343,10 +352,10 @@ We share pre-generated code samples from LLMs we have [evaluated](https://huggin
 
 ```bibtex
 @article{zhuo2024bigcodebench,
-    title={BigCodeBench: Benchmarking Code Generation with Diverse Function Calls and Complex Instructions}, 
-    author={Terry Yue Zhuo and Minh Chien Vu and Jenny Chim and Han Hu and Wenhao Yu and Ratnadira Widyasari and Imam Nur Bani Yusuf and Haolan Zhan and Junda He and Indraneil Paul and Simon Brunner and Chen Gong and Thong Hoang and Armel Randy Zebaze and Xiaoheng Hong and Wen-Ding Li and Jean Kaddour and Ming Xu and Zhihan Zhang and Prateek Yadav and Naman Jain and Alex Gu and Zhoujun Cheng and Jiawei Liu and Qian Liu and Zijian Wang and David Lo and Binyuan Hui and Niklas Muennighoff and Daniel Fried and Xiaoning Du and Harm de Vries and Leandro Von Werra},
-    journal={arXiv preprint arXiv:2406.15877},
-    year={2024}
+  title={BigCodeBench: Benchmarking Code Generation with Diverse Function Calls and Complex Instructions},
+  author={Zhuo, Terry Yue and Vu, Minh Chien and Chim, Jenny and Hu, Han and Yu, Wenhao and Widyasari, Ratnadira and Yusuf, Imam Nur Bani and Zhan, Haolan and He, Junda and Paul, Indraneil and others},
+  journal={arXiv preprint arXiv:2406.15877},
+  year={2024}
 }
 ```
 

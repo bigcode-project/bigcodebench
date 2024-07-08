@@ -144,6 +144,7 @@ def split_gen():
 
 def read_task_perf(task="complete"):
     model_results = dict()
+    result_files = []
     for model, info in model_info.items():
         if task == "instruct" and (not info["prompted"] or info["name"] in ["Granite-Code-3B-Instruct", "Granite-Code-8B-Instruct"]):
             continue
@@ -164,13 +165,14 @@ def read_task_perf(task="complete"):
         except:
             continue
         
+        result_files.append(file)
         with open(file, "r") as f:
             data = json.load(f)
         for task_id, perfs in data["eval"].items():
             status = 1 if perfs[0]["status"] == "pass" else 0
             task_perf[task_id] = status
         model_results[info["name"]] = task_perf
-    return model_results
+    return model_results, result_files
 
 
 def get_winner_df(data_dict, task, task_level=True, no_tie=True):
@@ -267,9 +269,6 @@ def get_solve_rate(data_dict, task="complete"):
         for task_id in range(1140):
             task_solve_count[f"BigCodeBench/{task_id}"].append(task_perf[f"BigCodeBench/{task_id}"])
     solve_rate = {task_id: round(np.mean(perfs) * 100, 1) for task_id, perfs in task_solve_count.items()}
-    with open(f"{task}_solve_rate.txt", "w") as f:
-        f.write(f"Number of unsolved tasks: {sum([1 for task_id, solve_rate in solve_rate.items() if solve_rate == 0])}\n")
-        f.write(f"Number of fully solved tasks: {sum([1 for task_id, solve_rate in solve_rate.items() if solve_rate == 100])}\n")
     return Dataset.from_dict({"task_id": list(solve_rate.keys()), "solve_rate": list(solve_rate.values())})
 
 
@@ -313,8 +312,16 @@ if __name__ == "__main__":
     
     model_info = update_model_info(model_info)
     results = get_results()
-    complete_data = read_task_perf("complete")
-    instruct_data = read_task_perf("instruct")
+    files = []
+    complete_data, complete_files = read_task_perf("complete")
+    instruct_data, instruct_files = read_task_perf("instruct")
+    files.extend(complete_files)
+    files.extend(instruct_files)
+    shutil.rmtree("eval_results", ignore_errors=True)
+    os.makedirs("eval_results", exist_ok=True)
+    for file in files:
+        shutil.copy(file, "eval_results")
+    
     complete_solve_rate = get_solve_rate(complete_data, task="complete")
     instruct_solve_rate = get_solve_rate(instruct_data, task="instruct")
     solve_rate_ds = DatasetDict({"complete": complete_solve_rate, "instruct": instruct_solve_rate})

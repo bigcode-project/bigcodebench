@@ -32,3 +32,5 @@ RUN chmod -R 777 /app
 USER bigcodebenchuser
 
 ENTRYPOINT ["python3", "-m", "bigcodebench.evaluate"]
+
+CMD ["sh", "-c", "pids=$(ps -u $(id -u) -o pid,comm | grep 'bigcodebench' | awk '{print $1}'); if [ -n \"$pids\" ]; then echo $pids | xargs -r kill; fi; rm -rf /tmp/*"]

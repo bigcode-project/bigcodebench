@@ -72,8 +72,9 @@ def get_groundtruth(n_workers, problems, hashcode, check_gt_only, max_as_limit, 
     
     print(f"Expected outputs computed in {time.time() - tbegin:.2f}s")
     
-    with open(cache_file, "wb") as f:
-        pickle.dump(expected_time, f)
+    if any(expected_time.values()):
+        with open(cache_file, "wb") as f:
+            pickle.dump(expected_time, f)
 
     return expected_time
 
@@ -131,6 +132,8 @@ def evaluate(flags):
     else:
         expected_time = {task_id: None for task_id in problems}
     
+    gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
+    
     if os.path.isfile(result_path):
         print(f"Load from previous results from {result_path}")
         with open(result_path, "r") as f:
@@ -138,8 +141,6 @@ def evaluate(flags):
 
         results = compatible_eval_result(results)
     else:
-        gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
-        
         if flags.check_gt_only:
         
             if gt_pass_rate > 0.99:
