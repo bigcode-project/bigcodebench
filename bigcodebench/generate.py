@@ -22,6 +22,7 @@ def codegen(
     n_samples=1,
     id_range=None,
     resume=True,
+    offline=False,
 ):
     with Progress(
         TextColumn(f"BigCodeBench--{subset} •" + "[progress.percentage]{task.percentage:>3.0f}%"),
@@ -31,7 +32,7 @@ def codegen(
         TimeElapsedColumn(),
     ) as p:
             
-        dataset = get_bigcodebench()
+        dataset = get_bigcodebench(offline=offline)
 
         if model.is_direct_completion() and subset == "instruct":
             raise Exception("Base model does not support direct completion for instruct tasks")
@@ -119,6 +120,7 @@ def main():
     parser.add_argument("--tp", default=1, type=int)
     parser.add_argument("--trust_remote_code", action="store_true")
     parser.add_argument("--tokenizer_name", default=None, type=str)
+    parser.add_argument("--offline", action="store_true")
 
     args = parser.parse_args()
 
@@ -164,7 +166,8 @@ def main():
         strip_newlines=args.strip_newlines,
         n_samples=args.n_samples,
         resume=args.resume,
-        id_range=args.id_range
+        id_range=args.id_range,
+        offline=args.offline
     )
 
 
