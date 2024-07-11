@@ -27,11 +27,6 @@ def _ready_bigcodebench_path(mini=False, noextreme=False, version="default", off
     
     try:
         dataset = load_dataset(BIGCODEBENCH_HF, split=BIGCODEBENCH_VERSION)
-        if offline:
-            with open("network-free-set.txt", "r") as f:
-                included_ids = f.read()
-            included_ids = included_ids.split("\n")
-            dataset = dataset.filter(lambda instance: instance["task_id"] in included_ids)
         make_cache(url, dataset, path)
     except:
         if os.path.exists(path):
