@@ -322,6 +322,7 @@ def main():
     parser.add_argument(
         "--no-gt", action="store_true", help="Check the groundtruth"
     )
+    parser.add_argument("--offline", action="store_true")
     args = parser.parse_args()
 
     evaluate(args)
