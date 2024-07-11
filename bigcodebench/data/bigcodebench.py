@@ -71,7 +71,7 @@ def get_bigcodebench_hash(mini=False, noextreme=False, version="default", offlin
     Returns:
         str: The hash of BigCodeBench
     """
-    data_path = _ready_bigcodebench_path(mini, noextreme, version="default", offline)
+    data_path = _ready_bigcodebench_path(mini, noextreme, version, offline)
     with open(data_path, "rb") as f:
         data = f.read()
     return hashlib.md5(data).hexdigest()
