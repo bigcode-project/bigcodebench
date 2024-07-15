@@ -848,7 +848,7 @@ model_info = {
     "yi-large": {
         "name": "Yi-Large",
         "link": "https://www.lingyiwanwu.com/",
-        "prompted": False,
+        "prompted": True,
         "moe": False,
         "size": None,
         "act_param": None,
@@ -857,7 +857,7 @@ model_info = {
     "THUDM/codegeex4-all-9b": {
         "name": "CodeGeex4-All-9B",
         "link": "https://huggingface.co/THUDM/codegeex4-all-9b",
-        "prompted": False,
+        "prompted": True,
         "moe": False,
         "size": 9,
         "act_param": 9,
