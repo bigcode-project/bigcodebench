@@ -118,21 +118,22 @@ def evaluate(flags):
         # bypass the samples
         flags.samples = "__dummy__.jsonl"
     
+    extra = flags.subset + "_" if flags.subset != "full" else ""
     if os.path.isdir(flags.samples):
-        result_path = os.path.join(flags.samples, "eval_results.json")
+        result_path = os.path.join(flags.samples, f"{extra}eval_results.json")
     else:
         assert flags.samples.endswith(".jsonl")
-        result_path = flags.samples.replace(".jsonl", "_eval_results.json")
+        result_path = flags.samples.replace(".jsonl", f"_{extra}eval_results.json")
 
-    problems = get_bigcodebench()
-    dataset_hash = get_bigcodebench_hash()
+    problems = get_bigcodebench(subset=flags.subset)
+    dataset_hash = get_bigcodebench_hash(subset=flags.subset)
     
     if not flags.no_gt:
         expected_time = get_groundtruth(n_workers, problems, dataset_hash, flags.check_gt_only, flags.max_as_limit, flags.max_data_limit, flags.max_stack_limit)
     else:
         expected_time = {task_id: None for task_id in problems}
     
-    gt_pass_rate = np.mean([1 if v is not None else 0 for v in expected_time.values()])
+    gt_pass_rate = np.mean([1 if v is not None else 0 for k, v in expected_time.items() if k in problems])
     
     if os.path.isfile(result_path):
         print(f"Load from previous results from {result_path}")
@@ -199,11 +200,11 @@ def evaluate(flags):
             def stucking_checker():
                 while remainings:
                     last_size = len(remainings)
-                    time.sleep(120)
+                    time.sleep(240)
                     if last_size != len(remainings) or len(remainings) == 0:
                         continue
                     # Potential stucking
-                    warn("No samples had finished testing in the last 120s")
+                    warn("No samples had finished testing in the last 240s")
                     warn(f"{len(remainings)} samples to be tested: {remainings}")
 
             threading.Thread(target=stucking_checker).start()
@@ -229,10 +230,12 @@ def evaluate(flags):
                 )
 
     # Calculate pass@k.
-    total = np.array([len(r) for r in results["eval"].values()])
+    total = np.array([len(r) for k, r in results["eval"].items() if k in problems])
     base_correct = []
 
-    for res in results["eval"].values():
+    for key, res in results["eval"].items():
+        if key not in problems:
+            continue
         bc = sum([r["status"] == PASS for r in res])
         base_correct.append(bc)
 
@@ -245,8 +248,9 @@ def evaluate(flags):
     }
     
     mode = "-calibrated" if "sanitized-calibrated" in flags.samples else ""
-    flags.subset = flags.subset[0].upper() + flags.subset[1:]
-    cprint(f"BigCodeBench-{flags.subset}{mode}", "green")
+    extra = flags.subset.capitalize()
+    flags.split = flags.split.capitalize()
+    cprint(f"BigCodeBench-{flags.split}{mode} ({extra})", "green")
         
     if flags.no_gt:
         cprint(f"Groundtruth is not checked", "yellow")
@@ -308,8 +312,9 @@ def evaluate(flags):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--subset", required=True, type=str, choices=["complete", "instruct"]
+        "--split", required=True, type=str, choices=["complete", "instruct"]
     )
+    parser.add_argument("--subset", default="full", type=str, choices=["full", "hard"])
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
