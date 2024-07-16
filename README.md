@@ -117,7 +117,8 @@ bigcodebench.generate \
     --backend [vllm|hf|openai|mistral|anthropic|google] \
     --tp [gpu_number] \
     [--trust_remote_code] \
-    [--base_url [base_url]]
+    [--base_url [base_url]] \
+    [--tokenizer_name [tokenizer_name]]
 ```
 >
 The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
