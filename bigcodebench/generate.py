@@ -36,7 +36,7 @@ def codegen(
 
         if model.is_direct_completion() and split == "instruct":
             raise Exception("Base model does not support direct completion for instruct tasks")
-
+        
         # create save_path if it doesn't exist, e.g., a/b.jsonl
         dirname = os.path.dirname(save_path)
         if not os.path.exists(dirname) and dirname != "":
@@ -119,6 +119,8 @@ def main():
     parser.add_argument("--base_url", default=None, type=str)
     parser.add_argument("--tp", default=1, type=int)
     parser.add_argument("--trust_remote_code", action="store_true")
+    parser.add_argument("--tokenizer_name", default=None, type=str)
+
     args = parser.parse_args()
 
     if args.greedy and (args.temperature != 0 or args.bs != 1 or args.n_samples != 1)\
@@ -142,7 +144,8 @@ def main():
         temperature=args.temperature,
         base_url=args.base_url,
         tp=args.tp,
-        trust_remote_code=args.trust_remote_code
+        trust_remote_code=args.trust_remote_code,
+        tokenizer_name=args.tokenizer_name
     )
     
     extra = "-" + args.subset if args.subset != "full" else ""
@@ -160,7 +163,7 @@ def main():
         strip_newlines=args.strip_newlines,
         n_samples=args.n_samples,
         resume=args.resume,
-        id_range=args.id_range,
+        id_range=args.id_range
     )
 
 
