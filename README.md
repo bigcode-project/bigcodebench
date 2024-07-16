@@ -104,10 +104,12 @@ pip install -U flash-attn
 To generate code samples from a model, you can use the following command:
 >
 ```bash
+# when greedy, there is no need for temperature and n_samples
 bigcodebench.generate \
     --model [model_name] \
-    --subset [complete|instruct] \
-    --greedy \
+    --split [complete|instruct] \
+    --subset [full|hard] \
+    [--greedy] \
     --bs [bs] \
     --temperature [temp] \
     --n_samples [n_samples] \
@@ -124,7 +126,8 @@ The generated code samples will be stored in a file named `[model_name]--bigcode
 # If you are using GPUs
 docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest \
     --model [model_name] \ 
-    --subset [complete|instruct] \
+    --split [complete|instruct] \
+    --subset [full|hard] \
     [--greedy] \
     --bs [bs] \   
     --temperature [temp] \
@@ -136,7 +139,8 @@ docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/app -t bigcodebenc
 # ...Or if you are using CPUs
 docker run -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest \
     --model [model_name] \ 
-    --subset [complete|instruct] \
+    --split [complete|instruct] \
+    --subset [full|hard] \
     [--greedy] \
     --bs [bs] \   
     --temperature [temp] \
@@ -233,10 +237,10 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 # If you want to change the RAM address space limit (in MB, 128 GB by default): `--max-as-limit XXX`
 # If you want to change the RAM data segment limit (in MB, 4 GB by default): `--max-data-limit`
 # If you want to change the RAM stack limit (in MB, 4 MB by default): `--max-stack-limit`
-docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
+docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
 
 # If you only want to check the ground truths
-docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl --check-gt-only
+docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --check-gt-only
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -251,12 +255,12 @@ Then, run the evaluation:
 
 ```bash
 # ...Or locally ⚠️
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
+bigcodebench.evaluate --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
 # ...If you really don't want to check the ground truths
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl --no-gt
+bigcodebench.evaluate --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --no-gt
 
 # You are strongly recommended to use the following command to clean up the environment after evaluation:
-pids=$(ps -u $(id -u) -o pid,comm | grep '^ *[0-9]\\+ bigcodebench' | awk '{print $1}'); if [ -n \"$pids\" ]; then echo $pids | xargs -r kill; fi;
+pids=$(ps -u $(id -u) -o pid,comm | grep 'bigcodebench' | awk '{print $1}'); if [ -n \"$pids\" ]; then echo $pids | xargs -r kill; fi;
 rm -rf /tmp/*
 ```
 
