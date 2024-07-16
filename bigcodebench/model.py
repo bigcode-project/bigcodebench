@@ -26,7 +26,6 @@ except ImportError:
     warn("GoogleGenAI decoder will not work. Fix by `pip install google-generativeai`")
 
 import torch
-from stop_sequencer import StopSequencer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 try:
@@ -130,10 +129,11 @@ class VllmDecoder(DecoderBase):
             "trust_remote_code": self.trust_remote_code,
         }
 
-        self.tokenizer = AutoTokenizer.from_pretrained(self.name, **kwargs)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.name, legacy=False, **kwargs)
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
         self.llm = LLM(model=name, max_model_len=2048, **kwargs)
+        self.llm.set_tokenizer(tokenizer=self.tokenizer)
 
     def is_direct_completion(self) -> bool:
         return self.tokenizer.chat_template is None
@@ -179,7 +179,7 @@ class HfTorchDecoder(DecoderBase):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         kwargs = {}
-        kwargs["device_map"] = "auto"
+        kwargs["device_map"] = "cuda:0"
         kwargs["trust_remote_code"] = self.trust_remote_code
         # string to torch dtype
         kwargs["torch_dtype"] = getattr(torch, self.dtype)
@@ -187,7 +187,7 @@ class HfTorchDecoder(DecoderBase):
 
         print(f"{kwargs = }")
 
-        self.tokenizer = AutoTokenizer.from_pretrained(name, **kwargs)
+        self.tokenizer = AutoTokenizer.from_pretrained(name, legacy=False, **kwargs)
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
 
@@ -213,18 +213,7 @@ class HfTorchDecoder(DecoderBase):
             kwargs["top_p"] = 0.95
             kwargs["temperature"] = self.temperature
 
-        stop_sequencer = StopSequencer(
-            self.model,
-            model_type="causal",  # or seq2seq
-            tokenizer=self.tokenizer,
-        )
-
-        model = stop_sequencer.register_stop_texts(
-            stop_texts=self.eos,
-            input_length=input_tokens.size(-1),
-        )
-
-        outputs = model.generate(
+        outputs = self.model.generate(
             input_tokens,
             max_new_tokens=self.max_new_tokens,
             do_sample=do_sample,
@@ -253,7 +242,7 @@ class GenenralHfTorchDecoder(HfTorchDecoder):
         super().__init__(name=name, **kwargs)
         self.eos += ["\n```\n"]
         print(f"EOS strings: {self.eos}")
-        self.tokenizer = AutoTokenizer.from_pretrained(self.name, **kwargs)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.name, legacy=False, **kwargs)
 
     def codegen(
         self, prompt: str, do_sample: bool = True, num_samples: int = 200
