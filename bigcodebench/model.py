@@ -194,6 +194,7 @@ class HfTorchDecoder(DecoderBase):
             self.tokenizer_name = self.name
         
         self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, legacy=False, **kwargs)
+        
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
 
