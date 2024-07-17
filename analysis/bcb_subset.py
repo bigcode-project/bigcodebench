@@ -12,6 +12,7 @@ from datasets import load_dataset, Dataset, Features, Value, Sequence, DatasetDi
 from utils import *
 
 VERSION = "v0.1.0_hf"
+
 def update_model_info(model_info):
     for model, info in model_info.items():
         if "https://huggingface.co/" in info["link"]:
