@@ -15,25 +15,26 @@ else
   BASE_MODEL=$MODEL
 fi
 
-FILE_HEADER=$ORG$BASE_MODEL--$DATASET-$SUBSET--$BACKEND-$TEMP-$N_SAMPLES
+if [ "$SUBSET" = "full" ]; then
+    FILE_HEADER="${ORG}${BASE_MODEL}--${DATASET}-${SPLIT}--${BACKEND}-${TEMP}-${N_SAMPLES}"
+  else
+    FILE_HEADER="${ORG}${BASE_MODEL}--${DATASET}-${SUBSET}-${SPLIT}--${BACKEND}-${TEMP}-${N_SAMPLES}"
+  fi
 
 echo $FILE_HEADER
 bigcodebench.generate \
   --tp $NUM_GPU \
   --model $MODEL \
-  --bs $BS \
-  --temperature $TEMP \
-  --n_samples $N_SAMPLES \
   --resume \
   --split $SPLIT \
   --subset $SUBSET \
   --backend $BACKEND \
-  --trust_remote_code
+  --greedy
 
 bigcodebench.sanitize --samples $FILE_HEADER.jsonl --calibrate
 
 # Check if the ground truth works on your machine
-bigcodebench.evaluate --split $SUBSET --samples $FILE_HEADER-sanitized-calibrated.jsonl
+bigcodebench.evaluate --split $SPLIT --subset $SUBSET --samples $FILE_HEADER-sanitized-calibrated.jsonl
 
 # If the execution is slow:
-bigcodebench.evaluate --split $SUBSET --samples $FILE_HEADER-sanitized-calibrated.jsonl --parallel 32
+bigcodebench.evaluate --split $SPLIT --subset $SUBSET --samples $FILE_HEADER-sanitized-calibrated.jsonl --parallel 32
