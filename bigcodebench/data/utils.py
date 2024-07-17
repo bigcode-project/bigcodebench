@@ -37,7 +37,7 @@ def make_cache(gzip_url, hf_data, cache_path, gh=False, offline=False):
             # If offline, then parse the json then check the task_id
             if offline:
                 json_data = [json.loads(line) for line in data.split('\n') if line]
-                json_data = [item for item in json_data if item.get("task_id") in OFFLINE_IDS]
+                json_data = [item for item in json_data if item.get("task_id").lstrip("BigCodeBench/") in OFFLINE_IDS]
 
             # create CACHE_DIR if not exists
             if not os.path.exists(CACHE_DIR):
@@ -52,7 +52,7 @@ def make_cache(gzip_url, hf_data, cache_path, gh=False, offline=False):
                     f.write(data)
         else:
             if offline:
-                hf_data = hf_data.filter(lambda instance: instance["task_id"] in OFFLINE_IDS)
+                hf_data = hf_data.filter(lambda instance: instance["task_id"].lstrip("BigCodeBench/") in OFFLINE_IDS)
             hf_data.to_json(cache_path)
 
 
