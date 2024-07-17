@@ -92,6 +92,7 @@ class DecoderBase(ABC):
         dtype: str = "bfloat16",  # default
         trust_remote_code: bool = False,
         tokenizer_name: str = None,
+        tokenizer_legacy: bool = False,
     ) -> None:
         print("Initializing a decoder model: {} ...".format(name))
         self.name = name
@@ -103,6 +104,7 @@ class DecoderBase(ABC):
         self.dtype = dtype
         self.trust_remote_code = trust_remote_code
         self.tokenizer_name = tokenizer_name
+        self.tokenizer_legacy = tokenizer_legacy
 
     @abstractmethod
     def codegen(
@@ -133,7 +135,7 @@ class VllmDecoder(DecoderBase):
         if self.tokenizer_name is None:
             self.tokenizer_name = self.name
         
-        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, **kwargs)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, **kwargs, legacy=not self.tokenizer_legacy)
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
         self.llm = LLM(model=name, max_model_len=2048, **kwargs)
@@ -193,7 +195,7 @@ class HfTorchDecoder(DecoderBase):
         if self.tokenizer_name is None:
             self.tokenizer_name = self.name
         
-        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, **kwargs)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, **kwargs, legacy=not self.tokenizer_legacy)
         
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
@@ -249,7 +251,8 @@ class GenenralHfTorchDecoder(HfTorchDecoder):
         super().__init__(name=name, **kwargs)
         self.eos += ["\n```\n"]
         print(f"EOS strings: {self.eos}")
-        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name if self.tokenizer_name else self.name, **kwargs)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name if self.tokenizer_name else self.name,
+                                                       **kwargs, legacy=not self.tokenizer_legacy)
 
     def codegen(
         self, prompt: str, do_sample: bool = True, num_samples: int = 200
@@ -483,6 +486,7 @@ def make_model(
     base_url=None,
     trust_remote_code=False,
     tokenizer_name=None,
+    tokenizer_legacy=True,
 ):
     if backend == "vllm":
         return GeneralVllmDecoder(
@@ -493,6 +497,7 @@ def make_model(
             tp=tp,
             trust_remote_code=trust_remote_code,
             tokenizer_name=tokenizer_name,
+            tokenizer_legacy=tokenizer_legacy,
         )
     elif backend == "hf":
         return GenenralHfTorchDecoder(
@@ -502,6 +507,7 @@ def make_model(
             dataset=dataset,
             trust_remote_code=trust_remote_code,
             tokenizer_name=tokenizer_name,
+            tokenizer_legacy=tokenizer_legacy,
         )
     elif backend == "openai":
         return OpenAIChatDecoder(

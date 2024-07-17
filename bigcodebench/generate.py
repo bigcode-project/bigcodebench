@@ -119,6 +119,7 @@ def main():
     parser.add_argument("--base_url", default=None, type=str)
     parser.add_argument("--tp", default=1, type=int)
     parser.add_argument("--trust_remote_code", action="store_true")
+    parser.add_argument("--tokenizer_legacy", action="store_true")
     parser.add_argument("--tokenizer_name", default=None, type=str)
 
     args = parser.parse_args()
@@ -144,7 +145,8 @@ def main():
         base_url=args.base_url,
         tp=args.tp,
         trust_remote_code=args.trust_remote_code,
-        tokenizer_name=args.tokenizer_name
+        tokenizer_name=args.tokenizer_name,
+        tokenizer_legacy=args.tokenizer_legacy
     )
     
     extra = "-" + args.subset if args.subset != "full" else ""
