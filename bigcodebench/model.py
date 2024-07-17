@@ -133,7 +133,7 @@ class VllmDecoder(DecoderBase):
         if self.tokenizer_name is None:
             self.tokenizer_name = self.name
         
-        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, legacy=False, **kwargs)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, **kwargs)
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
         self.llm = LLM(model=name, max_model_len=2048, **kwargs)
@@ -193,7 +193,7 @@ class HfTorchDecoder(DecoderBase):
         if self.tokenizer_name is None:
             self.tokenizer_name = self.name
         
-        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, legacy=False, **kwargs)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, **kwargs)
         
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
