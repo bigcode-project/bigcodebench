@@ -11,6 +11,7 @@ from bigcodebench.eval.utils import (
     swallow_io,
     time_limit,
     safe_environment,
+    TIMEOUT_LIMIT,
 )
 
 
@@ -51,7 +52,7 @@ def trusted_exec(code, test_code, task_id, max_as_limit, max_data_limit, max_sta
         suite = loader.loadTestsFromTestCase(TestCases)
         test_result = unittest.TestResult()
         start = time.time()
-        with safe_environment(), swallow_io(), time_limit(seconds=120):
+        with safe_environment(), swallow_io(), time_limit(seconds=TIMEOUT_LIMIT):
             suite.run(test_result)
 
         if len(test_result.failures + test_result.errors) > 0:
@@ -68,7 +69,7 @@ def trusted_exec(code, test_code, task_id, max_as_limit, max_data_limit, max_sta
 def trusted_check_exec(code, inputs):
     """Check trusted_exec success."""
     try:
-        with time_limit(seconds=120):
+        with time_limit(seconds=TIMEOUT_LIMIT):
             trusted_exec(code, inputs)
     except Exception:
         return False
@@ -83,7 +84,7 @@ def trusted_check(
     max_data_limit: float,
     max_stack_limit: float,
 ):
-    timeout = os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", 120) + 1
+    timeout = os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", TIMEOUT_LIMIT) + 1
     # shared memory objects
     times = Value("d", -1)
     manager = Manager()

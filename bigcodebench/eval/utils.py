@@ -31,6 +31,8 @@ import subprocess
 import multiprocessing
 from typing import Optional
 
+TIMEOUT_LIMIT=240.0
+
 @contextlib.contextmanager
 def swallow_subprocess_output():
     """Context manager to swallow stdout and stderr for subprocesses."""

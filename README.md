@@ -104,10 +104,12 @@ pip install -U flash-attn
 To generate code samples from a model, you can use the following command:
 >
 ```bash
+# when greedy, there is no need for temperature and n_samples
 bigcodebench.generate \
     --model [model_name] \
-    --subset [complete|instruct] \
-    --greedy \
+    --split [complete|instruct] \
+    --subset [full|hard] \
+    [--greedy] \
     --bs [bs] \
     --temperature [temp] \
     --n_samples [n_samples] \
@@ -115,7 +117,8 @@ bigcodebench.generate \
     --backend [vllm|hf|openai|mistral|anthropic|google] \
     --tp [gpu_number] \
     [--trust_remote_code] \
-    [--base_url [base_url]]
+    [--base_url [base_url]] \
+    [--tokenizer_name [tokenizer_name]]
 ```
 >
 The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
@@ -124,7 +127,8 @@ The generated code samples will be stored in a file named `[model_name]--bigcode
 # If you are using GPUs
 docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest \
     --model [model_name] \ 
-    --subset [complete|instruct] \
+    --split [complete|instruct] \
+    --subset [full|hard] \
     [--greedy] \
     --bs [bs] \   
     --temperature [temp] \
@@ -136,7 +140,8 @@ docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/app -t bigcodebenc
 # ...Or if you are using CPUs
 docker run -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest \
     --model [model_name] \ 
-    --subset [complete|instruct] \
+    --split [complete|instruct] \
+    --subset [full|hard] \
     [--greedy] \
     --bs [bs] \   
     --temperature [temp] \
@@ -233,10 +238,10 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 # If you want to change the RAM address space limit (in MB, 128 GB by default): `--max-as-limit XXX`
 # If you want to change the RAM data segment limit (in MB, 4 GB by default): `--max-data-limit`
 # If you want to change the RAM stack limit (in MB, 4 MB by default): `--max-stack-limit`
-docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
+docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
 
 # If you only want to check the ground truths
-docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl --check-gt-only
+docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --check-gt-only
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -251,12 +256,12 @@ Then, run the evaluation:
 
 ```bash
 # ...Or locally ⚠️
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl
+bigcodebench.evaluate --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
 # ...If you really don't want to check the ground truths
-bigcodebench.evaluate --subset [complete|instruct] --samples samples-sanitized-calibrated.jsonl --no-gt
+bigcodebench.evaluate --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --no-gt
 
 # You are strongly recommended to use the following command to clean up the environment after evaluation:
-pids=$(ps -u $(id -u) -o pid,comm | grep '^ *[0-9]\\+ bigcodebench' | awk '{print $1}'); if [ -n \"$pids\" ]; then echo $pids | xargs -r kill; fi;
+pids=$(ps -u $(id -u) -o pid,comm | grep 'bigcodebench' | awk '{print $1}'); if [ -n \"$pids\" ]; then echo $pids | xargs -r kill; fi;
 rm -rf /tmp/*
 ```
 
@@ -341,6 +346,8 @@ We share pre-generated code samples from LLMs we have [evaluated](https://huggin
 *  See the attachment of our [v0.1.5](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.1.5). We include both `sanitized_samples.zip` and `sanitized_samples_calibrated.zip` for your convenience.
 
 ## 🐞 Known Issues
+
+- [ ] Due to [the Hugging Face tokenizer update](https://github.com/huggingface/transformers/pull/31305), some tokenizer may be broken and will degrade the performance of the evaluation. Therefore, we set up with `legacy=False` for the initialization. If you notice the unexpected change, please try `--tokenizer_legacy` during the generation.
 
 - [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.2%) between runs. We are working on improving the evaluation stability.
 
