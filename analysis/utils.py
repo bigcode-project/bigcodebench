@@ -602,13 +602,22 @@ model_info = {
         "act_param": 7,
         "open-data": "None",
         },
-    "mistralai/Codestral-22B-v0.1": {
+    "codestral-2405": {
         "name": "Codestral-22B-v0.1",
         "link": "https://huggingface.co/mistralai/Codestral-22B-v0.1",
         "prompted": True,
         "moe": False,
         "size": 22,
         "act_param": 22,
+        "open-data": "None",
+        },
+    "codestral-mamba-2407": {
+        "name": "Codestral-Mamba",
+        "link": "https://huggingface.co/mistralai/mamba-codestral-7B-v0.1",
+        "prompted": True,
+        "moe": False,
+        "size": 7,
+        "act_param": 7,
         "open-data": "None",
         },
     "mistralai/Mistral-7B-Instruct-v0.3": {
