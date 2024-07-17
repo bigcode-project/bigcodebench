@@ -23,7 +23,6 @@ if [ "$SUBSET" = "full" ]; then
 
 echo $FILE_HEADER
 bigcodebench.generate \
-  --tp $NUM_GPU \
   --model $MODEL \
   --resume \
   --split $SPLIT \
