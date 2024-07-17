@@ -52,9 +52,6 @@ def get_results(tids):
         hf_model = ""
         files = glob(f"results/{model}--bigcodebench-*.json")
         assert files, f"No files found for results/{model}--bigcodebench-*.json"
-        # if "https://huggingface.co/" in info["link"]:
-        #     hf_model = info["link"].split("https://huggingface.co/")[-1]
-        #     model = hf_model.replace("/", "--")
         for file in files:
             _, suffix = os.path.basename(file).split("--bigcodebench-")
             status = []
@@ -153,8 +150,6 @@ def read_task_perf(tids, task="complete"):
 
         task_perf = dict()
         model = model.replace("/", "--")
-        # if info["link"].startswith("https://huggingface.co/"):
-        #     model = info["link"].split("https://huggingface.co/")[-1].replace("/", "--")
         try:
             if info["prompted"] and not info["direct_complete"]:
                 files = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized-calibrated_eval_results.json")

@@ -283,7 +283,8 @@ def evaluate(flags):
             json.dump(results, f, indent=2)
     
     pass_at_k_path = result_path.replace("_eval_results.json", "_pass_at_k.json")
-    pass_at_k["model"] = flags.samples.split("/")[-1].replace(".jsonl", "")
+    pass_at_k["model"] = os.path.basename(flags.samples).split("--bigcodebench-")[0]
+    pass_at_k["calibrated"] = "sanitized-calibrated" in flags.samples
     pass_at_k["subset"] = flags.subset
 
     def save_pass_at_k():
