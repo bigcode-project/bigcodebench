@@ -640,7 +640,7 @@ model_info = {
     },
     "deepseek-coder": {
         "name": "DeepSeek-Coder-V2-Instruct",
-        "link": "https://www.deepseek.com/",
+        "link": "https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2-Instruct",
         "prompted": True,
         "moe": True,
         "size": 236,

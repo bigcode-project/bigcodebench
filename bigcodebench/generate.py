@@ -123,8 +123,7 @@ def main():
 
     args = parser.parse_args()
 
-    if args.greedy and (args.temperature != 0 or args.bs != 1 or args.n_samples != 1)\
-        or (args.temperature == 0 and args.n_samples == 1):
+    if args.greedy or (args.temperature == 0 and args.n_samples == 1):
         args.temperature = 0
         args.bs = 1
         args.n_samples = 1

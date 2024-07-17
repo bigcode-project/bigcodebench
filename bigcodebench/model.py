@@ -26,7 +26,6 @@ except ImportError:
     warn("GoogleGenAI decoder will not work. Fix by `pip install google-generativeai`")
 
 import torch
-from stop_sequencer import StopSequencer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 try:
@@ -137,7 +136,8 @@ class VllmDecoder(DecoderBase):
         self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, **kwargs)
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
-        self.llm = LLM(model=name, max_model_len=2048, tokenizer=self.tokenizer_name, **kwargs)
+        self.llm = LLM(model=name, max_model_len=2048, **kwargs)
+        self.llm.set_tokenizer(tokenizer=self.tokenizer)
 
     def is_direct_completion(self) -> bool:
         return self.tokenizer.chat_template is None
@@ -190,11 +190,11 @@ class HfTorchDecoder(DecoderBase):
         self.skip_special_tokens = True
 
         print(f"{kwargs = }", self.tokenizer_name)
-
         if self.tokenizer_name is None:
             self.tokenizer_name = self.name
-
+        
         self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, **kwargs)
+        
         if self.tokenizer.chat_template is None:
             self.eos += extra_eos_for_direct_completion(dataset)
 
@@ -220,18 +220,7 @@ class HfTorchDecoder(DecoderBase):
             kwargs["top_p"] = 0.95
             kwargs["temperature"] = self.temperature
 
-        stop_sequencer = StopSequencer(
-            self.model,
-            model_type="causal",  # or seq2seq
-            tokenizer=self.tokenizer,
-        )
-
-        model = stop_sequencer.register_stop_texts(
-            stop_texts=self.eos,
-            input_length=input_tokens.size(-1),
-        )
-
-        outputs = model.generate(
+        outputs = self.model.generate(
             input_tokens,
             max_new_tokens=self.max_new_tokens,
             do_sample=do_sample,
