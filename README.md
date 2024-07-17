@@ -347,7 +347,7 @@ We share pre-generated code samples from LLMs we have [evaluated](https://huggin
 
 ## 🐞 Known Issues
 
-- [ ] Due to [the Hugging Face tokenizer update](https://github.com/huggingface/transformers/pull/31305), some tokenizer may be broken and will degrade the performance of the evaluation. Therefore, we set up with `legacy=False` for the initialization. If you notice the unexpected change, please try `--tokenizer_legacy` during the generation.
+- [ ] Due to [the Hugging Face tokenizer update](https://github.com/huggingface/transformers/pull/31305), some tokenizer may be broken and will degrade the performance of the evaluation. Therefore, we set up with `legacy=False` for the initialization. If you notice the unexpected behaviors, please try `--tokenizer_legacy` during the generation.
 
 - [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.2%) between runs. We are working on improving the evaluation stability.
 
