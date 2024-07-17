@@ -74,8 +74,6 @@ def read_task_perf(tids, task="complete"):
             continue
         task_perf = {f"BigCodeBench/{task_id}": 0 for task_id in range(1140)}
         model = model.replace("/", "--")
-        # if info["link"].startswith("https://huggingface.co/"):
-        #     model = info["link"].split("https://huggingface.co/")[-1].replace("/", "--")
         try:
             if info["prompted"] and not info["direct_complete"]:
                 files = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized-calibrated_eval_results.json")
