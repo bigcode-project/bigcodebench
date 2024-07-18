@@ -347,9 +347,9 @@ We share pre-generated code samples from LLMs we have [evaluated](https://huggin
 
 ## 🐞 Known Issues
 
-- [ ] Due to [the Hugging Face tokenizer update](https://github.com/huggingface/transformers/pull/31305), some tokenizer may be broken and will degrade the performance of the evaluation. Therefore, we set up with `legacy=False` for the initialization. If you notice the unexpected behaviors, please try `--tokenizer_legacy` during the generation.
+- [ ] Due to [the Hugging Face tokenizer update](https://github.com/huggingface/transformers/pull/31305), some tokenizers may be broken and will degrade the performance of the evaluation. Therefore, we set up with `legacy=False` for the initialization. If you notice the unexpected behaviors, please try `--tokenizer_legacy` during the generation.
 
-- [ ] Due to the flakes in the evaluation, the execution results may vary slightly (~0.2%) between runs. We are working on improving the evaluation stability.
+- [ ] Due to the flakiness in the evaluation, the execution results may vary slightly (~0.2% for Full set, and ~0.6% for Hard set) between runs. We are working on improving the evaluation stability.
 
 - [ ] You may get errors like `ImportError: /usr/local/lib/python3.10/site-packages/matplotlib/_c_internal_utils.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object` when running the evaluation. This is due to the memory limit of the docker container. You can increase the memory limit of the docker container to solve this issue.
 
