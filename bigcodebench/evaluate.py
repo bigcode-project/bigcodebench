@@ -125,8 +125,8 @@ def evaluate(flags):
         assert flags.samples.endswith(".jsonl")
         result_path = flags.samples.replace(".jsonl", f"_{extra}eval_results.json")
 
-    problems = get_bigcodebench(subset=flags.subset)
-    dataset_hash = get_bigcodebench_hash(subset=flags.subset)
+    problems = get_bigcodebench(subset=flags.subset, offline=flags.offline)
+    dataset_hash = get_bigcodebench_hash(subset=flags.subset, offline=flags.offline)
     
     if not flags.no_gt:
         expected_time = get_groundtruth(n_workers, problems, dataset_hash, flags.check_gt_only, flags.max_as_limit, flags.max_data_limit, flags.max_stack_limit)
@@ -328,6 +328,7 @@ def main():
     parser.add_argument(
         "--no-gt", action="store_true", help="Check the groundtruth"
     )
+    parser.add_argument("--offline", action="store_true")
     args = parser.parse_args()
 
     evaluate(args)
