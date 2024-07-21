@@ -281,33 +281,34 @@ def evaluate(flags):
     if not os.path.isfile(result_path):
         with open(result_path, "w") as f:
             json.dump(results, f, indent=2)
-    
-    pass_at_k_path = result_path.replace("_eval_results.json", "_pass_at_k.json")
-    pass_at_k["model"] = os.path.basename(flags.samples).split("--bigcodebench-")[0]
-    pass_at_k["calibrated"] = "sanitized-calibrated" in flags.samples
-    pass_at_k["subset"] = flags.subset
 
-    def save_pass_at_k():
-        with open(pass_at_k_path, "w") as f:
-            json.dump(pass_at_k, f, indent=2)
+    if flags.save_pass_rate:
+        pass_at_k_path = result_path.replace("_eval_results.json", "_pass_at_k.json")
+        pass_at_k["model"] = os.path.basename(flags.samples).split("--bigcodebench-")[0]
+        pass_at_k["calibrated"] = "sanitized-calibrated" in flags.samples
+        pass_at_k["subset"] = flags.subset
 
-    if os.path.isfile(pass_at_k_path):
-        saved_pass_at_k = json.load(open(pass_at_k_path, "r"))
-        # compare saved_pass_at_k with pass_at_k
-        for k in saved_pass_at_k.keys():
-            if pass_at_k[k] != saved_pass_at_k[k]:
-                cprint(f"Warning: {k} is different from the saved one", "yellow")
+        def save_pass_at_k():
+            with open(pass_at_k_path, "w") as f:
+                json.dump(pass_at_k, f, indent=2)
+
+        if os.path.isfile(pass_at_k_path):
+            saved_pass_at_k = json.load(open(pass_at_k_path, "r"))
+            # compare saved_pass_at_k with pass_at_k
+            for k in saved_pass_at_k.keys():
+                if pass_at_k[k] != saved_pass_at_k[k]:
+                    cprint(f"Warning: {k} is different from the saved one", "yellow")
+                    
+            # ask user whether to save the pass@k
+            decision = ""
+            while decision.lower() not in ["y", "n"]:
+                print(f"Save pass@k to {pass_at_k_path}? [Y/N]")
+                decision = input()
+            if decision.lower() == "y":
+                save_pass_at_k()
                 
-        # ask user whether to save the pass@k
-        decision = ""
-        while decision.lower() not in ["y", "n"]:
-            print(f"Save pass@k to {pass_at_k_path}? [Y/N]")
-            decision = input()
-        if decision.lower() == "y":
+        else:
             save_pass_at_k()
-            
-    else:
-        save_pass_at_k()
 
 
 def main():
@@ -317,6 +318,7 @@ def main():
     )
     parser.add_argument("--subset", default="full", type=str, choices=["full", "hard"])
     parser.add_argument("--samples", required=True, type=str)
+    parser.add_argument("--save_pass_rate", action="store_true")
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
     parser.add_argument("--max-as-limit", default=128*1024, type=int)
