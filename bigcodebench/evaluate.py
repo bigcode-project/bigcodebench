@@ -325,10 +325,10 @@ def main():
     parser.add_argument("--max-data-limit", default=4*1024, type=int)
     parser.add_argument("--max-stack-limit", default=5, type=int)
     parser.add_argument(
-        "--check-gt-only", action="store_true", help="Check the groundtruth"
+        "--check-gt-only", action="store_true", help="Check the ground truth"
     )
     parser.add_argument(
-        "--no-gt", action="store_true", help="Check the groundtruth"
+        "--no-gt", action="store_true", help="Skip the ground truth"
     )
     args = parser.parse_args()
 
