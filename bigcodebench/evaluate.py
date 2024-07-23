@@ -134,6 +134,7 @@ def evaluate(flags):
         expected_time = {task_id: None for task_id in problems}
     
     gt_pass_rate = np.mean([1 if v is not None else 0 for k, v in expected_time.items() if k in problems])
+    failed_tasks = [k for k, v in expected_time.items() if v is None and k in problems]
     
     if os.path.isfile(result_path):
         print(f"Load from previous results from {result_path}")
@@ -149,6 +150,9 @@ def evaluate(flags):
             else:
                 cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}\nPlease be cautious!", "red")
             return
+        
+            if len(failed_tasks) > 0:
+                cprint(f"Failed tasks: {failed_tasks}", "red")
         
         results = {
             "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -259,6 +263,9 @@ def evaluate(flags):
             cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}", "green")
         else:
             cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}\nPlease be cautious!", "red")
+        
+        if len(failed_tasks) > 0:
+            cprint(f"Failed tasks: {failed_tasks}", "red")
     
     for k, v in pass_at_k.items():
         cprint(f"{k}:\t{v:.3f}", "green")
