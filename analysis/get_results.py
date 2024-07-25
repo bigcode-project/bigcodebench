@@ -17,11 +17,15 @@ def update_model_info(model_info):
         if "https://huggingface.co/" in info["link"]:
             hf_model = info["link"].split("https://huggingface.co/")[-1]
             print(hf_model)
-            tokenizer = AutoTokenizer.from_pretrained(hf_model, trust_remote_code=True)
-            if tokenizer.chat_template is None:
+            try:
+                tokenizer = AutoTokenizer.from_pretrained(hf_model, trust_remote_code=True)
+                
+                if tokenizer.chat_template is None:
+                    model_info[model]["direct_complete"] = True
+                else:
+                    model_info[model]["direct_complete"] = False
+            except:
                 model_info[model]["direct_complete"] = True
-            else:
-                model_info[model]["direct_complete"] = False
         else:
             model_info[model]["direct_complete"] = False
     
@@ -44,7 +48,7 @@ def get_results(tids):
             "moe": info["moe"],
             "size": info["size"],
             "act_param": info["act_param"],
-            "direct_complete": info["direct_complete"],
+            # "direct_complete": info["direct_complete"],
         }
         
     for model, info in model_info.items():
@@ -53,10 +57,16 @@ def get_results(tids):
         files = glob(f"results/{model}--bigcodebench-*.json")
         assert files, f"No files found for results/{model}--bigcodebench-*.json"
         for file in files:
-            _, suffix = os.path.basename(file).split("--bigcodebench-")
+            try:
+                _, suffix = os.path.basename(file).split("--bigcodebench-hard-")
+                with open("results/"+model+"--bigcodebench-hard-"+suffix, "r") as f:
+                    data = json.load(f)
+            except:
+                _, suffix = os.path.basename(file).split("--bigcodebench-")
+                with open("results/"+model+"--bigcodebench-"+suffix, "r") as f:
+                    data = json.load(f)
             status = []
-            with open("results/"+model+"--bigcodebench-"+suffix, "r") as f:
-                data = json.load(f)
+            
             for key, value in data["eval"].items():
                 if key not in tids:
                     continue
@@ -76,22 +86,22 @@ def get_results(tids):
                 mode = "-cal"
             
             results[info["name"]][f"pass@1"][f"{task}{mode}"] = round(mean(status)*100,1)
-            if not info["prompted"] or info["direct_complete"]:
+            if not info["prompted"]:# or info["direct_complete"]:
                 results[info["name"]][f"pass@1"][f"{task}-cal"] = round(mean(status)*100,1)
             
     for model, result in results.items():
         for task in ["complete"]:
             origin = result["pass@1"].pop(task)
-            assert origin, f"Missing original complete results for {model}"
+            # assert origin, f"Missing original complete results for {model}"
             calibrate = result["pass@1"].pop(f"{task}-cal")
             if calibrate:
-                if calibrate - origin > 1:
-                    results[model]["lazy"] = True
-                else:
-                    results[model]["lazy"] = False
+                # if calibrate - origin > 1:
+                #     results[model]["lazy"] = True
+                # else:
+                #     results[model]["lazy"] = False
                 results[model]["pass@1"][task] = calibrate
             else:
-                results[model]["lazy"] = False
+                # results[model]["lazy"] = False
                 results[model]["pass@1"][task] = origin
         calibrate_instruct = result["pass@1"].pop(f"instruct-cal")
         result["pass@1"]["instruct"] = calibrate_instruct
@@ -151,14 +161,44 @@ def read_task_perf(tids, task="complete"):
         task_perf = dict()
         model = model.replace("/", "--")
         try:
-            if info["prompted"] and not info["direct_complete"]:
-                files = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized-calibrated_eval_results.json")
-                if files:
-                    file = files[0]
-                else:
-                    file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_eval_results.json")[0]
-            else:
-                file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_eval_results.json")[0]
+            try:
+                try:
+                    if info["prompted"]:# and not info["direct_complete"]:
+                        files = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized-calibrated_hard_eval_results.json")
+                        if files:
+                            file = files[0]
+                        else:
+                            file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_hard_eval_results.json")[0]
+                    else:
+                        file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_hard_eval_results.json")[0]
+                except:
+                    if info["prompted"]:
+                        files = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized-calibrated_eval_results.json")
+                        if files:
+                            file = files[0]
+                        else:
+                            file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_eval_results.json")[0]
+                    else:
+                        file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_eval_results.json")[0]
+            except:
+                try:
+                    if info["prompted"]:# and not info["direct_complete"]:
+                        files = glob(f"results/{model}--bigcodebench-hard-{task}*-0-1-sanitized-calibrated_hard_eval_results.json")
+                        if files:
+                            file = files[0]
+                        else:
+                            file = glob(f"results/{model}--bigcodebench-hard-{task}*-0-1-sanitized_hard_eval_results.json")[0]
+                    else:
+                        file = glob(f"results/{model}--bigcodebench-hard-{task}*-0-1-sanitized_hard_eval_results.json")[0]
+                except:
+                    if info["prompted"]:
+                        files = glob(f"results/{model}--bigcodebench-hard-{task}*-0-1-sanitized-calibrated_eval_results.json")
+                        if files:
+                            file = files[0]
+                        else:
+                            file = glob(f"results/{model}--bigcodebench-hard-{task}*-0-1-sanitized_eval_results.json")[0]
+                    else:
+                        file = glob(f"results/{model}--bigcodebench-hard-{task}*-0-1-sanitized_eval_results.json")[0]
         except:
             continue
         
@@ -255,8 +295,9 @@ def get_elo_mle(df, SCALE=400, BASE=10, INIT_RATING=1000):
 def update_elo_rating(results, elo_dict):
     for model, info in model_info.items():
         if info["name"] not in elo_dict:
-            continue
-        results[info["name"]]["elo_mle"] = elo_dict[info["name"]]
+            results[info["name"]]["elo_mle"] = None
+        else:
+            results[info["name"]]["elo_mle"] = elo_dict[info["name"]]
     return results
 
 
@@ -296,7 +337,7 @@ def get_solve_rate(data_dict, task="complete"):
 
 
 def get_hf_ds(results):
-    hf_dataset = {"model": [], "link": [], "moe": [], "size": [], "act_param": [], "type": [], "lazy": [], "direct_complete": [],
+    hf_dataset = {"model": [], "link": [], "moe": [], "size": [], "act_param": [], "type": [], #"lazy": [],# "direct_complete": [],
                   "complete": [], "instruct": [], "elo_mle": []}
 
     for model, result in results.items():
@@ -306,10 +347,10 @@ def get_hf_ds(results):
         hf_dataset["size"].append(result["size"])
         hf_dataset["act_param"].append(result["act_param"])
         hf_dataset["type"].append("🔶" if result["prompted"] else "🟢")
-        hf_dataset["lazy"].append(result["lazy"])
+        # hf_dataset["lazy"].append(result["lazy"])
         hf_dataset["complete"].append(result["pass@1"]["complete"])
         hf_dataset["instruct"].append(result["pass@1"]["instruct"])
-        hf_dataset["direct_complete"].append(result["direct_complete"])
+        # hf_dataset["direct_complete"].append(result["direct_complete"])
         hf_dataset["elo_mle"].append(result["elo_mle"])
 
     return Dataset.from_dict(hf_dataset)
@@ -335,11 +376,11 @@ def push_ds(ds, path, local=False):
 
 if __name__ == "__main__":
     
-    bcb_orig = load_dataset("bigcode/bigcodebench", split="v0.1.0_hf")
+    # bcb_orig = load_dataset("bigcode/bigcodebench", split="v0.1.0_hf")
     bcb_hard = load_dataset("bigcode/bigcodebench-hard", split="v0.1.0_hf")
-    model_info = update_model_info(model_info)
+    # model_info = update_model_info(model_info)
     bcb_config = {
-        "": bcb_orig,
+        # "": bcb_orig,
         "-hard": bcb_hard,
     }
     for suffix, bcb in bcb_config.items():
@@ -347,7 +388,8 @@ if __name__ == "__main__":
         files = []
         complete_data, complete_files = read_task_perf(bcb["task_id"], "complete")
         instruct_data, instruct_files = read_task_perf(bcb["task_id"], "instruct")
-        assert len(model_info) == len(complete_data)
+        assert len(model_info) == len(complete_data),\
+            f"Missing results for {set([val['name'] for val in model_info.values()]) - set([model for model in complete_data.keys()])}"
         with open("task2domain.json", "r") as f:
             task2domain = json.load(f)
         domain_complete = get_domain_perf(complete_data, task2domain)
@@ -372,7 +414,10 @@ if __name__ == "__main__":
         }
         elo_ds = dict()
         for config, (task_level, no_tie) in elo_config.items():
-            battles = get_winner_df(complete_data, bcb["task_id"], "complete", task_level=task_level, no_tie=no_tie)
+            filter_complete_data = {model: task_perf for model, task_perf in complete_data.items() if model in instruct_data}
+            complete_battles = get_winner_df(filter_complete_data, bcb["task_id"], "complete", task_level=task_level, no_tie=no_tie)
+            instruct_battles = get_winner_df(instruct_data, bcb["task_id"], "instruct", task_level=task_level, no_tie=no_tie)
+            battles = pd.concat([complete_battles, instruct_battles])
             elo_mle_bootstrap = get_bootstrap_result(battles, get_elo_mle, 500)
             bootstrap_lu_median = elo_mle_bootstrap.median().reset_index().set_axis(["model", "Elo rating"], axis=1)
             bootstrap_lu_median["Elo rating"] = (bootstrap_lu_median["Elo rating"] + 0.5).astype(int)
