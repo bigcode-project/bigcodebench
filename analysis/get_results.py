@@ -374,6 +374,17 @@ def push_ds(ds, path, local=False):
         ds.push_to_hub(path)
 
 
+def get_perf_df(data_dict):
+    perfs = {"Model": []}
+    for task_id in data_dict[list(data_dict.keys())[0]]:
+        perfs[task_id] = []
+    for model, task_perf in data_dict.items():
+        perfs["Model"].append(model)
+        for task_id, status in task_perf.items():
+            perfs[task_id].append(status)
+    return pd.DataFrame(perfs)
+
+    
 if __name__ == "__main__":
     
     # bcb_orig = load_dataset("bigcode/bigcodebench", split="v0.1.0_hf")
@@ -388,6 +399,9 @@ if __name__ == "__main__":
         files = []
         complete_data, complete_files = read_task_perf(bcb["task_id"], "complete")
         instruct_data, instruct_files = read_task_perf(bcb["task_id"], "instruct")
+        complete_df = get_perf_df(complete_data)
+        instruct_df = get_perf_df(instruct_data)
+        push_ds(DatasetDict({"complete": Dataset.from_pandas(complete_df), "instruct": Dataset.from_pandas(instruct_df)}), f"bigcode/bigcodebench{suffix}-perf")
         assert len(model_info) == len(complete_data),\
             f"Missing results for {set([val['name'] for val in model_info.values()]) - set([model for model in complete_data.keys()])}"
         with open("task2domain.json", "r") as f:
