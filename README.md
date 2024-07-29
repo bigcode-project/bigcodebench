@@ -238,6 +238,7 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 # If you want to change the RAM address space limit (in MB, 30 GB by default): `--max-as-limit XXX`
 # If you want to change the RAM data segment limit (in MB, 30 GB by default): `--max-data-limit`
 # If you want to change the RAM stack limit (in MB, 10 MB by default): `--max-stack-limit`
+# If you want to increase the execution time limit (in seconds, 240 seconds by default): `--min-time-limit`
 docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
 
 # If you only want to check the ground truths
