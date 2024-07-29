@@ -235,9 +235,9 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 
 ```bash
 # Mount the current directory to the container
-# If you want to change the RAM address space limit (in MB, 128 GB by default): `--max-as-limit XXX`
-# If you want to change the RAM data segment limit (in MB, 4 GB by default): `--max-data-limit`
-# If you want to change the RAM stack limit (in MB, 4 MB by default): `--max-stack-limit`
+# If you want to change the RAM address space limit (in MB, 30 GB by default): `--max-as-limit XXX`
+# If you want to change the RAM data segment limit (in MB, 30 GB by default): `--max-data-limit`
+# If you want to change the RAM stack limit (in MB, 10 MB by default): `--max-stack-limit`
 docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
 
 # If you only want to check the ground truths
@@ -259,6 +259,8 @@ Then, run the evaluation:
 bigcodebench.evaluate --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
 # ...If you really don't want to check the ground truths
 bigcodebench.evaluate --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --no-gt
+# If you want to save the pass rate to a file
+bigcodebench.evaluate --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --save_pass_rate
 
 # You are strongly recommended to use the following command to clean up the environment after evaluation:
 pids=$(ps -u $(id -u) -o pid,comm | grep 'bigcodebench' | awk '{print $1}'); if [ -n \"$pids\" ]; then echo $pids | xargs -r kill; fi;
