@@ -54,8 +54,10 @@ def trusted_exec(code, test_code, task_id, max_as_limit, max_data_limit, max_sta
         start = time.time()
         with safe_environment(), swallow_io(), time_limit(seconds=TIMEOUT_LIMIT):
             suite.run(test_result)
-
-        if len(test_result.failures + test_result.errors) > 0:
+        
+        errors = test_result.failures + test_result.errors
+        if len(errors) > 0:
+            print(errors)
             times.value = -1
         else:
             times.value = time.time() - start
@@ -83,8 +85,9 @@ def trusted_check(
     max_as_limit: float,
     max_data_limit: float,
     max_stack_limit: float,
+    min_time_limit: float = 10,
 ):
-    timeout = os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", TIMEOUT_LIMIT) + 1
+    timeout = max(os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", TIMEOUT_LIMIT), time_limit) + 1
     # shared memory objects
     times = Value("d", -1)
     manager = Manager()
