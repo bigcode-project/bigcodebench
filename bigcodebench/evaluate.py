@@ -34,7 +34,7 @@ from bigcodebench.gen.util import trusted_check
 Result = Tuple[str, List[bool]]
 
 
-def get_groundtruth(n_workers, problems, hashcode, check_gt_only, max_as_limit, max_data_limit, max_stack_limit):
+def get_groundtruth(n_workers, problems, hashcode, check_gt_only, max_as_limit, max_data_limit, max_stack_limit, min_time_limit):
     cache_file = os.path.join(CACHE_DIR, f"{hashcode}.pkl")
     if os.path.exists(cache_file):
         if check_gt_only:
@@ -60,7 +60,8 @@ def get_groundtruth(n_workers, problems, hashcode, check_gt_only, max_as_limit, 
                 problem["task_id"],
                 max_as_limit,
                 max_data_limit,
-                max_stack_limit
+                max_stack_limit,
+                min_time_limit,
             )
             
             futures.append(executor.submit(trusted_check, *args))
@@ -129,7 +130,7 @@ def evaluate(flags):
     dataset_hash = get_bigcodebench_hash(subset=flags.subset)
     
     if not flags.no_gt:
-        expected_time = get_groundtruth(n_workers, problems, dataset_hash, flags.check_gt_only, flags.max_as_limit, flags.max_data_limit, flags.max_stack_limit)
+        expected_time = get_groundtruth(n_workers, problems, dataset_hash, flags.check_gt_only, flags.max_as_limit, flags.max_data_limit, flags.max_stack_limit, flags.min_time_limit)
     else:
         expected_time = {task_id: None for task_id in problems}
     
