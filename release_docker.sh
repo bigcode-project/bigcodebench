@@ -29,3 +29,8 @@ docker build -f Docker/Generate.Dockerfile . -t bigcodebench/bigcodebench-genera
 docker tag bigcodebench/bigcodebench-generate:$version bigcodebench/bigcodebench-generate:latest
 docker push bigcodebench/bigcodebench-generate:$version
 docker push bigcodebench/bigcodebench-generate:latest
+
+docker build -f Docker/Gradio.Dockerfile . -t bigcodebench/bigcodebench-gradio:$version
+docker tag bigcodebench/bigcodebench-gradio:$version bigcodebench/bigcodebench-gradio:latest
+docker push bigcodebench/bigcodebench-gradio:$version
+docker push bigcodebench/bigcodebench-gradio:latest
