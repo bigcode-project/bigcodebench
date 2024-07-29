@@ -323,14 +323,14 @@ def main():
     parser.add_argument(
         "--split", required=True, type=str, choices=["complete", "instruct"]
     )
-    parser.add_argument("--subset", default="full", type=str, choices=["full", "hard"])
+    parser.add_argument("--subset", default="hard", type=str, choices=["full", "hard"])
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--save_pass_rate", action="store_true")
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
-    parser.add_argument("--max-as-limit", default=128*1024, type=int)
-    parser.add_argument("--max-data-limit", default=4*1024, type=int)
-    parser.add_argument("--max-stack-limit", default=5, type=int)
+    parser.add_argument("--max-as-limit", default=30*1024, type=int)
+    parser.add_argument("--max-data-limit", default=30*1024, type=int)
+    parser.add_argument("--max-stack-limit", default=10, type=int)
     parser.add_argument(
         "--check-gt-only", action="store_true", help="Check the ground truth"
     )
