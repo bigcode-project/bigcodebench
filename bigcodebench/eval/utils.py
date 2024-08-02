@@ -228,8 +228,11 @@ def safe_environment():
                 # Wait for a short time to see if the process terminates
                 for _ in range(10):  # Wait up to 1 second
                     time.sleep(0.1)
-                    if os.waitpid(pid, os.WNOHANG) != (0, 0):
-                        break
+                    try:
+                        # Check if the process has terminated
+                        os.kill(pid, 0)
+                    except ProcessLookupError:
+                        break  # Process has terminated
                 else:
                     # If the process didn't terminate, try SIGKILL
                     os.kill(pid, signal.SIGKILL)
