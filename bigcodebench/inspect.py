@@ -28,6 +28,8 @@ def inspection(args):
         task_path = os.path.join(path, task_id)
         if not os.path.exists(task_path):
             os.makedirs(task_path)
+        if task_id not in problems:
+            continue
         task_id_data = problems[task_id]
         with open(os.path.join(task_path, "ground_truth.py"), "w") as f:
             f.write(task_id_data[f"{args.split}_prompt"] + "\n\n" + task_id_data["canonical_solution"])
