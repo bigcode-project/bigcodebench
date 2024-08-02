@@ -150,10 +150,11 @@ def evaluate(flags):
                 cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}", "green")
             else:
                 cprint(f"Groundtruth pass rate: {gt_pass_rate:.3f}\nPlease be cautious!", "red")
-            return
         
             if len(failed_tasks) > 0:
                 cprint(f"Failed tasks: {failed_tasks}", "red")
+            
+            return
         
         results = {
             "date": datetime.now().strftime("%Y-%m-%d %H:%M"),

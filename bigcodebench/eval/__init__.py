@@ -178,8 +178,8 @@ def untrusted_check(
     min_time_limit: float = 10,
     gt_time_limit: float = 60
 ) -> Tuple[str, np.ndarray]:
-    time_limit = max(min_time_limit, gt_time_limit)
-    timeout = max(os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", TIMEOUT_LIMIT), time_limit) + 1
+    min_time_limit = max(min_time_limit, gt_time_limit)
+    timeout = max(os.getenv("BIGCODEBENCH_TIMEOUT_PER_TASK", TIMEOUT_LIMIT), min_time_limit) + 1
     # shared memory objects
     stat = Value("i", _UNKNOWN)
     manager = Manager()
