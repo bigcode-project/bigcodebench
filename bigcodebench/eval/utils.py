@@ -221,7 +221,19 @@ def safe_environment():
     try:
         yield
     finally:
-        # Restore original functions after the block
+        for pid in child_pids:
+            try:
+                os.kill(pid, signal.SIGTERM)
+                os.waitpid(pid, 0)
+            except ProcessLookupError:
+                pass  # Process already terminated
+            except Exception as e:
+                print(f"Error terminating process {pid}: {e}")
+                try:
+                    os.kill(pid, signal.SIGKILL)
+                except Exception:
+                    pass
+        
         os.kill = original_kill
         os.killpg = original_killpg
         os.system = original_system
