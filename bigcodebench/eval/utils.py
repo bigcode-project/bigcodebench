@@ -141,7 +141,7 @@ def safe_environment():
             else:
                 print(f"Prevented attempt to kill PID {pid} with signal {sig}")
         except ProcessLookupError:
-            print(f"Process {pid} does not exist.")
+            pass
 
     def safe_killpg(pgid, sig):
         if pgid == current_pgid or pgid in {os.getpgid(pid) for pid in child_pids}:
@@ -224,15 +224,18 @@ def safe_environment():
         for pid in child_pids:
             try:
                 os.kill(pid, signal.SIGTERM)
-                os.waitpid(pid, 0)
+                # Wait for a short time to see if the process terminates
+                for _ in range(10):  # Wait up to 1 second
+                    time.sleep(0.1)
+                    if os.waitpid(pid, os.WNOHANG) != (0, 0):
+                        break
+                else:
+                    # If the process didn't terminate, try SIGKILL
+                    os.kill(pid, signal.SIGKILL)
             except ProcessLookupError:
                 pass  # Process already terminated
             except Exception as e:
-                print(f"Error terminating process {pid}: {e}")
-                try:
-                    os.kill(pid, signal.SIGKILL)
-                except Exception:
-                    pass
+                print(f"Error handling process {pid}: {e}")
         
         os.kill = original_kill
         os.killpg = original_killpg
