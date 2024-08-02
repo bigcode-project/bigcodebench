@@ -225,19 +225,16 @@ def safe_environment():
         for pid in child_pids:
             try:
                 os.kill(pid, signal.SIGTERM)
-                # Wait for a short time to see if the process terminates
-                for _ in range(10):  # Wait up to 1 second
+                for _ in range(10):
                     time.sleep(0.1)
                     try:
-                        # Check if the process has terminated
                         os.kill(pid, 0)
                     except ProcessLookupError:
-                        break  # Process has terminated
+                        break
                 else:
-                    # If the process didn't terminate, try SIGKILL
                     os.kill(pid, signal.SIGKILL)
             except ProcessLookupError:
-                pass  # Process already terminated
+                pass
             except Exception as e:
                 print(f"Error handling process {pid}: {e}")
         
