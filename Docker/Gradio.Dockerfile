@@ -24,6 +24,8 @@ RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench
 
 RUN pip install -I --timeout 2000 -r https://github.com/bigcode-project/bigcodebench-annotation/releases/download/v0.1.0/requirements.txt
 
+RUN pip install APScheduler==3.10.1
+
 WORKDIR /app
 
 RUN chown -R bigcodebenchuser:bigcodebenchuser /app
