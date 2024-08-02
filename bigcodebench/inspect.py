@@ -19,7 +19,7 @@ def inspection(args):
         shutil.rmtree(path, ignore_errors=True)
     if not os.path.exists(path):
         os.makedirs(path)
-    problems = get_bigcodebench(subset=flags.subset)
+    problems = get_bigcodebench(subset=args.subset)
 
     eval_results = json.load(open(args.eval_results, "r"))
     for task_id, results in eval_results["eval"].items():
