@@ -14,7 +14,7 @@ def inspection(args):
         -- completion.py: prompt + completion
         -- execution_trace.txt: execution trace
     """
-    path = os.path.join("inspect", args.eval_results.split("/")[-1].replace(".json", ""))
+    path = os.path.join(args.save_path, args.eval_results.split("/")[-1].replace(".json", ""))
     if args.in_place:
         shutil.rmtree(path, ignore_errors=True)
     if not os.path.exists(path):
@@ -48,12 +48,13 @@ def inspection(args):
                     f.write("="*50 + "\n")
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--eval-results", required=True, type=str)
+    parser.add_argument("--eval_results", required=True, type=str)
     parser.add_argument(
         "--split", required=True, type=str, choices=["complete", "instruct"]
     )
     parser.add_argument("--subset", default="hard", type=str, choices=["full", "hard"])
-    parser.add_argument("--in-place", action="store_true")
+    parser.add_argument("--save_path", default="inspect", type=str)
+    parser.add_argument("--in_place", action="store_true")
     args = parser.parse_args()
     
     inspection(args)
