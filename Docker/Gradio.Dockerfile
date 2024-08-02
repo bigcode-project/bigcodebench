@@ -24,6 +24,14 @@ RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench
 
 RUN pip install -I --timeout 2000 -r https://github.com/bigcode-project/bigcodebench-annotation/releases/download/v0.1.0/requirements.txt
 
+RUN apt-get update && \
+    apt-get install -y \
+      bash \
+      git git-lfs \
+      wget curl procps \
+      htop vim nano && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 RUN chown -R bigcodebenchuser:bigcodebenchuser /app
