@@ -320,7 +320,11 @@ Here are some tips to speed up the evaluation:
 You can inspect the failed samples by using the following command:
 
 ```bash
-bigcodebench.inspect --eval-results sample-sanitized-calibrated_eval_results.json --in-place
+# Inspect the failed samples and save the results to `inspect/`
+bigcodebench.inspect --eval_results sample-sanitized-calibrated_eval_results.json --split complete --subset hard
+
+# Re-run the inspection in place
+bigcodebench.inspect --eval_results sample-sanitized-calibrated_eval_results.json --split complete --subset hard --in_place
 ```
 
 ## 🚀 Full Script
