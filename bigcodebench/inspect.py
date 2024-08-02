@@ -14,15 +14,17 @@ def inspection(args):
         -- completion.py: prompt + completion
         -- execution_trace.txt: execution trace
     """
-    path = os.path.join("inspect", args.eval_results.split("/")[-1].replace(".json", ""))
+    path = os.path.join(args.save_path, args.eval_results.split("/")[-1].replace(".json", ""))
     if args.in_place:
         shutil.rmtree(path, ignore_errors=True)
     if not os.path.exists(path):
         os.makedirs(path)
-    problems = get_bigcodebench()
+    problems = get_bigcodebench(subset=args.subset)
 
     eval_results = json.load(open(args.eval_results, "r"))
     for task_id, results in eval_results["eval"].items():
+        if task_id not in problems:
+            continue
         if all(result["status"] == "pass" for result in results):
             continue
         task_path = os.path.join(path, task_id)
@@ -30,7 +32,7 @@ def inspection(args):
             os.makedirs(task_path)
         task_id_data = problems[task_id]
         with open(os.path.join(task_path, "ground_truth.py"), "w") as f:
-            f.write(task_id_data[f"{args.subset}_prompt"] + "\n\n" + task_id_data["canonical_solution"])
+            f.write(task_id_data[f"{args.split}_prompt"] + "\n\n" + task_id_data["canonical_solution"])
         
         # write test
         with open(os.path.join(task_path, "test_case.py"), "w") as f:
@@ -48,9 +50,13 @@ def inspection(args):
                     f.write("="*50 + "\n")
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--eval-results", required=True, type=str)
-    parser.add_argument("--subset", required=True, type=str)
-    parser.add_argument("--in-place", action="store_true")
+    parser.add_argument("--eval_results", required=True, type=str)
+    parser.add_argument(
+        "--split", required=True, type=str, choices=["complete", "instruct"]
+    )
+    parser.add_argument("--subset", default="hard", type=str, choices=["full", "hard"])
+    parser.add_argument("--save_path", default="inspect", type=str)
+    parser.add_argument("--in_place", action="store_true")
     args = parser.parse_args()
     
     inspection(args)

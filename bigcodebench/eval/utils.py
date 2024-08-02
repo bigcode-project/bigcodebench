@@ -29,6 +29,7 @@ import signal
 import tempfile
 import subprocess
 import multiprocessing
+import time
 from typing import Optional
 
 TIMEOUT_LIMIT=240.0
@@ -141,7 +142,7 @@ def safe_environment():
             else:
                 print(f"Prevented attempt to kill PID {pid} with signal {sig}")
         except ProcessLookupError:
-            print(f"Process {pid} does not exist.")
+            pass
 
     def safe_killpg(pgid, sig):
         if pgid == current_pgid or pgid in {os.getpgid(pid) for pid in child_pids}:
@@ -221,7 +222,22 @@ def safe_environment():
     try:
         yield
     finally:
-        # Restore original functions after the block
+        for pid in child_pids:
+            try:
+                os.kill(pid, signal.SIGTERM)
+                for _ in range(10):
+                    time.sleep(0.1)
+                    try:
+                        os.kill(pid, 0)
+                    except ProcessLookupError:
+                        break
+                else:
+                    os.kill(pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            except Exception as e:
+                print(f"Error handling process {pid}: {e}")
+        
         os.kill = original_kill
         os.killpg = original_killpg
         os.system = original_system
