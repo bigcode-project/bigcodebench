@@ -137,7 +137,6 @@ def safe_environment():
         try:
             pgid = os.getpgid(pid)
             if pid == current_pid or pid in child_pids:
-                print(f"Allowed to kill PID {pid} with signal {sig}")
                 original_kill(pid, sig)
             else:
                 print(f"Prevented attempt to kill PID {pid} with signal {sig}")
@@ -146,7 +145,6 @@ def safe_environment():
 
     def safe_killpg(pgid, sig):
         if pgid == current_pgid or pgid in {os.getpgid(pid) for pid in child_pids}:
-            print(f"Allowed to kill PGID {pgid} with signal {sig}")
             original_killpg(pgid, sig)
         else:
             print(f"Prevented attempt to kill PGID {pgid} with signal {sig}")
