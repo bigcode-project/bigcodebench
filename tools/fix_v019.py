@@ -23,6 +23,17 @@ def map_ds(sample):
                     "from datetime import datetime",
                     "import datetime"
                 )
+                
+    if sample["task_id"] in  ["BigCodeBench/178"]:
+        for k in sample.keys():
+            sample[k] = sample[k].replace(
+                "from urllib import request\n",
+                ""
+            )
+            sample[k] = sample[k].replace(
+                "    - urllib.request\n",
+                ""
+            )
     
     return sample
     
@@ -30,7 +41,7 @@ if __name__ == "__main__":
     api = HfApi()
     ds_dict = load_dataset(BIGCODEBENCH_HF)
     ds = ds_dict[BIGCODEBENCH_VERSION]
-    function_id = [760, 1005, 1006]
+    function_id = [178, 760, 1005, 1006]
     
     new_ds = ds.map(map_ds)
     new_ds.to_json("new_ds.jsonl")
