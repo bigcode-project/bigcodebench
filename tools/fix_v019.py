@@ -5,15 +5,34 @@ import json
 import copy
 
 BIGCODEBENCH_HF = "bigcode/bigcodebench"
+BIGCODEBENCH_HARD_HF = "bigcode/bigcodebench-hard"
 BIGCODEBENCH_VERSION = "v0.1.0_hf"
 BIGCODEBENCH_UPDATE = "bigcode/bcb_update"
 BIGCODEBENCH_NEW_VERSION = "v0.1.1"
 
 def map_ds(sample):
-    if sample["task_id"] in ["BigCodeBench/1005", "BigCodeBench/1006"]:
+        
+    if sample["task_id"] in ["BigCodeBench/1006"]:
         sample["test"] = sample["test"].replace(
-            "https://getsamplefiles.com/download/zip/",
-            "https://github.com/bigcode-project/bigcodebench-annotation/releases/download/v0.1.0_hf/"
+'''\
+    def test_valid_zip_url(self):
+        """Test a valid ZIP URL."""
+        url = "https://getsamplefiles.com/download/zip/sample-1.zip"
+        result = task_func(url)
+        self.assertTrue(result.startswith("mnt/data/downloads/"))
+        self.assertTrue(result.endswith("sample-1"))
+        shutil.rmtree("mnt/data/downloads")
+''',
+'''\
+    @patch("requests.get")
+    def test_non_zip_content(self, mock_get):
+        """Test a valid ZIP URL."""
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.headers = {"Content-Type": "application/zip"}
+        mock_get.return_value.content = b"1"
+        url = "https://valid-url.com/sample.zip"
+        result = task_func(url)
+''',
         )
     
     if sample["task_id"] in ["BigCodeBench/760"]:
@@ -40,12 +59,20 @@ def map_ds(sample):
 if __name__ == "__main__":
     api = HfApi()
     ds_dict = load_dataset(BIGCODEBENCH_HF)
+    hard_ds_dict = load_dataset(BIGCODEBENCH_HARD_HF)
     ds = ds_dict[BIGCODEBENCH_VERSION]
-    function_id = [178, 760, 1005, 1006]
+    hard_ds = hard_ds_dict[BIGCODEBENCH_VERSION]
+    function_id = [178, 760, 1006]
     
     new_ds = ds.map(map_ds)
-    new_ds.to_json("new_ds.jsonl")
+    new_ds.to_json("BigCodeBench.jsonl")
     ds_dict[BIGCODEBENCH_NEW_VERSION] = new_ds
+    ds_dict.push_to_hub(BIGCODEBENCH_HF)
+    
+    new_hard_ds = hard_ds.map(map_ds)
+    new_hard_ds.to_json("BigCodeBench-Hard.jsonl")
+    hard_ds_dict[BIGCODEBENCH_NEW_VERSION] = new_hard_ds
+    hard_ds_dict.push_to_hub(BIGCODEBENCH_HARD_HF)
     
     for i in function_id:
         old_sample = ds.select([i])
