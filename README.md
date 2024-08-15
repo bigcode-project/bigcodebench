@@ -193,6 +193,9 @@ We provide a tool namely `bigcodebench.sanitize` to clean up the code:
 bigcodebench.sanitize --samples samples.jsonl --calibrate
 # Sanitized code will be produced to `samples-sanitized-calibrated.jsonl`
 
+# 💡 Optionally run the sanitization step with multiprocessing to speedup
+bigcodebench.sanitize --samples samples.jsonl --calibrate --parallel 8
+
 # 💡 If you want to get the original results:
 bigcodebench.sanitize --samples samples.jsonl
 # Sanitized code will be produced to `samples-sanitized.jsonl`

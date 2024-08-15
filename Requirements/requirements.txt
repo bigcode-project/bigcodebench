@@ -1,6 +1,7 @@
 appdirs>=1.4.4
 fire>=0.6.0
 multipledispatch>=0.6.0
+pqdm>=0.2.0
 tempdir>=0.7.1
 termcolor>=2.0.0
 tqdm>=4.56.0
