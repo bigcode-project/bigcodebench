@@ -774,7 +774,7 @@ model_info = {
         "open-data": "Partial",
     },
     "new-microsoft/Phi-3-mini-128k-instruct": {
-        "name": "Phi-3-Mini-128K-Instruct (June 2024)",
+        "name": "Phi-3.1-Mini-128K-Instruct",
         "link": "https://huggingface.co/microsoft/Phi-3-mini-128k-instruct",
         "prompted": True,
         "moe": False,
@@ -783,7 +783,7 @@ model_info = {
         "open-data": "None",
     },
     "old-microsoft/Phi-3-mini-128k-instruct": {
-        "name": "Phi-3-Mini-128K-Instruct (Old)",
+        "name": "Phi-3-Mini-128K-Instruct",
         "link": "https://huggingface.co/microsoft/Phi-3-mini-128k-instruct",
         "prompted": True,
         "moe": False,
@@ -969,6 +969,15 @@ model_info = {
         "moe": True,
         "size": 236,
         "act_param": 21,
+        "open-data": "None",
+    },
+    "microsoft/Phi-3.5-mini-instruct": {
+        "name": "Phi-3.5-Mini-Instruct",
+        "link": "https://huggingface.co/microsoft/Phi-3.5-mini-instruct",
+        "prompted": True,
+        "moe": False,
+        "size": 3.8,
+        "act_param": 3.8,
         "open-data": "None",
     },
 }
