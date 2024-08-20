@@ -458,20 +458,24 @@ class GeminiDecoder(GoogleGenAIDecoder):
         
         outputs = []
         for _ in range(batch_size):
-            response = model.generate_content(
-                "Please generate self-contained code to complete the following problem wrapped in a Python markdown block:"
-                + f"\n```python\n{prompt.strip()}\n```",
-                generation_config=genai_config
-            )
-            try:
-                output = response.candidates[0].content.parts[0].text
-                outputs.append(output)
-            except Exception as e:
-                if "list index out of range" in str(e):
-                    # append dummy response
-                    outputs.append("NO_RESPONSE")
-                else:
-                    raise e
+            while True:
+                try:
+                    response = model.generate_content(
+                        "Please generate self-contained code to complete the following problem wrapped in a Python markdown block:"
+                        + f"\n```python\n{prompt.strip()}\n```",
+                        generation_config=genai_config
+                    )
+                    output = response.candidates[0].content.parts[0].text
+                    outputs.append(output)
+                    break
+                except Exception as e:
+                    if "list index out of range" in str(e):
+                        # append dummy response
+                        outputs.append("NO_RESPONSE")
+                        break
+                    else:
+                        print(e)
+                        continue
 
         return outputs
 
