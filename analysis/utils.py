@@ -1007,9 +1007,9 @@ model_info = {
         "act_param": 7,
         "open-data": "Partial",
     },
-    "wyt2000/InverseCoder-CL-6.7B": {
-        "name": "InverseCoder-CL-6.7B",
-        "link": "https://huggingface.co/wyt2000/InverseCoder-CL-6.7B",
+    "wyt2000/InverseCoder-DS-6.7B": {
+        "name": "InverseCoder-DS-6.7B",
+        "link": "https://huggingface.co/wyt2000/InverseCoder-DS-6.7B",
         "prompted": True,
         "moe": False,
         "size": 6.7,
