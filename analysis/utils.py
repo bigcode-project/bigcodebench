@@ -1034,4 +1034,22 @@ model_info = {
         "act_param": None,
         "open-data": "None",
     },
+    "abacusai/Dracarys-Llama-3.1-70B-Instruct": {
+        "name": "Dracarys-Llama-3.1-70B-Instruct",
+        "link": "https://huggingface.co/abacusai/Dracarys-Llama-3.1-70B-Instruct",
+        "prompted": True,
+        "moe": False,
+        "size": 70,
+        "act_param": 70,
+        "open-data": "None",
+    },
+    "abacusai/Dracarys-72B-Instruct": {
+        "name": "Dracarys-72B-Instruct",
+        "link": "https://huggingface.co/abacusai/Dracarys-72B-Instruct",
+        "prompted": True,
+        "moe": False,
+        "size": 72,
+        "act_param": 72,
+        "open-data": "None",
+    },
 }
