@@ -27,6 +27,15 @@
     <a href="#-acknowledgement">🙏Acknowledgement</a>
 </p>
 
+## News
+- **[2024-08-19]** To make the evaluation fully reproducible, we add a real-time code execution session to the leaderboard. It can be viewed [here](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
+- **[2024-08-02]** We release `bigcodebench==v0.1.9`.
+- **[2024-07-18]** We announce a subset of BigCodeBench, BigCodeBench-Hard, which includes 148 tasks that are more aligned with the real-world programming tasks. The details are available [in this blog post](https://huggingface.co/blog/terryyz/bigcodebench-hard). The dataset is available [here](https://huggingface.co/datasets/bigcode/bigcodebench-hard). The new release is `bigcodebench==v0.1.8`.
+- **[2024-06-28]** We release `bigcodebench==v0.1.7`.
+- **[2024-06-27]** We release `bigcodebench==v0.1.6`.
+- **[2024-06-19]** We start the Hugging Face BigCodeBench Leaderboard! The leaderboard is available [here](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
+- **[2024-06-18]** We release BigCodeBench, a new benchmark for code generation with 1140 software-engineering-oriented programming tasks. Preprint is available [here](https://arxiv.org/abs/2406.15877). PyPI package is available [here](https://pypi.org/project/bigcodebench/) with the version `0.1.5`.
+
 ## 🌸 About
 
 ### BigCodeBench
@@ -361,9 +370,9 @@ We share pre-generated code samples from LLMs we have [evaluated](https://huggin
 
 - [ ] Due to the flakiness in the evaluation, the execution results may vary slightly (~0.2% for Full set, and ~0.6% for Hard set) between runs. We are working on improving the evaluation stability.
 
-- [ ] You may get errors like `ImportError: /usr/local/lib/python3.10/site-packages/matplotlib/_c_internal_utils.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object` when running the evaluation. This is due to the memory limit of the docker container. You can increase the memory limit of the docker container to solve this issue.
+- [x] You may get errors like `ImportError: /usr/local/lib/python3.10/site-packages/matplotlib/_c_internal_utils.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object` when running the evaluation. This is due to the memory limit of the docker container. You can increase the memory limit of the docker container to solve this issue. If the issue persists ,please use the real-time code execution session to evaluate the code in the [leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
 
-- [ ] We are aware of the issue of some users needing to use a proxy to access the internet. We are working on a subset of the tasks that do not require internet access to evaluate the code.
+- [x] ~~We are aware of the issue of some users needing to use a proxy to access the internet. We are working on a subset of the tasks that do not require internet access to evaluate the code.~~ Please use the real-time code execution session to evaluate the code in the [leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
 
 ## 📜 Citation
 
