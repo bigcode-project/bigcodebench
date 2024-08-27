@@ -50,12 +50,6 @@ BigCodeBench focuses on the evaluation of LLM4Code with *diverse function calls*
 * ✨ **Precise evaluation & ranking**: See [our leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard) for latest LLM rankings before & after rigorous evaluation.
 * ✨ **Pre-generated samples**: BigCodeBench accelerates code intelligence research by open-sourcing [LLM-generated samples](#-LLM-generated-code) for various models -- no need to re-run the expensive benchmarks!
 
-### Main Differences from EvalPlus
-
-We inherit the design of the EvalPlus framework, which is a flexible and extensible evaluation framework for code generation tasks. However, BigCodeBench has the following differences:
-* Execution Environment: The execution environment in BigCodeBench is less bounded than EvalPlus to support tasks with diverse library dependencies.
-* Test Evaluation: BigCodeBench relies on `unittest` for evaluating the generated code, which is more suitable for the test harness in BigCodeBench.
-
 ## 🔥 Quick Start
 
 > [!Tip]
