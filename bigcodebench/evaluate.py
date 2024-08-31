@@ -57,7 +57,7 @@ def get_groundtruth(subset, n_workers, problems, hashcode, check_gt_only, max_as
             if subset == "tool":
                 code = problem["canonical_solution"]
             else:
-                code = problem[f"{split}_prompt"] + "\n" + problem["canonical_solution"]
+                code = problem["code_prompt"] + "\n" + problem["canonical_solution"]
             args = (
                 code,
                 problem["test"],
