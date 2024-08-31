@@ -34,7 +34,7 @@ from bigcodebench.gen.util import trusted_check
 Result = Tuple[str, List[bool]]
 
 
-def get_groundtruth(n_workers, problems, hashcode, check_gt_only, max_as_limit, max_data_limit, max_stack_limit, min_time_limit):
+def get_groundtruth(subset, n_workers, problems, hashcode, check_gt_only, max_as_limit, max_data_limit, max_stack_limit, min_time_limit):
     cache_file = os.path.join(CACHE_DIR, f"{hashcode}.pkl")
     if os.path.exists(cache_file):
         if check_gt_only:
@@ -54,8 +54,12 @@ def get_groundtruth(n_workers, problems, hashcode, check_gt_only, max_as_limit, 
         expected_time = dict()
         
         for problem in problems.values():
+            if subset == "tool":
+                code = problem["canonical_solution"]
+            else:
+                code = problem[f"{split}_prompt"] + "\n" + problem["canonical_solution"]
             args = (
-                problem["complete_prompt"] + "\n" + problem["canonical_solution"],
+                code,
                 problem["test"],
                 problem["task_id"],
                 max_as_limit,
@@ -130,7 +134,7 @@ def evaluate(flags):
     dataset_hash = get_bigcodebench_hash(subset=flags.subset)
     
     if not flags.no_gt:
-        expected_time = get_groundtruth(n_workers, problems, dataset_hash, flags.check_gt_only, flags.max_as_limit, flags.max_data_limit, flags.max_stack_limit, flags.min_time_limit)
+        expected_time = get_groundtruth(flags.subset, n_workers, problems, dataset_hash, flags.check_gt_only, flags.max_as_limit, flags.max_data_limit, flags.max_stack_limit, flags.min_time_limit)
     else:
         expected_time = {task_id: None for task_id in problems}
     
@@ -177,13 +181,21 @@ def evaluate(flags):
                         f"Task {task_id} is found in the samples but not found in the dataset"
                     )
                     continue
-                solution = (
-                    sample["solution"]
+                
+                if flags.subset == "tool":
+                    solution = (problems[task_id][f"{flags.split}_prompt"] + "\n\n"
+                                + problems[task_id]["solution"]  
+                                if "solution" in sample
+                                else problems[task_id]["complete_prompt"] + sample["completion"] 
+                                + "\n\n" + problems[task_id][f"{flags.split}_tool_implementation"])
+                else:
+                    solution = (
+                        sample["solution"]
                     if "solution" in sample
-                    else problems[task_id]["complete_prompt"] + sample["completion"]
-                )
-                if "sanitized-calibrated" in flags.samples:
-                    solution = problems[task_id]["code_prompt"] + "\n    pass\n" + solution
+                        else problems[task_id]["complete_prompt"] + sample["completion"]
+                    )
+                    if "sanitized-calibrated" in flags.samples:
+                        solution = problems[task_id]["code_prompt"] + "\n    pass\n" + solution
                 remainings.add(sample["_identifier"])
                 args = (
                     completion_id[task_id],
@@ -323,9 +335,9 @@ def evaluate(flags):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--split", required=True, type=str, choices=["complete", "instruct"]
+        "--split", required=True, type=str, choices=["complete", "instruct", "positive", "negative", "mixed"]
     )
-    parser.add_argument("--subset", default="hard", type=str, choices=["full", "hard"])
+    parser.add_argument("--subset", default="hard", type=str, choices=["full", "hard", "tool"])
     parser.add_argument("--samples", required=True, type=str)
     parser.add_argument("--save_pass_rate", action="store_true")
     parser.add_argument("--parallel", default=None, type=int)

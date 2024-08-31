@@ -37,6 +37,8 @@ def codegen(
         if model.is_direct_completion() and split == "instruct":
             raise Exception("Base model does not support direct completion for instruct tasks")
         
+        if subset == "tool":
+            assert split in ["positive", "negative", "mixed"], "Tool subset only supports positive, negative, and mixed split"
         # create save_path if it doesn't exist, e.g., a/b.jsonl
         dirname = os.path.dirname(save_path)
         if not os.path.exists(dirname) and dirname != "":
@@ -70,9 +72,12 @@ def codegen(
             sidx = n_samples - nsamples
             while sidx < n_samples:
                 try:
-                    prompt = task[f"{split}_prompt"]
+                    if split == "tool":
+                        prompt = task[f"{split}_tool"] + "\n\n" + task["complete_prompt"]
+                    else:
+                        prompt = task[f"{split}_prompt"]
                 except:
-                    raise Exception(f"Invalid split {split}")
+                    raise Exception(f"Invalid split {split} for BigCodeBench-{subset}")
                 if strip_newlines:
                     prompt = prompt.strip("\n")
                 outputs = model.codegen(
@@ -105,8 +110,8 @@ def codegen(
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, type=str)
-    parser.add_argument("--split", required=True, type=str, choices=["complete", "instruct"])
-    parser.add_argument("--subset", default="full", type=str, choices=["full", "hard"])
+    parser.add_argument("--split", required=True, type=str, choices=["complete", "instruct", "positive", "negative", "mixed"])
+    parser.add_argument("--subset", default="full", type=str, choices=["full", "hard", "tool"])
     parser.add_argument("--save_path", default=None, type=str)
     parser.add_argument("--bs", default=1, type=int)
     parser.add_argument("--n_samples", default=1, type=int)
