@@ -149,15 +149,30 @@ def write_directory(directory: PathLike, data: Iterable[Dict]):
 
 def completeness_check(name, data):
     for task_id, task in data.items():
-        for key in [
-            "complete_prompt",
-            "instruct_prompt",
-            "canonical_solution",
-            "code_prompt",
-            "test",
-            "entry_point"
-        ]:
-            assert key in task, f"{key} not found in {name} #{task_id}!"
+        try:
+            for key in [
+                "complete_prompt",
+                "instruct_prompt",
+                "canonical_solution",
+                "code_prompt",
+                "test",
+                "entry_point"
+            ]:
+                assert key in task, f"{key} not found in {name} #{task_id}!"
+        except Exception as e:
+            for key in [
+                "complete_prompt",
+                "positive_tool",
+                "negative_tool",
+                "mixed_tool",
+                "positive_tool_implementation",
+                "negative_tool_implementation",
+                "mixed_tool_implementation",
+                "canonical_solution",
+                "test",
+                "entry_point"
+            ]:
+                assert key in task, f"{key} not found in {name} #{task_id}!"
 
 
 def to_raw(string):
