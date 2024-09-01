@@ -15,7 +15,7 @@ from bigcodebench.data import (
     write_directory,
     write_jsonl,
 )
-from bigcodebench.syncheck import syntax_check
+from bigcodebench.syncheck import syntax_check, api_check
 
 CLASS_TYPE = "class_definition"
 FUNCTION_TYPE = "function_definition"
@@ -183,6 +183,7 @@ def process_solution(
     sample_solution: Dict,
     dataset: Dict,
     entry_point: Dict,
+    check_lib: bool = False,
     debug_task: str = None,
     calibrate: bool = False,
     is_folder: bool = False,
@@ -209,6 +210,9 @@ def process_solution(
 
     new_code = sanitize(code=old_code, entrypoint=function_name)
 
+    if check_lib:
+        new_code = "" if api_check(new_code) else new_code
+    
     # if old code and new code are different, print msg
     if new_code != old_code:
         msg = "Sanitized: " + dbg_identifier
@@ -220,7 +224,7 @@ def process_solution(
 
 
 def script(
-    samples: str, inplace: bool = False, debug_task: str = None, calibrate: bool = False, parallel: int=32
+    samples: str, check_lib: bool = False, inplace: bool = False, debug_task: str = None, calibrate: bool = False, parallel: int=32
 ):
     # task_id -> entry_point
     entry_point = {}
@@ -235,15 +239,19 @@ def script(
     target_path = pathlib.Path(samples)
     if not inplace:
         if is_folder:
-            if calibrate:
-                new_name = target_path.name + "-sanitized-calibrated"
+            if check_lib:
+                new_name = target_path.name + "-skip-lib"
+            elif calibrate:
+                new_name = new_name + "-sanitized-calibrated"
             else:
-                new_name = target_path.name + "-sanitized"
+                new_name = new_name + "-sanitized"
         else:
+            if check_lib:
+                new_name = target_path.name.replace(".jsonl", "-skip-lib.jsonl")
             if calibrate:
-                new_name = target_path.name.replace(".jsonl", "-sanitized-calibrated.jsonl")
+                new_name = new_name.replace(".jsonl", "-sanitized-calibrated.jsonl")
             else:
-                new_name = target_path.name.replace(".jsonl", "-sanitized.jsonl")
+                new_name = new_name.replace(".jsonl", "-sanitized.jsonl")
         target_path = target_path.parent / new_name
     target_path = str(target_path)
 
@@ -257,6 +265,7 @@ def script(
             "sample_solution": sample_solution,
             "dataset": dataset,
             "entry_point": entry_point,
+            "check_lib": check_lib,
             "debug_task": debug_task,
             "calibrate": calibrate,
             "is_folder": is_folder,

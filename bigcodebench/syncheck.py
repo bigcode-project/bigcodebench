@@ -10,6 +10,61 @@ from termcolor import colored
 
 from bigcodebench.data import load_solutions
 
+def api_check(code: str) -> bool:
+    tree = ast.parse(code)
+    imported_modules = set()
+    imported_names = {}
+
+    class ApiExtractor(ast.NodeVisitor):
+        def __init__(self):
+            self.in_task_func = False
+            self.uses_library_api = False
+
+        def visit_Import(self, node):
+            for alias in node.names:
+                imported_modules.add(alias.name)
+                if alias.asname:
+                    imported_modules.add(alias.asname)
+
+        def visit_ImportFrom(self, node):
+            if node.module:
+                for alias in node.names:
+                    full_name = f'{node.module}.{alias.name}'
+                    imported_names[alias.asname or alias.name] = full_name
+
+        def visit_FunctionDef(self, node):
+            if node.name == 'task_func':
+                self.in_task_func = True
+                self.generic_visit(node)
+                self.in_task_func = False
+            else:
+                self.generic_visit(node)
+
+        def visit_Attribute(self, node):
+            if self.in_task_func:
+                attr_chain = []
+                current = node
+                while isinstance(current, ast.Attribute):
+                    attr_chain.append(current.attr)
+                    current = current.value
+                if isinstance(current, ast.Name):
+                    attr_chain.append(current.id)
+                    attr_chain.reverse()
+                    full_name = '.'.join(attr_chain)
+                    if attr_chain[0] in imported_modules or attr_chain[0] in imported_names:
+                        self.uses_library_api = True
+            self.generic_visit(node)
+
+        def visit_Name(self, node):
+            if self.in_task_func:
+                if node.id in imported_modules or node.id in imported_names:
+                    self.uses_library_api = True
+            self.generic_visit(node)
+
+    extractor = ApiExtractor()
+    extractor.visit(tree)
+
+    return extractor.uses_library_api
 
 def syntax_check(code, verbose=False):
     try:

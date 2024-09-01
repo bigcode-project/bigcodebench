@@ -62,15 +62,13 @@ def make_chat_prompt(prompt: str, subset: str, split: str, tokenizer: AutoTokeni
 
     if subset == "tool":
         prompt = f"""\
-Based on the given customized modules, please provide a self-contained answer (e.g., Python script or refusal) that solves the following problem in a markdown code block without using any imports:
+You should only utilize the helper modules given in the markdown code block to provide a self-contained Python script that implements `task_func`. Assume all listed helper modules work as expected on the backend but are not visible for their implementation details. Call `refusal_func` if you cannot find proper helper modules in the code block to solve the task.
+
+Please complete `task_func` in a markdown code block without using any external library APIs or defining any modules:
 ```
 {prompt.strip()}
 ```
 """     
-        response = f"""\
-Below is a answer (e.g., Python script or refusal) that solves the problem:
-{_MAGIC_SPLITTER_}
-"""
     else:
         prompt = f"""\
 Please provide a self-contained Python script that solves the following problem in a markdown code block:
@@ -79,7 +77,7 @@ Please provide a self-contained Python script that solves the following problem 
 ```
 """
 
-        response = f"""\
+    response = f"""\
 Below is a Python script with a self-contained function that solves the problem and passes corresponding tests:
 ```python
 {_MAGIC_SPLITTER_}
@@ -296,9 +294,9 @@ class OpenAIChatDecoder(DecoderBase):
         fmt = "json_object" if self.name == "gpt-4-1106-preview" else "text"
         if self.subset == "tool":
             if fmt == "json_object":
-                message = r'Based on the given customized modules, please complete the following code snippet without using any imports by generating JSON like {"code": ""}'
+                message = r'Based on the given customized modules, please complete the following code snippet by generating JSON like {"code": ""} without using any external library APIs or defining any modules'
             else:
-                message = r"Based on the given customized modules, please provide a self-contained answer (e.g., Python script or refusal) that solves the following problem in a markdown code block without using any imports:"
+                message = r"You should only utilize the helper modules given in the markdown code block to provide a self-contained Python script that implements `task_func`. Assume all listed helper modules work as expected on the backend but are not visible for their implementation details. Call `refusal_func` if you cannot find proper helper modules in the code block to solve the task.\n\nPlease complete `task_func` in a markdown code block without using any external library APIs or defining any modules:"
         else:
             if fmt == "json_object":
                 message = r'Please complete the following code snippet by generating JSON like {"code": ""}'
@@ -361,7 +359,9 @@ class MistralChatDecoder(DecoderBase):
         
         if self.subset == "tool":
             message = f"""\
-Based on the given customized modules, please provide a self-contained answer (e.g., Python script or refusal) that solves the following problem in a markdown code block without using any imports:
+You should only utilize the helper modules given in the markdown code block to provide a self-contained Python script that implements `task_func`. Assume all listed helper modules work as expected on the backend but are not visible for their implementation details. Call `refusal_func` if you cannot find proper helper modules in the code block to solve the task.
+
+Please complete `task_func` in a markdown code block without using any external library APIs or defining any modules:
 ```
 {prompt.strip()}
 ```
@@ -423,7 +423,9 @@ class AnthropicMessageDecoder(AnthropicDecoder):
         outputs = []
         if self.subset == "tool":
             message = f"""\
-Based on the given customized modules, please provide a self-contained answer (e.g., Python script or refusal) that solves the following problem in a markdown code block without using any imports:
+You should only utilize the helper modules given in the markdown code block to provide a self-contained Python script that implements `task_func`. Assume all listed helper modules work as expected on the backend but are not visible for their implementation details. Call `refusal_func` if you cannot find proper helper modules in the code block to solve the task.
+
+Please complete `task_func` in a markdown code block without using any external library APIs or defining any modules:
 ```
 {prompt.strip()}
 ```
@@ -513,7 +515,9 @@ class GeminiDecoder(GoogleGenAIDecoder):
         
         if self.subset == "tool":
             message = f"""\
-Based on the given customized modules, please provide a self-contained answer (e.g., Python script or refusal) that solves the following problem in a markdown code block without using any imports:
+You should only utilize the helper modules given in the markdown code block to provide a self-contained Python script that implements `task_func`. Assume all listed helper modules work as expected on the backend but are not visible for their implementation details. Call `refusal_func` if you cannot find proper helper modules in the code block to solve the task.
+
+Please complete `task_func` in a markdown code block without using any external library APIs or defining any modules:
 ```
 {prompt.strip()}
 ```
