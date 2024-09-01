@@ -55,18 +55,31 @@ def extra_eos_for_direct_completion(dataset) -> List[str]:
 _MAGIC_SPLITTER_ = "-[[]]-this-is-really-our-highest-priority-[[]]-"
 
 
-def make_chat_prompt(prompt: str, tokenizer: AutoTokenizer) -> str:
+def make_chat_prompt(prompt: str, subset: str, split: str, tokenizer: AutoTokenizer) -> str:
     # directly return prompt if it does not have a tokenizer.chat_template
     if tokenizer.chat_template is None:
         return prompt
 
-    prompt = f"""\
+    if subset == "tool":
+        prompt = f"""\
+Based on the given customized modules, please provide a self-contained answer (e.g., Python script or refusal) that solves the following problem in a markdown code block without using any imports:
+```
+{prompt.strip()}
+```
+"""     
+        response = f"""\
+Below is a answer (e.g., Python script or refusal) that solves the problem:
+{_MAGIC_SPLITTER_}
+"""
+    else:
+        prompt = f"""\
 Please provide a self-contained Python script that solves the following problem in a markdown code block:
 ```
 {prompt.strip()}
 ```
 """
-    response = f"""\
+
+        response = f"""\
 Below is a Python script with a self-contained function that solves the problem and passes corresponding tests:
 ```python
 {_MAGIC_SPLITTER_}
@@ -86,6 +99,8 @@ class DecoderBase(ABC):
     def __init__(
         self,
         name: str,
+        subset: str,
+        split: str,
         batch_size: int = 1,
         temperature: float = 0.8,
         max_new_tokens: int = 1280,
@@ -96,6 +111,8 @@ class DecoderBase(ABC):
     ) -> None:
         print("Initializing a decoder model: {} ...".format(name))
         self.name = name
+        self.subset = subset
+        self.split = split
         self.batch_size = batch_size
         self.temperature = temperature
         self.eos = EOS
@@ -175,7 +192,7 @@ class GeneralVllmDecoder(VllmDecoder):
     def codegen(
         self, prompt: str, do_sample: bool = True, num_samples: int = 200
     ) -> List[str]:
-        prompt = make_chat_prompt(prompt, self.tokenizer)
+        prompt = make_chat_prompt(prompt, self.subset, self.split, self.tokenizer)
         return VllmDecoder.codegen(self, prompt, do_sample, num_samples)
 
 
@@ -259,7 +276,7 @@ class GenenralHfTorchDecoder(HfTorchDecoder):
     def codegen(
         self, prompt: str, do_sample: bool = True, num_samples: int = 200
     ) -> List[str]:
-        prompt = make_chat_prompt(prompt, self.tokenizer)
+        prompt = make_chat_prompt(prompt, self.subset, self.split, self.tokenizer)
         return HfTorchDecoder.codegen(self, prompt, do_sample, num_samples)
 
 
@@ -277,10 +294,16 @@ class OpenAIChatDecoder(DecoderBase):
 
         # construct prompt
         fmt = "json_object" if self.name == "gpt-4-1106-preview" else "text"
-        if fmt == "json_object":
-            message = r'Please complete the following code snippet by generating JSON like {"code": ""}'
+        if self.subset == "tool":
+            if fmt == "json_object":
+                message = r'Based on the given customized modules, please complete the following code snippet without using any imports by generating JSON like {"code": ""}'
+            else:
+                message = r"Based on the given customized modules, please provide a self-contained answer (e.g., Python script or refusal) that solves the following problem in a markdown code block without using any imports:"
         else:
-            message = r"Please generate self-contained code to complete the following problem:"
+            if fmt == "json_object":
+                message = r'Please complete the following code snippet by generating JSON like {"code": ""}'
+            else:
+                message = r"Please generate self-contained code to complete the following problem in a markdown code block:"
 
         message += f"\n```python\n{prompt.strip()}\n```"
 
@@ -335,14 +358,29 @@ class MistralChatDecoder(DecoderBase):
         batch_size = min(self.batch_size, num_samples)
 
         outputs = []
+        
+        if self.subset == "tool":
+            message = f"""\
+Based on the given customized modules, please provide a self-contained answer (e.g., Python script or refusal) that solves the following problem in a markdown code block without using any imports:
+```
+{prompt.strip()}
+```
+"""
+        else:
+            message = f"""\
+Please provide a self-contained Python script that solves the following problem in a markdown code block:
+```
+{prompt.strip()}
+```
+"""
+
         for _ in range(batch_size):
             ret = self.client.chat(
                 model=self.name,
                 messages=[
                     ChatMessage(
                         role="user",
-                        content="Please generate self-contained code to solve the following problem in a Python markdown block:"
-                        + f"\n```python\n{prompt.strip()}\n```",
+                        content=message,
                     )
                 ],
                 max_tokens=self.max_new_tokens,
@@ -383,15 +421,28 @@ class AnthropicMessageDecoder(AnthropicDecoder):
             assert batch_size == 1, "Sampling only supports batch size of 1"
 
         outputs = []
-        for _ in range(batch_size):
-            message = anthropic_request.make_auto_request(
+        if self.subset == "tool":
+            message = f"""\
+Based on the given customized modules, please provide a self-contained answer (e.g., Python script or refusal) that solves the following problem in a markdown code block without using any imports:
+```
+{prompt.strip()}
+```
+"""
+        else:
+            message = f"""\
+Please provide a self-contained Python script that solves the following problem in a markdown code block:
+```
+{prompt.strip()}
+```
+"""
+
+        ret = anthropic_request.make_auto_request(
                 client=self.client,
                 model=self.name,
                 messages=[
                     {
                         "role": "user",
-                        "content": "Please generate self-contained code to complete the following problem wrapped in a Python markdown block:"
-                        + f"\n```python\n{prompt.strip()}\n```\n",
+                        "content": message,
                     }
                 ],
                 max_tokens=self.max_new_tokens,
@@ -459,12 +510,27 @@ class GeminiDecoder(GoogleGenAIDecoder):
         model = genai.GenerativeModel(model_name=self.name, generation_config=genai_config, safety_settings=safety_settings)
         
         outputs = []
+        
+        if self.subset == "tool":
+            message = f"""\
+Based on the given customized modules, please provide a self-contained answer (e.g., Python script or refusal) that solves the following problem in a markdown code block without using any imports:
+```
+{prompt.strip()}
+```
+"""
+        else:
+            message = f"""\
+Please provide a self-contained Python script that solves the following problem in a markdown code block:
+```
+{prompt.strip()}
+```
+"""
+
         for _ in range(batch_size):
             while True:
                 try:
                     response = model.generate_content(
-                        "Please generate self-contained code to complete the following problem wrapped in a Python markdown block:"
-                        + f"\n```python\n{prompt.strip()}\n```",
+                        message,
                         generation_config=genai_config
                     )
                     output = response.candidates[0].content.parts[0].text
