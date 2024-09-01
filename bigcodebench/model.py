@@ -551,6 +551,8 @@ Please provide a self-contained Python script that solves the following problem 
 def make_model(
     model: str,
     backend: str,
+    subset: str,
+    split: str,
     dataset: str = "bigcodebench",
     batch_size: int = 1,
     temperature: float = 0.0,
@@ -563,6 +565,8 @@ def make_model(
     if backend == "vllm":
         return GeneralVllmDecoder(
             name=model,
+            subset=subset,
+            split=split,
             batch_size=batch_size,
             temperature=temperature,
             dataset=dataset,
@@ -574,6 +578,8 @@ def make_model(
     elif backend == "hf":
         return GenenralHfTorchDecoder(
             name=model,
+            subset=subset,
+            split=split,
             batch_size=batch_size,
             temperature=temperature,
             dataset=dataset,
@@ -584,6 +590,8 @@ def make_model(
     elif backend == "openai":
         return OpenAIChatDecoder(
             name=model,
+            subset=subset,
+            split=split,
             batch_size=batch_size,
             temperature=temperature,
             base_url=base_url,
@@ -591,18 +599,24 @@ def make_model(
     elif backend == "mistral":
         return MistralChatDecoder(
             name=model,
+            subset=subset,
+            split=split,
             batch_size=batch_size,
             temperature=temperature,
         )
     elif backend == "anthropic":
         return AnthropicMessageDecoder(
             name=model,
+            subset=subset,
+            split=split,
             batch_size=batch_size,
             temperature=temperature,
         )
     elif backend == "google":
         return GeminiDecoder(
             name=model,
+            subset=subset,
+            split=split,
             batch_size=batch_size,
             temperature=temperature,
         )

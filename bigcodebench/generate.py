@@ -145,6 +145,8 @@ def main():
     model_runner = make_model(
         model=args.model,
         backend=args.backend,
+        subset=args.subset,
+        split=args.split,
         batch_size=args.bs,
         temperature=args.temperature,
         base_url=args.base_url,
