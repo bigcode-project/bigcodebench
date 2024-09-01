@@ -221,9 +221,7 @@ def process_solution(
             old_code = old_code.replace("```python\n    ", "```python\n"+dataset[task_id]["complete_prompt"]+"    ")
 
     new_code = sanitize(code=old_code, entrypoint=function_name, skip_module=skip_module)
-    if not new_code.startswith("def task_func") and new_code:
-        print(new_code)
-        exit()
+    
     # if old code and new code are different, print msg
     if new_code != old_code:
         msg = "Sanitized: " + dbg_identifier
