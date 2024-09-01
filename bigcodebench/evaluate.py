@@ -189,7 +189,7 @@ def evaluate(flags):
                                 )
                     solution += "\n\n" + problems[task_id][f"{flags.split}_tool_implementation"]
                     if "sanitized-calibrated" in flags.samples:
-                        solution = problems[task_id]["code_prompt"] + "\n    pass\n" + solution
+                        solution = problems[task_id]["complete_prompt"] + "\n    pass\n" + solution
                 else:
                     solution = (
                         sample["solution"]
