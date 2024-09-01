@@ -245,22 +245,23 @@ def script(
     # make a new folder with "-sanitized" suffix
     is_folder = os.path.isdir(samples)
     target_path = pathlib.Path(samples)
+    target_path_name = target_path.name
     if not inplace:
         if is_folder:
             if skip_module:
-                target_path.name = target_path.name + "-skip-lib"
+                target_path_name = target_path_name + "-sanitized"
             elif calibrate:
-                new_name = target_path.name + "-sanitized-calibrated"
+                target_path_name = target_path_name + "-sanitized-calibrated"
             else:
-                new_name = target_path.name + "-sanitized"
+                target_path_name = target_path_name + "-sanitized"
         else:
             if skip_module:
-                target_path.name = target_path.name.replace(".jsonl", "-skip-lib.jsonl")
+                target_path_name = target_path_name.replace(".jsonl", "-skip-lib.jsonl")
             if calibrate:
-                new_name = target_path.name.replace(".jsonl", "-sanitized-calibrated.jsonl")
+                target_path_name = target_path_name.replace(".jsonl", "-sanitized-calibrated.jsonl")
             else:
-                new_name = target_path.name.replace(".jsonl", "-sanitized.jsonl")
-        target_path = target_path.parent / new_name
+                target_path_name = target_path_name.replace(".jsonl", "-sanitized.jsonl")
+        target_path = target_path.parent / target_path_name
     target_path = str(target_path)
 
     nsan = 0
