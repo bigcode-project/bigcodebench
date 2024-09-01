@@ -183,11 +183,12 @@ def evaluate(flags):
                     continue
                 
                 if flags.subset == "tool":
-                    solution = (problems[task_id][f"{flags.split}_prompt"] + "\n\n"
-                                + problems[task_id]["solution"]  
+                    solution = (problems[task_id][f"complete_prompt"] + "\n\n"
+                                + sample["solution"]  
                                 if "solution" in sample
                                 else problems[task_id]["complete_prompt"] + sample["completion"] 
-                                + "\n\n" + problems[task_id][f"{flags.split}_tool_implementation"])
+                                )
+                    solution += "\n\n" + problems[task_id][f"{flags.split}_tool_implementation"]
                 else:
                     solution = (
                         sample["solution"]
