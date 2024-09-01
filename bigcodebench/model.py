@@ -435,9 +435,9 @@ Please provide a self-contained Python script that solves the following problem 
 {prompt.strip()}
 ```
 """
-
-        ret = anthropic_request.make_auto_request(
-                client=self.client,
+        for _ in range(batch_size):
+            ret = anthropic_request.make_auto_request(
+                    client=self.client,
                 model=self.name,
                 messages=[
                     {
@@ -449,7 +449,7 @@ Please provide a self-contained Python script that solves the following problem 
                 stop_sequences=["\n```\n", "\nif "],
                 **kwargs,
             )
-            outputs.append(message.content[0].text)
+            outputs.append(ret.content[0].text)
 
         return outputs
 
