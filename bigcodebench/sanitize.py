@@ -116,7 +116,7 @@ def sanitize(code: str, entrypoint: Optional[str] = None, skip_module: bool = Fa
     class_names = set()
     function_names = set()
     variable_names = set()
-    reacheable = set()
+    reachable = set()
     
     root_node = tree.root_node
     import_nodes = []
@@ -159,7 +159,7 @@ def sanitize(code: str, entrypoint: Optional[str] = None, skip_module: bool = Fa
 
     if entrypoint:
         name2deps = get_deps(definition_nodes)
-        reacheable = get_function_dependency(entrypoint, name2deps)
+        reachable = get_function_dependency(entrypoint, name2deps)
 
     sanitized_output = b""
 
@@ -168,7 +168,7 @@ def sanitize(code: str, entrypoint: Optional[str] = None, skip_module: bool = Fa
 
     for pair in definition_nodes:
         name, node = pair
-        if entrypoint and not (name in reacheable):
+        if entrypoint and not (name in reachable):
             continue
         sanitized_output += code_bytes[node.start_byte : node.end_byte] + b"\n"
         
@@ -248,18 +248,18 @@ def script(
     if not inplace:
         if is_folder:
             if skip_module:
-                new_name = target_path.name + "-skip-lib"
+                target_path.name = target_path.name + "-skip-lib"
             elif calibrate:
-                new_name = new_name + "-sanitized-calibrated"
+                new_name = target_path.name + "-sanitized-calibrated"
             else:
-                new_name = new_name + "-sanitized"
+                new_name = target_path.name + "-sanitized"
         else:
             if skip_module:
-                new_name = target_path.name.replace(".jsonl", "-skip-lib.jsonl")
+                target_path.name = target_path.name.replace(".jsonl", "-skip-lib.jsonl")
             if calibrate:
-                new_name = new_name.replace(".jsonl", "-sanitized-calibrated.jsonl")
+                new_name = target_path.name.replace(".jsonl", "-sanitized-calibrated.jsonl")
             else:
-                new_name = new_name.replace(".jsonl", "-sanitized.jsonl")
+                new_name = target_path.name.replace(".jsonl", "-sanitized.jsonl")
         target_path = target_path.parent / new_name
     target_path = str(target_path)
 
