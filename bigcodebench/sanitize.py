@@ -126,7 +126,8 @@ def sanitize(code: str, entrypoint: Optional[str] = None, skip_module: bool = Fa
 
     for child in root_node.children:
         if child.type in IMPORT_TYPE:
-            import_nodes.append(child)
+            if not skip_module:
+                import_nodes.append(child)
         elif child.type == CLASS_TYPE:
             name = get_definition_name(child)
             if not (
@@ -219,8 +220,10 @@ def process_solution(
         if calibrate:
             old_code = old_code.replace("```python\n    ", "```python\n"+dataset[task_id]["complete_prompt"]+"    ")
 
-    new_code = sanitize(code=old_code, entrypoint=function_name)
-    
+    new_code = sanitize(code=old_code, entrypoint=function_name, skip_module=skip_module)
+    if not new_code.startswith("def task_func") and new_code:
+        print(new_code)
+        exit()
     # if old code and new code are different, print msg
     if new_code != old_code:
         msg = "Sanitized: " + dbg_identifier
