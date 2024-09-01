@@ -108,7 +108,7 @@ def has_return_statement(node: Node) -> bool:
     return False
 
 
-def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
+def sanitize(code: str, entrypoint: Optional[str] = None, skip_module: bool = False) -> str:
     code = code_extract(code.strip())
     code_bytes = bytes(code, "utf8")
     parser = get_parser("python")
@@ -116,10 +116,13 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
     class_names = set()
     function_names = set()
     variable_names = set()
-
+    reacheable = set()
+    
     root_node = tree.root_node
     import_nodes = []
     definition_nodes = []
+
+    task_func_found = not skip_module
 
     for child in root_node.children:
         if child.type in IMPORT_TYPE:
@@ -129,15 +132,19 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
             if not (
                 name in class_names or name in variable_names or name in function_names
             ):
-                definition_nodes.append((name, child))
+                if task_func_found:
+                    definition_nodes.append((name, child))
                 class_names.add(name)
         elif child.type == FUNCTION_TYPE:
             name = get_definition_name(child)
             if not (
                 name in function_names or name in variable_names or name in class_names
             ):
-                definition_nodes.append((name, child))
-                function_names.add(get_definition_name(child))
+                if name == entrypoint:
+                    task_func_found = True
+                if task_func_found:
+                    definition_nodes.append((name, child))
+                function_names.add(name)
         elif (
             child.type == EXPRESSION_TYPE and child.children[0].type == ASSIGNMENT_TYPE
         ):
@@ -146,7 +153,8 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
             if not (
                 name in variable_names or name in function_names or name in class_names
             ):
-                definition_nodes.append((name, subchild))
+                if task_func_found:
+                    definition_nodes.append((name, subchild))
                 variable_names.add(name)
 
     if entrypoint:
@@ -176,14 +184,17 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
             outer_lines.append(i)
     if outer_lines:
         sanitized_output = "\n".join(lines[: outer_lines[-1]])
-    return sanitized_output
+    if skip_module:
+        return "" if api_check(sanitized_output) else sanitized_output
+    else:
+        return sanitized_output
 
 
 def process_solution(
     sample_solution: Dict,
     dataset: Dict,
     entry_point: Dict,
-    check_lib: bool = False,
+    skip_module: bool = False,
     debug_task: str = None,
     calibrate: bool = False,
     is_folder: bool = False,
@@ -209,9 +220,6 @@ def process_solution(
             old_code = old_code.replace("```python\n    ", "```python\n"+dataset[task_id]["complete_prompt"]+"    ")
 
     new_code = sanitize(code=old_code, entrypoint=function_name)
-
-    if check_lib:
-        new_code = "" if api_check(new_code) else new_code
     
     # if old code and new code are different, print msg
     if new_code != old_code:
@@ -224,7 +232,7 @@ def process_solution(
 
 
 def script(
-    samples: str, check_lib: bool = False, inplace: bool = False, debug_task: str = None, calibrate: bool = False, parallel: int=32
+    samples: str, skip_module: bool = False, inplace: bool = False, debug_task: str = None, calibrate: bool = False, parallel: int=32
 ):
     # task_id -> entry_point
     entry_point = {}
@@ -239,14 +247,14 @@ def script(
     target_path = pathlib.Path(samples)
     if not inplace:
         if is_folder:
-            if check_lib:
+            if skip_module:
                 new_name = target_path.name + "-skip-lib"
             elif calibrate:
                 new_name = new_name + "-sanitized-calibrated"
             else:
                 new_name = new_name + "-sanitized"
         else:
-            if check_lib:
+            if skip_module:
                 new_name = target_path.name.replace(".jsonl", "-skip-lib.jsonl")
             if calibrate:
                 new_name = new_name.replace(".jsonl", "-sanitized-calibrated.jsonl")
@@ -265,7 +273,7 @@ def script(
             "sample_solution": sample_solution,
             "dataset": dataset,
             "entry_point": entry_point,
-            "check_lib": check_lib,
+            "skip_module": skip_module,
             "debug_task": debug_task,
             "calibrate": calibrate,
             "is_folder": is_folder,
