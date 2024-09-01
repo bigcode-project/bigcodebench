@@ -269,7 +269,7 @@ def evaluate(flags):
     mode = "-calibrated" if "sanitized-calibrated" in flags.samples else ""
     extra = flags.subset.capitalize()
     flags.split = flags.split.capitalize()
-    cprint(f"BigCodeBench-{flags.split}{mode} ({extra})", "green")
+    cprint(f"BigCodeBench-{extra}{mode} ({flags.split})", "green")
         
     if flags.no_gt:
         cprint(f"Groundtruth is not checked", "yellow")
