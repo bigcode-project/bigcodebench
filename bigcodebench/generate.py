@@ -72,12 +72,12 @@ def codegen(
             sidx = n_samples - nsamples
             while sidx < n_samples:
                 try:
-                    if split == "tool":
+                    if subset == "tool":
                         prompt = task[f"{split}_tool"] + "\n\n" + task["complete_prompt"]
                     else:
                         prompt = task[f"{split}_prompt"]
                 except:
-                    raise Exception(f"Invalid split {split} for BigCodeBench-{subset}")
+                    raise Exception(f"Invalid split {split} for bigcodebench-{subset}")
                 if strip_newlines:
                     prompt = prompt.strip("\n")
                 outputs = model.codegen(
