@@ -108,7 +108,7 @@ def has_return_statement(node: Node) -> bool:
     return False
 
 
-def sanitize(code: str, entrypoint: Optional[str] = None, skip_module: bool = False) -> str:
+def sanitize(code: str, entrypoint: Optional[str] = None, no_module: bool = False) -> str:
     code = code_extract(code.strip())
     code_bytes = bytes(code, "utf8")
     parser = get_parser("python")
@@ -122,11 +122,11 @@ def sanitize(code: str, entrypoint: Optional[str] = None, skip_module: bool = Fa
     import_nodes = []
     definition_nodes = []
 
-    task_func_found = not skip_module
+    task_func_found = not no_module
 
     for child in root_node.children:
         if child.type in IMPORT_TYPE:
-            if not skip_module:
+            if not no_module:
                 import_nodes.append(child)
         elif child.type == CLASS_TYPE:
             name = get_definition_name(child)
@@ -185,7 +185,7 @@ def sanitize(code: str, entrypoint: Optional[str] = None, skip_module: bool = Fa
             outer_lines.append(i)
     if outer_lines:
         sanitized_output = "\n".join(lines[: outer_lines[-1]])
-    if skip_module:
+    if no_module:
         return "" if api_check(sanitized_output) else sanitized_output
     else:
         return sanitized_output
@@ -195,7 +195,7 @@ def process_solution(
     sample_solution: Dict,
     dataset: Dict,
     entry_point: Dict,
-    skip_module: bool = False,
+    no_module: bool = False,
     debug_task: str = None,
     calibrate: bool = False,
     is_folder: bool = False,
@@ -220,7 +220,7 @@ def process_solution(
         if calibrate:
             old_code = old_code.replace("```python\n    ", "```python\n"+dataset[task_id]["complete_prompt"]+"    ")
 
-    new_code = sanitize(code=old_code, entrypoint=function_name, skip_module=skip_module)
+    new_code = sanitize(code=old_code, entrypoint=function_name, no_module=no_module)
     
     # if old code and new code are different, print msg
     if new_code != old_code:
@@ -233,7 +233,7 @@ def process_solution(
 
 
 def script(
-    samples: str, skip_module: bool = False, inplace: bool = False, debug_task: str = None, calibrate: bool = False, parallel: int=32
+    samples: str, no_module: bool = False, inplace: bool = False, debug_task: str = None, calibrate: bool = False, parallel: int=32
 ):
     # task_id -> entry_point
     entry_point = {}
@@ -249,14 +249,14 @@ def script(
     target_path_name = target_path.name
     if not inplace:
         if is_folder:
-            if skip_module:
+            if no_module:
                 target_path_name = target_path_name + "-sanitized"
             elif calibrate:
                 target_path_name = target_path_name + "-sanitized-calibrated"
             else:
                 target_path_name = target_path_name + "-sanitized"
         else:
-            if skip_module:
+            if no_module:
                 target_path_name = target_path_name.replace(".jsonl", "-skip-lib.jsonl")
             if calibrate:
                 target_path_name = target_path_name.replace(".jsonl", "-sanitized-calibrated.jsonl")
@@ -275,7 +275,7 @@ def script(
             "sample_solution": sample_solution,
             "dataset": dataset,
             "entry_point": entry_point,
-            "skip_module": skip_module,
+            "no_module": no_module,
             "debug_task": debug_task,
             "calibrate": calibrate,
             "is_folder": is_folder,
