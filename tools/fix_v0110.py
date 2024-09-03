@@ -19,7 +19,21 @@ def map_ds(sample):
                             "Requirements:\n    - sklearn.ensemble\n",
                             "Requirements:\n    - pandas\n    - sklearn.ensemble\n"    
                 )
-    
+    if sample["task_id"] in ["BigCodeBench/241"]:
+        for k in sample.keys():
+            if "prompt" in k:
+                sample[k] = sample[k].replace(
+                            "The function will plot the original and normalized arrays using matplotlib.",
+                            "The function will plot the original and normalized arrays with a title of 'Original vs. Normalized Data'."    
+                )
+    if sample["task_id"] in ["BigCodeBench/267"]:
+        for k in sample.keys():
+            if "prompt" in k:
+                sample[k] = sample[k].replace(
+                            "Plots and returns the FFT of the signal.",
+                            "Plots and returns the FFT of the signal with a title of 'FFT of the signal'."    
+                )
+
     return sample
     
 if __name__ == "__main__":
@@ -28,7 +42,7 @@ if __name__ == "__main__":
     hard_ds_dict = load_dataset(BIGCODEBENCH_HARD_HF)
     ds = ds_dict[BIGCODEBENCH_VERSION]
     hard_ds = hard_ds_dict[BIGCODEBENCH_VERSION]
-    function_id = [37]
+    function_id = [37, 267, 241]
     
     new_ds = ds.map(map_ds)
     new_ds.to_json("BigCodeBench.jsonl")
