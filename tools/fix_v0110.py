@@ -11,6 +11,12 @@ BIGCODEBENCH_UPDATE = "bigcode/bcb_update"
 BIGCODEBENCH_NEW_VERSION = "v0.1.2"
 
 def map_ds(sample):
+    if sample["task_id"] in ["BigCodeBench/16"]:
+        for k in sample.keys():
+            sample[k] = sample[k].replace(
+                "No logs found to backup.", "No logs found to backup"
+            )
+
     if sample["task_id"] in ["BigCodeBench/37"]:
         for k in sample.keys():
             if "prompt" in k:
@@ -28,7 +34,7 @@ if __name__ == "__main__":
     hard_ds_dict = load_dataset(BIGCODEBENCH_HARD_HF)
     ds = ds_dict[BIGCODEBENCH_VERSION]
     hard_ds = hard_ds_dict[BIGCODEBENCH_VERSION]
-    function_id = [37]
+    function_id = [16, 37]
     
     new_ds = ds.map(map_ds)
     new_ds.to_json("BigCodeBench.jsonl")
