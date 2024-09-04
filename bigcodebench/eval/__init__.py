@@ -304,7 +304,7 @@ def extract_defined_modules(code: str, entry_point: str):
 
     # Second pass: collect used functions and methods within task_func
     for node in ast.iter_child_nodes(tree):
-        if isinstance(node, ast.FunctionDef) and node.name == 'task_func':
+        if isinstance(node, ast.FunctionDef) and node.name == entry_point:
             TaskFuncVisitor().visit(node)
             break  # Assuming there's only one task_func
 
