@@ -199,6 +199,20 @@ def evaluate(flags):
                     )
                     if "sanitized-calibrated" in flags.samples:
                         solution = problems[task_id]["code_prompt"] + "\n    pass\n" + solution
+                
+                # Skip execution for empty solutions
+                if not solution.strip():
+                    eval_results[task_id].append({
+                        "completion_id": completion_id[task_id],
+                        "task_id": task_id,
+                        "_identifier": sample["_identifier"],
+                        "solution": solution,
+                        "base": (FAIL, "Empty solution")
+                    })
+                    completion_id[task_id] += 1
+                    n_samples += 1
+                    continue
+                
                 remainings.add(sample["_identifier"])
                 args = (
                     completion_id[task_id],
@@ -215,7 +229,7 @@ def evaluate(flags):
                 completion_id[task_id] += 1
                 n_samples += 1
 
-            assert n_samples == len(remainings), "Missing problems in unfinished"
+            assert n_samples == len(remainings) + sum(len(r) for r in eval_results.values()), "Missing problems in unfinished"
             assert len(completion_id) == len(problems), "Missing problems in samples"
 
             def stucking_checker():
@@ -230,7 +244,7 @@ def evaluate(flags):
 
             threading.Thread(target=stucking_checker).start()
 
-            for future in tqdm(as_completed(futures), total=n_samples):
+            for future in tqdm(as_completed(futures), total=len(futures)):
                 result = future.result()
                 remainings.remove(result["_identifier"])
                 eval_results[result["task_id"]].append(result)

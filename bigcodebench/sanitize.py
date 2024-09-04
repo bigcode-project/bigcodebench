@@ -108,7 +108,7 @@ def has_return_statement(node: Node) -> bool:
     return False
 
 
-def sanitize(code: str, entrypoint: Optional[str] = None, no_module: bool = False) -> str:
+def sanitize(code: str, solution: Dict, entrypoint: Optional[str] = None) -> str:
     code = code_extract(code.strip())
     code_bytes = bytes(code, "utf8")
     parser = get_parser("python")
@@ -122,29 +122,26 @@ def sanitize(code: str, entrypoint: Optional[str] = None, no_module: bool = Fals
     import_nodes = []
     definition_nodes = []
 
-    task_func_found = not no_module
-
     for child in root_node.children:
         if child.type in IMPORT_TYPE:
-            if not no_module:
-                import_nodes.append(child)
+            # if subset != "tool":
+            import_nodes.append(child)
         elif child.type == CLASS_TYPE:
             name = get_definition_name(child)
             if not (
                 name in class_names or name in variable_names or name in function_names
             ):
-                if task_func_found:
-                    definition_nodes.append((name, child))
+                definition_nodes.append((name, child))
                 class_names.add(name)
         elif child.type == FUNCTION_TYPE:
             name = get_definition_name(child)
             if not (
                 name in function_names or name in variable_names or name in class_names
             ):
-                if name == entrypoint:
-                    task_func_found = True
-                if task_func_found:
-                    definition_nodes.append((name, child))
+                # if name == entrypoint:
+                #     task_func_found = True
+                # if task_func_found:
+                definition_nodes.append((name, child))
                 function_names.add(name)
         elif (
             child.type == EXPRESSION_TYPE and child.children[0].type == ASSIGNMENT_TYPE
@@ -154,8 +151,8 @@ def sanitize(code: str, entrypoint: Optional[str] = None, no_module: bool = Fals
             if not (
                 name in variable_names or name in function_names or name in class_names
             ):
-                if task_func_found:
-                    definition_nodes.append((name, subchild))
+                # if task_func_found:
+                definition_nodes.append((name, subchild))
                 variable_names.add(name)
 
     if entrypoint:
@@ -185,17 +182,17 @@ def sanitize(code: str, entrypoint: Optional[str] = None, no_module: bool = Fals
             outer_lines.append(i)
     if outer_lines:
         sanitized_output = "\n".join(lines[: outer_lines[-1]])
-    if no_module:
-        return "" if api_check(sanitized_output) else sanitized_output
-    else:
-        return sanitized_output
+    # if subset == "tool":
+    #     return "" if api_check(solution[f"{split}_tool_"] + "\n" + sanitized_output) else sanitized_output
+    # else:
+    return sanitized_output
 
 
 def process_solution(
     sample_solution: Dict,
     dataset: Dict,
     entry_point: Dict,
-    no_module: bool = False,
+    subset: str,
     debug_task: str = None,
     calibrate: bool = False,
     is_folder: bool = False,
@@ -220,8 +217,10 @@ def process_solution(
         if calibrate:
             old_code = old_code.replace("```python\n    ", "```python\n"+dataset[task_id]["complete_prompt"]+"    ")
 
-    new_code = sanitize(code=old_code, entrypoint=function_name, no_module=no_module)
-    
+    new_code = sanitize(code=old_code, solution=sample_solution, entrypoint=function_name)
+    if subset == "tool":
+        if api_check(new_code):
+            new_code = ""
     # if old code and new code are different, print msg
     if new_code != old_code:
         msg = "Sanitized: " + dbg_identifier
@@ -233,12 +232,12 @@ def process_solution(
 
 
 def script(
-    samples: str, no_module: bool = False, inplace: bool = False, debug_task: str = None, calibrate: bool = False, parallel: int=32
+    samples: str, subset: str, inplace: bool = False, debug_task: str = None, calibrate: bool = False, parallel: int=32
 ):
     # task_id -> entry_point
     entry_point = {}
     # merge two datasets
-    dataset = {**get_bigcodebench()}
+    dataset = {**get_bigcodebench(subset=subset)}
 
     for task_id, problem in dataset.items():
         entry_point[task_id] = problem["entry_point"]
@@ -249,15 +248,11 @@ def script(
     target_path_name = target_path.name
     if not inplace:
         if is_folder:
-            if no_module:
-                target_path_name = target_path_name + "-sanitized"
-            elif calibrate:
+            if calibrate:
                 target_path_name = target_path_name + "-sanitized-calibrated"
             else:
                 target_path_name = target_path_name + "-sanitized"
         else:
-            if no_module:
-                target_path_name = target_path_name.replace(".jsonl", "-skip-lib.jsonl")
             if calibrate:
                 target_path_name = target_path_name.replace(".jsonl", "-sanitized-calibrated.jsonl")
             else:
@@ -275,7 +270,7 @@ def script(
             "sample_solution": sample_solution,
             "dataset": dataset,
             "entry_point": entry_point,
-            "no_module": no_module,
+            "subset": subset,
             "debug_task": debug_task,
             "calibrate": calibrate,
             "is_folder": is_folder,
@@ -288,6 +283,7 @@ def script(
 
     for result in results:
         if result is not None:
+            print(result)
             new_solutions.append(result)
             nsan += 1
         ntotal += 1
