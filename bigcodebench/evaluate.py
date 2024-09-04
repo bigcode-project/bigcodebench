@@ -26,6 +26,7 @@ from bigcodebench.eval import (
     compatible_eval_result,
     estimate_pass_at_k,
     untrusted_check,
+    extract_defined_modules,
 )
 from bigcodebench.gen.util import trusted_check
 
@@ -93,6 +94,7 @@ def check_correctness(
     identifier=None,
     min_time_limit: float = 0.1,
     gt_time_limit: float = 2.0,
+    used_modules: List[str] = [],
 ) -> Dict[str, Result]:  # {...}, "base" | "plus" -> (status, details)
     ret = {
         "completion_id": completion_id,
@@ -110,6 +112,10 @@ def check_correctness(
         min_time_limit,
         gt_time_limit,
     )
+    if used_modules:
+        ret["used_modules"] = (set(used_modules) == set(problems["used_modules"]))
+    else:
+        ret["used_modules"] = True
     return ret
 
 
@@ -165,89 +171,75 @@ def evaluate(flags):
             "eval": {},
         }
 
-        with ProcessPoolExecutor(max_workers=n_workers) as executor:
-            futures = []
-            completion_id = Counter()
-            n_samples = 0
-            eval_results = defaultdict(list)  # task_id ->
-            remainings = set()
+        completion_id = Counter()
+        n_samples = 0
+        eval_results = defaultdict(list)  # task_id ->
+        remainings = set()
 
-            print("Reading samples...")
-            for sample in tqdm(load_solutions(flags.samples)):
-                task_id = sample["task_id"]
-                
-                if task_id not in problems:
-                    warn(
-                        f"Task {task_id} is found in the samples but not found in the dataset"
-                    )
-                    continue
-                
-                if flags.subset == "tool":
-                    solution = (sample["solution"]  
-                                if "solution" in sample
-                                else problems[task_id]["complete_prompt"] + sample["completion"] 
-                                )
-                    solution = problems[task_id]["positive_tool_implementation"] + solution
-                    if "sanitized-calibrated" in flags.samples:
-                        solution = problems[task_id]["complete_prompt"] + "\n    pass\n" + solution
-                    solution = problems[task_id][f"positive_tool_implementation"] + solution
-                else:
-                    solution = (
-                        sample["solution"]
-                    if "solution" in sample
-                        else problems[task_id]["complete_prompt"] + sample["completion"]
-                    )
-                    if "sanitized-calibrated" in flags.samples:
-                        solution = problems[task_id]["code_prompt"] + "\n    pass\n" + solution
-                
-                # Skip execution for empty solutions
-                if not solution.strip():
-                    eval_results[task_id].append({
-                        "completion_id": completion_id[task_id],
-                        "task_id": task_id,
-                        "_identifier": sample["_identifier"],
-                        "solution": solution,
-                        "base": (FAIL, "Empty solution")
-                    })
-                    completion_id[task_id] += 1
-                    n_samples += 1
-                    continue
-                
-                remainings.add(sample["_identifier"])
-                args = (
-                    completion_id[task_id],
-                    problems[task_id],
-                    solution,
-                    flags.max_as_limit,
-                    flags.max_data_limit,
-                    flags.max_stack_limit,
-                    sample["_identifier"],
-                    flags.min_time_limit,
-                    expected_time[task_id] if expected_time[task_id] else 20
+        print("Reading samples...")
+        samples = list(load_solutions(flags.samples))
+        
+        def process_sample(sample):
+            task_id = sample["task_id"]
+            
+            if task_id not in problems:
+                warn(f"Task {task_id} is found in the samples but not found in the dataset")
+                return None
+            
+            used_modules = []
+            if flags.subset == "tool":
+                solution = (sample["solution"]  
+                            if "solution" in sample
+                            else problems[task_id]["complete_prompt"] + sample["completion"] 
+                            )
+                solution = problems[task_id]["positive_tool_implementation"] + solution
+                if "sanitized-calibrated" in flags.samples:
+                    solution = problems[task_id]["complete_prompt"] + "\n    pass\n" + solution
+                solution = problems[task_id][f"positive_tool_implementation"] + solution
+                used_modules = extract_defined_modules(problems[task_id][f"{flags.split}_tool_implementation"] + "\n" + solution, problems[task_id]["entry_point"])
+            else:
+                solution = (
+                    sample["solution"]
+                if "solution" in sample
+                    else problems[task_id]["complete_prompt"] + sample["completion"]
                 )
-                futures.append(executor.submit(check_correctness, *args))
-                completion_id[task_id] += 1
+                if "sanitized-calibrated" in flags.samples:
+                    solution = problems[task_id]["code_prompt"] + "\n    pass\n" + solution
+            
+            # Skip execution for empty solutions
+            if not solution.strip():
+                return {
+                    "completion_id": completion_id[task_id],
+                    "task_id": task_id,
+                    "_identifier": sample["_identifier"],
+                    "solution": solution,
+                    "base": (FAIL, "Empty solution")
+                }
+            
+            args = (
+                completion_id[task_id],
+                problems[task_id],
+                solution,
+                flags.max_as_limit,
+                flags.max_data_limit,
+                flags.max_stack_limit,
+                sample["_identifier"],
+                flags.min_time_limit,
+                expected_time[task_id] if expected_time[task_id] else 20,
+                used_modules,
+            )
+            return check_correctness(*args)
+
+        results_list = pqdm(samples, process_sample, n_jobs=n_workers, desc="Processing samples")
+
+        for result in results_list:
+            if result is not None:
+                eval_results[result["task_id"]].append(result)
+                completion_id[result["task_id"]] += 1
                 n_samples += 1
 
-            assert n_samples == len(remainings) + sum(len(r) for r in eval_results.values()), "Missing problems in unfinished"
-            assert len(completion_id) == len(problems), "Missing problems in samples"
-
-            def stucking_checker():
-                while remainings:
-                    last_size = len(remainings)
-                    time.sleep(240)
-                    if last_size != len(remainings) or len(remainings) == 0:
-                        continue
-                    # Potential stucking
-                    warn("No samples had finished testing in the last 240s")
-                    warn(f"{len(remainings)} samples to be tested: {remainings}")
-
-            threading.Thread(target=stucking_checker).start()
-
-            for future in tqdm(as_completed(futures), total=len(futures)):
-                result = future.result()
-                remainings.remove(result["_identifier"])
-                eval_results[result["task_id"]].append(result)
+        assert n_samples == sum(len(r) for r in eval_results.values()), "Missing problems in unfinished"
+        assert len(completion_id) == len(problems), "Missing problems in samples"
 
         # sort the results for each problem by completion_id
         for task_id, task_results in eval_results.items():
@@ -255,12 +247,14 @@ def evaluate(flags):
             results["eval"][task_id] = []
             for res in task_results:
                 stat, details = res["base"]
+                tool_use = res["used_modules"]
                 results["eval"][task_id].append(
                     {
                         "task_id": task_id,
                         "solution": res["solution"],
                         "status": stat,
                         "details": details,
+                        "tool_use": tool_use,
                     }
                 )
 
@@ -275,12 +269,18 @@ def evaluate(flags):
         base_correct.append(bc)
 
     base_correct = np.array(base_correct)
-
+    tool_correct = np.array([r["tool_use"] for r in results["eval"].values()])
+    
     pass_at_k = {
         f"pass@{k}": estimate_pass_at_k(total, base_correct, k).mean()
         for k in [1, 5, 10, 25, 100]
         if total.min() >= k
     }
+    
+    if flags.subset == "tool":
+        pass_at_k.update({f"pass_tool@{k}": estimate_pass_at_k(total, tool_correct, k).mean()
+                          for k in [1, 5, 10, 25, 100]
+                          if total.min() >= k})
     
     mode = "-calibrated" if "sanitized-calibrated" in flags.samples else ""
     extra = flags.subset.capitalize()
@@ -300,6 +300,11 @@ def evaluate(flags):
     
     for k, v in pass_at_k.items():
         cprint(f"{k}:\t{v:.3f}", "green")
+        
+    if flags.subset == "tool":
+        for k, v in pass_at_k.items():
+            if k.startswith("pass_tool@"):
+                cprint(f"{k}:\t{v:.3f}", "green")
 
     # save results
     if os.path.isfile(result_path):

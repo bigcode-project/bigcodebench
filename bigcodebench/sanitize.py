@@ -283,7 +283,6 @@ def script(
 
     for result in results:
         if result is not None:
-            print(result)
             new_solutions.append(result)
             nsan += 1
         ntotal += 1

@@ -24,6 +24,7 @@ import itertools
 import multiprocessing
 import os
 import sys
+import ast
 import time
 import types
 import unittest
@@ -240,3 +241,80 @@ def evaluate_files(
         )
         ret.append((stat, det.tolist()))
     return ret
+
+
+def extract_defined_modules(code: str, entry_point: str):
+    tree = ast.parse(code)
+    defined_functions = set()
+    defined_methods = {}
+    used_functions = set()
+    used_methods = set()
+    variable_classes = {}
+
+    class FunctionDefVisitor(ast.NodeVisitor):
+        def visit_FunctionDef(self, node):
+            defined_functions.add(node.name)
+            self.generic_visit(node)
+
+        def visit_ClassDef(self, node):
+            for item in node.body:
+                if isinstance(item, ast.FunctionDef):
+                    if node.name not in defined_methods:
+                        defined_methods[node.name] = set()
+                    defined_methods[node.name].add(item.name)
+            self.generic_visit(node)
+
+    class TaskFuncVisitor(ast.NodeVisitor):
+        def visit_Assign(self, node):
+            if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name):
+                class_name = node.value.func.id
+                for target in node.targets:
+                    if isinstance(target, ast.Name):
+                        variable_classes[target.id] = class_name
+            self.generic_visit(node)
+
+        def visit_Call(self, node):
+            if isinstance(node.func, ast.Name):
+                used_functions.add(node.func.id)
+            elif isinstance(node.func, ast.Attribute):
+                value = node.func.value
+                if isinstance(value, ast.Name):
+                    var_name = value.id
+                    if var_name in variable_classes:
+                        used_methods.add(f"{variable_classes[var_name]}.{node.func.attr}")
+                    else:
+                        used_methods.add(f"{var_name}.{node.func.attr}")
+                elif isinstance(value, ast.Attribute):
+                    # Handle nested attributes (e.g., obj.attr.method())
+                    attr_chain = [node.func.attr]
+                    while isinstance(value, ast.Attribute):
+                        attr_chain.append(value.attr)
+                        value = value.value
+                    if isinstance(value, ast.Name):
+                        var_name = value.id
+                        if var_name in variable_classes:
+                            attr_chain.append(variable_classes[var_name])
+                        else:
+                            attr_chain.append(var_name)
+                        used_methods.add('.'.join(reversed(attr_chain)))
+            self.generic_visit(node)
+
+    # First pass: collect all defined functions and methods
+    FunctionDefVisitor().visit(tree)
+
+    # Second pass: collect used functions and methods within task_func
+    for node in ast.iter_child_nodes(tree):
+        if isinstance(node, ast.FunctionDef) and node.name == 'task_func':
+            TaskFuncVisitor().visit(node)
+            break  # Assuming there's only one task_func
+
+    # Filter used functions to include only those defined before task_func
+    result = [func for func in used_functions if func in defined_functions]
+
+    # Filter used methods to include only those defined before task_func
+    for class_name, methods in defined_methods.items():
+        for method in methods:
+            if any(f"{class_name}.{method}" in used_method for used_method in used_methods):
+                result.append(f"{class_name}.{method}")
+
+    return result
