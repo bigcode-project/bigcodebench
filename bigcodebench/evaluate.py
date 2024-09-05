@@ -187,6 +187,7 @@ def evaluate(flags):
             print("Reading samples...")
             for sample in tqdm(load_solutions(flags.samples)):
                 task_id = sample["task_id"]
+                used_tools = []
                 
                 if task_id not in problems:
                     warn(
@@ -202,7 +203,7 @@ def evaluate(flags):
                     try:
                         used_tools = extract_defined_modules(problems[task_id][f"{flags.split}_tool_implementation"] + "\n" + solution, problems[task_id]["entry_point"])
                     except Exception as e:
-                        used_tools = []
+                        pass
                     solution = problems[task_id]["positive_tool_implementation"] + solution
                     if "sanitized-calibrated" in flags.samples:
                         solution = problems[task_id]["complete_prompt"] + "\n    pass\n" + solution
@@ -299,29 +300,14 @@ def evaluate(flags):
     # Calculate pass@k.
     total = np.array([len(r) for k, r in results["eval"].items() if k in problems])
     base_correct = []
-    tool_correct = []
-    syntax_correct = []
+
     for key, res in results["eval"].items():
         if key not in problems:
             continue
         bc = sum([r["status"] == PASS for r in res])
         base_correct.append(bc)    
     
-    for key, res in results["eval"].items():
-        if key not in problems:
-            continue
-        tc = sum([r["tool_use"] for r in res])
-        tool_correct.append(tc)
-    
-    for key, res in results["eval"].items():
-        if key not in problems:
-            continue
-        empty_solutions = sum([r["solution"] for r in res])
-        syntax_correct.append(empty_solutions)
-    
     base_correct = np.array(base_correct)
-    tool_correct = np.array(tool_correct)
-    syntax_correct = np.array(syntax_correct)
     
     pass_at_k = {
         f"pass@{k}": estimate_pass_at_k(total, base_correct, k).mean()
@@ -330,9 +316,28 @@ def evaluate(flags):
     }
     
     if flags.subset == "tool":
+        tool_correct = []
+        syntax_correct = []
+        
+        for key, res in results["eval"].items():
+            if key not in problems:
+                continue
+            tc = sum([r["tool_use"] for r in res])
+            tool_correct.append(tc)
+        
+        for key, res in results["eval"].items():
+            if key not in problems:
+                continue
+            empty_solutions = sum([r["solution"] for r in res])
+            syntax_correct.append(empty_solutions)
+        
+        tool_correct = np.array(tool_correct)
+        syntax_correct = np.array(syntax_correct)
+        
         pass_at_k.update({f"tool@{k}": estimate_pass_at_k(total, tool_correct, k).mean()
                           for k in [1, 5, 10, 25, 100]
                           if total.min() >= k})
+        
         pass_at_k.update({f"syntax@{k}": estimate_pass_at_k(total, syntax_correct, k).mean()
                         for k in [1, 5, 10, 25, 100]
                         if total.min() >= k})
@@ -346,9 +351,9 @@ def evaluate(flags):
         cprint(f"Groundtruth is not checked", "yellow")
     else:
         if gt_pass_rate > 0.99:
-            cprint(f"Groundtruth pass rate: {gt_pass_rate*100:.2f}%", "green")
+            cprint(f"Groundtruth pass rate: {gt_pass_rate*100:.1f}%", "green")
         else:
-            cprint(f"Groundtruth pass rate: {gt_pass_rate*100:.2f}%\nPlease be cautious!", "red")
+            cprint(f"Groundtruth pass rate: {gt_pass_rate*100:.1f}%\nPlease be cautious!", "red")
         
         if len(failed_tasks) > 0:
             cprint(f"Failed tasks: {failed_tasks}", "red")
