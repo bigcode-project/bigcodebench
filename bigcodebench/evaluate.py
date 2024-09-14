@@ -204,14 +204,26 @@ def evaluate(flags):
             assert len(completion_id) == len(problems), "Missing problems in samples"
 
             def stucking_checker():
+                unchanged_duration = 0
+                last_size = len(remainings)
+
                 while remainings:
-                    last_size = len(remainings)
-                    time.sleep(240)
-                    if last_size != len(remainings) or len(remainings) == 0:
-                        continue
-                    # Potential stucking
-                    warn("No samples had finished testing in the last 240s")
-                    warn(f"{len(remainings)} samples to be tested: {remainings}")
+                    time.sleep(1)
+                    current_size = len(remainings)
+
+                    if current_size != last_size or current_size == 0:
+                        # Reset the unchanged duration if something has changed
+                        unchanged_duration = 0
+                        last_size = current_size
+                    else:
+                        # Increment the duration if nothing has changed
+                        unchanged_duration += 1
+
+                    if unchanged_duration >= 240:
+                        # Output warnings after 240 seconds of no change
+                        warn("No samples have finished testing in the last 240s")
+                        warn(f"{len(remainings)} samples to be tested: {remainings}")
+                        unchanged_duration = 0  # Reset after warning
 
             threading.Thread(target=stucking_checker).start()
 
