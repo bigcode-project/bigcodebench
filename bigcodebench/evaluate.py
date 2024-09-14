@@ -6,7 +6,7 @@ import pickle
 import threading
 import time
 from collections import Counter, defaultdict
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed, wait, ALL_COMPLETED
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
 from warnings import warn
@@ -204,26 +204,14 @@ def evaluate(flags):
             assert len(completion_id) == len(problems), "Missing problems in samples"
 
             def stucking_checker():
-                unchanged_duration = 0
-                last_size = len(remainings)
+                not_done = [True]
+                while len(not_done) > 0:
+                    done, not_done = wait(futures, timeout=240, return_when=ALL_COMPLETED)
 
-                while remainings:
-                    time.sleep(1)
-                    current_size = len(remainings)
-
-                    if current_size != last_size or current_size == 0:
-                        # Reset the unchanged duration if something has changed
-                        unchanged_duration = 0
-                        last_size = current_size
-                    else:
-                        # Increment the duration if nothing has changed
-                        unchanged_duration += 1
-
-                    if unchanged_duration >= 240:
+                    if len(done) == 0:
                         # Output warnings after 240 seconds of no change
                         warn("No samples have finished testing in the last 240s")
                         warn(f"{len(remainings)} samples to be tested: {remainings}")
-                        unchanged_duration = 0  # Reset after warning
 
             threading.Thread(target=stucking_checker).start()
 
