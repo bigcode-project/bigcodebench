@@ -209,7 +209,6 @@ def evaluate(flags):
                     done, not_done = wait(futures, timeout=240, return_when=ALL_COMPLETED)
 
                     if len(done) == 0:
-                        # Output warnings after 240 seconds of no change
                         warn("No samples have finished testing in the last 240s")
                         warn(f"{len(remainings)} samples to be tested: {remainings}")
 
