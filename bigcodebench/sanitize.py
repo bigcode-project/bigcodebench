@@ -1,6 +1,7 @@
 """Post-processing LLM-generated Python code implemented using tree-sitter."""
 
 import os
+import re
 import pathlib
 from typing import Dict, Generator, List, Optional, Set, Tuple
 from pqdm.processes import pqdm
@@ -168,7 +169,15 @@ def sanitize(code: str, solution: Dict, entrypoint: Optional[str] = None) -> str
         name, node = pair
         if entrypoint and not (name in reachable):
             continue
-        sanitized_output += code_bytes[node.start_byte : node.end_byte] + b"\n"
+        node_code = code_bytes[node.start_byte : node.end_byte].decode("utf8")
+        if node.type == FUNCTION_TYPE and name == entrypoint:
+            # Remove return type annotation, including unnecessary spaces
+            node_code = re.sub(r"->\s*[^:]+:", ":", node_code)
+            # Ensure there is exactly one space before the colon
+            node_code = re.sub(r'\s*\)(\s*):', ') :', node_code)
+            node_code = re.sub(r"\s*:", ":", node_code)
+            node_code = re.sub(r":", " :", node_code)
+        sanitized_output += node_code.encode("utf8") + b"\n"
         
     sanitized_output = sanitized_output[:-1].decode("utf8")
     

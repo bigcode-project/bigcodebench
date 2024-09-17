@@ -57,6 +57,7 @@ def trusted_exec(code, test_code, task_id, max_as_limit, max_data_limit, max_sta
         
         errors = test_result.failures + test_result.errors
         if len(errors) > 0:
+            print(task_id)
             print(errors)
             times.value = -1
         else:

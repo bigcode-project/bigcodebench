@@ -23,6 +23,7 @@ from bigcodebench.data import (
 )
 from bigcodebench.data.utils import CACHE_DIR
 from bigcodebench.eval import (
+    FAIL,
     PASS,
     compatible_eval_result,
     estimate_pass_at_k,
@@ -57,7 +58,7 @@ def get_groundtruth(subset, n_workers, problems, hashcode, check_gt_only, max_as
         
         for problem in problems.values():
             if subset == "tool":
-                code = problem["canonical_solution"]
+                code = problem["positive_tool_implementation"] + "\n" + problem["code_before_entry_point"] + "\n" + problem["canonical_solution"]
             else:
                 code = problem["code_prompt"] + "\n" + problem["canonical_solution"]
             args = (
@@ -119,8 +120,9 @@ def check_correctness(
         if split in ["positive", "mixed"]:
             ret["used_tools"] = (set(used_tools) == set(problem["used_tools"]))
         else:
-            assert split == "negative"
-            ret["used_tools"] = (set(used_tools) == {"refusal_func"})
+            ret["used_tools"] = False
+    else:
+        ret["used_tools"] = False
 
     return ret
 
@@ -195,6 +197,30 @@ def evaluate(flags):
                     )
                     continue
                 
+                # Skip execution for empty solutions
+                if not sample["solution"]:
+                    
+                    if flags.subset == "tool" and flags.split == "negative":
+                        eval_results[task_id].append({
+                            "completion_id": completion_id[task_id],
+                            "task_id": task_id,
+                            "_identifier": sample["_identifier"],
+                            "solution": sample["solution"],
+                            "used_tools": False,
+                            "base": (FAIL, "No refusal") if "There is no solution can be found based on the provided helper functions." not in sample["solution"] else (PASS, "")
+                            })
+                    else:
+                        eval_results[task_id].append({
+                            "completion_id": completion_id[task_id],
+                            "task_id": task_id,
+                            "_identifier": sample["_identifier"],
+                            "solution": sample["solution"],
+                            "used_tools": False,
+                            "base": (FAIL, "Empty solution")
+                        })
+                    completion_id[task_id] += 1
+                    n_samples += 1
+                
                 if flags.subset == "tool":
                     solution = (sample["solution"]  
                                 if "solution" in sample
@@ -217,19 +243,6 @@ def evaluate(flags):
                     )
                     if "sanitized-calibrated" in flags.samples:
                         solution = problems[task_id]["code_prompt"] + "\n    pass\n" + solution
-            
-                # Skip execution for empty solutions
-                if not solution:
-                    eval_results[task_id].append({
-                        "completion_id": completion_id[task_id],
-                        "task_id": task_id,
-                        "_identifier": sample["_identifier"],
-                        "solution": solution,
-                        "base": (FAIL, "Empty solution")
-                    })
-                    completion_id[task_id] += 1
-                    n_samples += 1
-                    continue
         
                 remainings.add(sample["_identifier"])
                 args = (
@@ -276,31 +289,20 @@ def evaluate(flags):
             results["eval"][task_id] = []
             for res in task_results:
                 stat, details = res["base"]
-                if flags.subset == "tool":
-                    tool_use = res["used_tools"]
-                    results["eval"][task_id].append(
-                        {
-                            "task_id": task_id,
-                            "solution": res["solution"],
-                            "status": stat,
-                            "details": details,
-                            "tool_use": tool_use,
-                        }
-                    )
-                else:
-                    results["eval"][task_id].append(
-                        {
-                            "task_id": task_id,
-                            "solution": res["solution"],
-                            "status": stat,
-                            "details": details,
-                        }
-                    )
+                tool_use = res["used_tools"]
+                results["eval"][task_id].append(
+                    {
+                        "task_id": task_id,
+                        "solution": res["solution"],
+                        "status": stat,
+                        "details": details,
+                        "tool_use": tool_use,
+                    }
+                )
 
     # Calculate pass@k.
     total = np.array([len(r) for k, r in results["eval"].items() if k in problems])
     base_correct = []
-
     for key, res in results["eval"].items():
         if key not in problems:
             continue
@@ -315,7 +317,7 @@ def evaluate(flags):
         if total.min() >= k
     }
     
-    if flags.subset == "tool":
+    if flags.subset == "tool" and flags.split != "negative":
         tool_correct = []
         syntax_correct = []
         
@@ -325,11 +327,10 @@ def evaluate(flags):
             tc = sum([r["tool_use"] for r in res])
             tool_correct.append(tc)
         
-        for key, res in results["eval"].items():
-            if key not in problems:
+        for sample in load_solutions(flags.samples):
+            if sample["task_id"] not in problems:
                 continue
-            empty_solutions = sum([r["solution"] for r in res])
-            syntax_correct.append(empty_solutions)
+            syntax_correct.append(sample["solution"] != "")
         
         tool_correct = np.array(tool_correct)
         syntax_correct = np.array(syntax_correct)
@@ -359,7 +360,7 @@ def evaluate(flags):
             cprint(f"Failed tasks: {failed_tasks}", "red")
     
     for k, v in pass_at_k.items():
-        cprint(f"{k}:\t{v*100:.2f}%", "green")
+        cprint(f"{k}: {v*100:.2f}%", "green")
 
     # save results
     if os.path.isfile(result_path):
