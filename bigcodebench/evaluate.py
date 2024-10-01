@@ -249,7 +249,7 @@ def evaluate(flags):
 
     pass_at_k = {
         f"pass@{k}": estimate_pass_at_k(total, base_correct, k).mean()
-        for k in [1, 5, 10, 25, 100]
+        for k in flags.pass_k
         if total.min() >= k
     }
     
@@ -327,6 +327,7 @@ def main():
     )
     parser.add_argument("--subset", default="hard", type=str, choices=["full", "hard"])
     parser.add_argument("--samples", required=True, type=str)
+    parser.add_argument("--pass_k", nargs='+', type=int, default=[1, 5, 10], help="List of k values to use, e.g., --pass_k 1 5 10")
     parser.add_argument("--save_pass_rate", action="store_true")
     parser.add_argument("--parallel", default=None, type=int)
     parser.add_argument("--min-time-limit", default=1, type=float)
