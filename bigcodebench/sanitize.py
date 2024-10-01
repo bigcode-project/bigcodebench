@@ -108,7 +108,7 @@ def has_return_statement(node: Node) -> bool:
     return False
 
 
-def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
+def extract_target_code_or_empty(code: str, entrypoint: Optional[str] = None) -> str:
     code = code_extract(code.strip())
     code_bytes = bytes(code, "utf8")
     parser = get_parser("python")
@@ -177,6 +177,13 @@ def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
     if outer_lines:
         sanitized_output = "\n".join(lines[: outer_lines[-1]])
     return sanitized_output
+
+
+def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
+    sanitized_code = extract_target_code_or_empty(code, entrypoint).strip()
+    if not sanitized_code:
+        return code_extract(code)
+    return sanitized_code
 
 
 def process_solution(

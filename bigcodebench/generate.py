@@ -4,6 +4,7 @@ import argparse
 
 from bigcodebench.model import DecoderBase, make_model
 from bigcodebench.data import get_bigcodebench, write_jsonl
+from bigcodebench.sanitize import sanitize
 from rich.progress import (
     BarColumn,
     MofNCompleteColumn,
@@ -23,6 +24,7 @@ def codegen(
     n_samples=1,
     id_range=None,
     resume=True,
+    batch_size: int=-1,
 ):
     with Progress(
         TextColumn(f"BigCodeBench--{split.capitalize()} ({subset.capitalize()}) •" + "[progress.percentage]{task.percentage:>3.0f}%"),
@@ -41,65 +43,81 @@ def codegen(
         dirname = os.path.dirname(save_path)
         if not os.path.exists(dirname) and dirname != "":
             os.makedirs(dirname)
+            
+        batch_prompts = []
+        batch_task_ids = []
+        batch_nsamples = []
+        batch_entry_points = []
+        
+        # Read existing data once if resuming
+        existing_data = {}
+        if resume and os.path.exists(save_path):
+            with open(save_path, "r") as f:
+                for line in f:
+                    item = json.loads(line)
+                    existing_data[item["task_id"]] = existing_data.get(item["task_id"], 0) + 1
+        
         for id_num, (task_id, task) in enumerate(p.track(dataset.items())):
             if id_range is not None:
                 low, high = id_range
-                if id_num < low or id_num >= high:
+                if id_num < low:
                     p.console.print(f"Skipping {task_id} as it is not in {id_range}")
                     continue
+                if id_num > id_range[1]:
+                    break
 
             p_name = task_id.replace("/", "_")
 
-            # read the existing file if save_path exists
-            if os.path.exists(save_path):
-                with open(save_path, "r") as f:
-                    existing_data = f.read().splitlines()
-            log = f"Codegen: {p_name} @ {model}"
-            n_existing = 0
-            if resume:
-                if os.path.exists(save_path):
-                    n_existing = len([1 for line in existing_data if json.loads(line)["task_id"] == task_id])
-                else:
-                    n_existing = 0
+            n_existing = existing_data.get(task_id, 0)
+            nsamples = n_samples - n_existing
+            
+            try:
+                prompt = task[f"{split}_prompt"]
+            except:
+                raise Exception(f"Invalid split {split} for bigcodebench-{subset}")
+            if strip_newlines:
+                prompt = prompt.strip("\n")
+            
+            if nsamples > 0:
+                batch_prompts.append(prompt)
+                batch_task_ids.append(task_id)
+                batch_nsamples.append(nsamples)
+                batch_entry_points.append(task["entry_point"])
+                
+                log = f"Codegen: {p_name} @ {model}"
                 if n_existing > 0:
                     log += f" (resuming from {n_existing})"
-
-            nsamples = n_samples - n_existing
-            p.console.print(log)
-
-            sidx = n_samples - nsamples
-            while sidx < n_samples:
-                try:
-                    prompt = task[f"{split}_prompt"]
-                except:
-                    raise Exception(f"Invalid split {split}")
-                if strip_newlines:
-                    prompt = prompt.strip("\n")
+                p.console.print(log)
+            
+            if (batch_size and len(batch_prompts) == batch_size) or id_num == len(dataset) - 1 or (id_range and id_num == id_range[1] - 1):
+                if not batch_prompts and id_num == len(dataset) - 1:
+                    break
                 outputs = model.codegen(
-                    prompt,
+                    batch_prompts,
                     do_sample=not greedy,
-                    num_samples=n_samples - sidx,
+                    num_samples=max(batch_nsamples),
                 )
                 assert outputs, "No outputs from model!"
-                if model.is_direct_completion():
-                    samples = [
-                        dict(
-                            task_id=task_id,
-                            solution=task["complete_prompt"]+completion
-                        )
-                        for task_id, completion in zip([task_id]*len(outputs), outputs)
-                    ]
-                else:
-                    samples = [
-                        dict(
-                            task_id=task_id,
-                            solution=completion,
-                        )
-                        for task_id, completion in zip([task_id]*len(outputs), outputs)
-                    ]
+                
+                samples = []
+                for task_id, content, entry_point, nsamples, task_outputs in zip(batch_task_ids, batch_prompts, batch_entry_points, batch_nsamples, outputs):
+                    if model.is_direct_completion():
+                        samples.extend([
+                            dict(task_id=task_id, solution=sanitize(content+completion, entry_point))
+                            for completion in task_outputs[:nsamples]
+                        ])
+                    else:
+                        samples.extend([
+                            dict(task_id=task_id, solution=sanitize(completion, entry_point))
+                            for completion in task_outputs[:nsamples]
+                        ])
                 print(f"Generated {len(samples)} samples")
                 write_jsonl(save_path, samples, append=True)
-                sidx += len(outputs)
+            
+                # Clear batches
+                batch_prompts = []
+                batch_task_ids = []
+                batch_nsamples = []
 
 
 def main():
@@ -113,6 +131,7 @@ def main():
     parser.add_argument("--temperature", default=0.0, type=float)
     parser.add_argument("--greedy", action="store_true")
     parser.add_argument("--strip_newlines", action="store_true")
+    parser.add_argument("--direct_completion", action="store_true")
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--id_range", nargs=2, type=int)
     parser.add_argument("--backend", default="vllm", type=str, choices=["vllm", "hf", "openai", "mistral", "anthropic", "google"])
@@ -126,7 +145,6 @@ def main():
 
     if args.greedy or (args.temperature == 0 and args.n_samples == 1):
         args.temperature = 0
-        args.bs = 1
         args.n_samples = 1
         args.greedy = True
         print("Greedy decoding ON (--greedy): setting bs=1, n_samples=1, temperature=0")
@@ -140,18 +158,20 @@ def main():
     model_runner = make_model(
         model=args.model,
         backend=args.backend,
-        batch_size=args.bs,
+        subset=args.subset,
+        split=args.split,
         temperature=args.temperature,
         base_url=args.base_url,
         tp=args.tp,
         trust_remote_code=args.trust_remote_code,
+        direct_completion=args.direct_completion,
         tokenizer_name=args.tokenizer_name,
         tokenizer_legacy=args.tokenizer_legacy
     )
     
     extra = "-" + args.subset if args.subset != "full" else ""
     if not args.save_path:
-        save_path = args.model.replace("/", "--") + f"--bigcodebench{extra}-{args.split}--{args.backend}-{args.temperature}-{args.n_samples}.jsonl"
+        save_path = args.model.replace("/", "--") + f"--bigcodebench{extra}-{args.split}--{args.backend}-{args.temperature}-{args.n_samples}-sanitized_calibrated.jsonl"
     else:
         save_path = args.save_path
 
@@ -164,7 +184,8 @@ def main():
         strip_newlines=args.strip_newlines,
         n_samples=args.n_samples,
         resume=args.resume,
-        id_range=args.id_range
+        id_range=args.id_range,
+        batch_size=args.bs
     )
 
 
