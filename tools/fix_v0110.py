@@ -25,6 +25,29 @@ def map_ds(sample):
                             "Requirements:\n    - sklearn.ensemble\n",
                             "Requirements:\n    - pandas\n    - sklearn.ensemble\n"    
                 )
+    if sample["task_id"] in ["BigCodeBench/211"]:
+        sample['test'] = sample['test'].replace(
+"""
+        mock_response = MagicMock()
+        mock_response.content = MOCK_CONTENT
+""",
+"""
+        mock_response = MagicMock()
+        mock_response.content = MOCK_CONTENT
+        mock_response.status_code = 200
+"""
+        )
+
+    if sample["task_id"] in ["BigCodeBench/215"]:
+        sample['test'] = sample['test'].replace(
+"""
+        mock_response = Mock()
+""",
+"""
+        mock_response = Mock()
+        mock_response.status_code = 200
+"""
+        )
     
     if sample["task_id"] in ["BigCodeBench/241"]:
         for k in sample.keys():
@@ -50,7 +73,7 @@ if __name__ == "__main__":
     hard_ds_dict = load_dataset(BIGCODEBENCH_HARD_HF)
     ds = ds_dict[BIGCODEBENCH_VERSION]
     hard_ds = hard_ds_dict[BIGCODEBENCH_VERSION]
-    function_id = [16, 37, 241, 267]
+    function_id = [16, 37, 211, 215, 241, 267]
     
     new_ds = ds.map(map_ds)
     new_ds.to_json("BigCodeBench.jsonl")
