@@ -46,8 +46,7 @@
 
 ### BigCodeBench
 
-BigCodeBench is an **_easy-to-use_** benchmark for code generation with **_practical_** and **_challenging_** programming tasks. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more complex instructions and diverse function calls.
-To facilitate the evaluation of LLMs on BigCodeBench, we provide this Python package `bigcodebench` that includes the dataset, generation scripts, and evaluation scripts. The package is built on top of the [EvalPlus](https://github.com/evalplus/evalplus) framework, which is a flexible and extensible evaluation framework for code generation tasks.
+BigCodeBench is an **_easy-to-use_** benchmark for solving **_practical_** and **_challenging_** tasks via code. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more complex instructions and diverse function calls.
 
 ### Why BigCodeBench?
 
