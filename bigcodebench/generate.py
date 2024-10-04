@@ -3,7 +3,7 @@ import json
 import argparse
 from typing import Optional, Tuple
 
-from bigcodebench.model import DecoderBase, make_model
+from bigcodebench.provider import DecoderBase, make_model
 from bigcodebench.data import get_bigcodebench, write_jsonl
 from bigcodebench.sanitize import sanitize
 from rich.progress import (
