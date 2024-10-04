@@ -1,6 +1,7 @@
 import os
 import json
 import argparse
+from typing import Optional, Tuple
 
 from bigcodebench.model import DecoderBase, make_model
 from bigcodebench.data import get_bigcodebench, write_jsonl
@@ -16,7 +17,7 @@ from rich.progress import (
 
 def codegen(
     model: DecoderBase,
-    save_path: str,
+    target_path: str,
     split: str,
     subset="full",
     greedy=False,
@@ -39,8 +40,8 @@ def codegen(
         if model.is_direct_completion() and split == "instruct":
             raise Exception("Base model does not support direct completion for instruct tasks")
         
-        # create save_path if it doesn't exist, e.g., a/b.jsonl
-        dirname = os.path.dirname(save_path)
+        # create target_path if it doesn't exist, e.g., a/b.jsonl
+        dirname = os.path.dirname(target_path)
         if not os.path.exists(dirname) and dirname != "":
             os.makedirs(dirname)
             
@@ -51,8 +52,8 @@ def codegen(
         
         # Read existing data once if resuming
         existing_data = {}
-        if resume and os.path.exists(save_path):
-            with open(save_path, "r") as f:
+        if resume and os.path.exists(target_path):
+            with open(target_path, "r") as f:
                 for line in f:
                     item = json.loads(line)
                     existing_data[item["task_id"]] = existing_data.get(item["task_id"], 0) + 1
@@ -103,16 +104,17 @@ def codegen(
                 for task_id, content, entry_point, nsamples, task_outputs in zip(batch_task_ids, batch_prompts, batch_entry_points, batch_nsamples, outputs):
                     if model.is_direct_completion():
                         samples.extend([
-                            dict(task_id=task_id, solution=sanitize(content+completion, entry_point))
+                            dict(task_id=task_id, solution=sanitize(content+completion, entry_point), raw_solution=content+completion)
                             for completion in task_outputs[:nsamples]
                         ])
                     else:
                         samples.extend([
-                            dict(task_id=task_id, solution=sanitize(completion, entry_point))
+                            dict(task_id=task_id, solution=sanitize(completion, entry_point), raw_solution=completion)
                             for completion in task_outputs[:nsamples]
                         ])
+
                 print(f"Generated {len(samples)} samples")
-                write_jsonl(save_path, samples, append=True)
+                write_jsonl(target_path, samples, append=True)
             
                 # Clear batches
                 batch_prompts = []
@@ -120,73 +122,77 @@ def codegen(
                 batch_nsamples = []
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--model", required=True, type=str)
-    parser.add_argument("--split", required=True, type=str, choices=["complete", "instruct"])
-    parser.add_argument("--subset", default="full", type=str, choices=["full", "hard"])
-    parser.add_argument("--save_path", default=None, type=str)
-    parser.add_argument("--bs", default=1, type=int)
-    parser.add_argument("--n_samples", default=1, type=int)
-    parser.add_argument("--temperature", default=0.0, type=float)
-    parser.add_argument("--greedy", action="store_true")
-    parser.add_argument("--strip_newlines", action="store_true")
-    parser.add_argument("--direct_completion", action="store_true")
-    parser.add_argument("--resume", action="store_true")
-    parser.add_argument("--id_range", nargs=2, type=int)
-    parser.add_argument("--backend", default="vllm", type=str, choices=["vllm", "hf", "openai", "mistral", "anthropic", "google"])
-    parser.add_argument("--base_url", default=None, type=str)
-    parser.add_argument("--tp", default=1, type=int)
-    parser.add_argument("--trust_remote_code", action="store_true")
-    parser.add_argument("--tokenizer_legacy", action="store_true")
-    parser.add_argument("--tokenizer_name", default=None, type=str)
+def run_codegen(
+    model: str,
+    split: str,
+    subset: str,
+    root: str = "bcb_results",
+    bs: Optional[int] = None,
+    n_samples: int = 1,
+    temperature: float = 0.0,
+    greedy: bool = False,
+    strip_newlines: bool = False,
+    direct_completion: bool = False,
+    resume: bool = True,
+    id_range: Tuple[int, int] = None,
+    backend: str = "vllm",
+    base_url: str = None,
+    tp: int = 1,
+    trust_remote_code: bool = False,
+    tokenizer_name: str = None,
+    tokenizer_legacy: bool = False,
+):
 
-    args = parser.parse_args()
-
-    if args.greedy or (args.temperature == 0 and args.n_samples == 1):
-        args.temperature = 0
-        args.n_samples = 1
-        args.greedy = True
+    if greedy or (temperature == 0 and n_samples == 1):
+        temperature = 0
+        n_samples = 1
+        greedy = True
         print("Greedy decoding ON (--greedy): setting bs=1, n_samples=1, temperature=0")
 
-    if args.id_range is not None:
-        assert len(args.id_range) == 2, "id_range must be a list of length 2"
-        assert args.id_range[0] < args.id_range[1], "id_range must be increasing"
-        args.id_range = tuple(args.id_range)
+    if id_range is not None:
+        assert len(id_range) == 2, "id_range must be a list of length 2"
+        assert id_range[0] < id_range[1], "id_range must be increasing"
+        id_range = tuple(id_range)
 
     # Make dir for codes generated by each model
     model_runner = make_model(
-        model=args.model,
-        backend=args.backend,
-        subset=args.subset,
-        split=args.split,
-        temperature=args.temperature,
-        base_url=args.base_url,
-        tp=args.tp,
-        trust_remote_code=args.trust_remote_code,
-        direct_completion=args.direct_completion,
-        tokenizer_name=args.tokenizer_name,
-        tokenizer_legacy=args.tokenizer_legacy
+        model=model,
+        backend=backend,
+        subset=subset,
+        split=split,
+        temperature=temperature,
+        base_url=base_url,
+        tp=tp,
+        trust_remote_code=trust_remote_code,
+        direct_completion=direct_completion,
+        tokenizer_name=tokenizer_name,
+        tokenizer_legacy=tokenizer_legacy
     )
     
-    extra = "-" + args.subset if args.subset != "full" else ""
-    if not args.save_path:
-        save_path = args.model.replace("/", "--") + f"--bigcodebench{extra}-{args.split}--{args.backend}-{args.temperature}-{args.n_samples}-sanitized_calibrated.jsonl"
-    else:
-        save_path = args.save_path
+    extra = "-" + subset if subset != "full" else ""
+    identifier = model.replace("/", "--") + f"--bigcodebench{extra}-{split}--{backend}-{temperature}-{n_samples}-sanitized_calibrated.jsonl"
+    
+    target_path = os.path.join(root, identifier)
 
     codegen(
         model=model_runner,
-        save_path=save_path,
-        split=args.split,
-        subset=args.subset,
-        greedy=args.greedy,
-        strip_newlines=args.strip_newlines,
-        n_samples=args.n_samples,
-        resume=args.resume,
-        id_range=args.id_range,
-        batch_size=args.bs
+        target_path=target_path,
+        split=split,
+        subset=subset,
+        greedy=greedy,
+        strip_newlines=strip_newlines,
+        n_samples=n_samples,
+        resume=resume,
+        id_range=id_range,
+        batch_size=bs
     )
+
+    return target_path
+
+
+def main():
+    from fire import Fire
+    Fire(run_codegen)
 
 
 if __name__ == "__main__":
