@@ -107,7 +107,7 @@ bigcodebench.evaluate \
 
 > [!Note]
 >
-> Remotely executing on BigCodeBench-Full typically takes 5-7 minutes, and on BigCodeBench-Hard typically takes 3-5 minutes.
+> Remotely executing on `BigCodeBench-Full` typically takes 5-7 minutes, and on `BigCodeBench-Hard` typically takes 3-5 minutes.
 
 > [!Note]
 >
