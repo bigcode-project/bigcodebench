@@ -16,25 +16,31 @@
 </p>
 
 <p align="center">
-    <a href="#-about">🌸About</a> •
-    <a href="#-quick-start">🔥Quick Start</a> •
-    <a href="#-failure-inspection">🔍Failure Inspection</a> •
-    <a href="#-full-script">🚀Full Script</a> •
-    <a href="#-result-analysis">📊Result Analysis</a> •
-    <a href="#-llm-generated-code">💻LLM-generated Code</a> •
-    <a href="#-known-issues">🐞Known Issues</a> •
-    <a href="#-citation">📜Citation</a> •
-    <a href="#-acknowledgement">🙏Acknowledgement</a>
+    <a href="#-news">📰 News</a> •
+    <a href="#-quick-start">🔥 Quick Start</a> •
+    <a href="#-remote-evaluation">🚀 Remote Evaluation</a> •
+    <a href="#-llm-generated-code">💻 LLM-generated Code</a> •
+    <a href="#-advanced-usage">📜 Advanced Usage</a> •
+    <a href="#-citation">🙏 Acknowledgement</a>
 </p>
 
-## News
+## 📰 News
+- **[2024-10-05]** We create a public code execution API on the Hugging Face space. 
+- **[2024-10-01]** We have evaluated 139 models on BigCodeBench-Hard so far. Take a look at the [leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard)!
 - **[2024-08-19]** To make the evaluation fully reproducible, we add a real-time code execution session to the leaderboard. It can be viewed [here](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
 - **[2024-08-02]** We release `bigcodebench==v0.1.9`.
+
+<details><summary>More News <i>:: click to expand ::</i></summary>
+<div>
+
 - **[2024-07-18]** We announce a subset of BigCodeBench, BigCodeBench-Hard, which includes 148 tasks that are more aligned with the real-world programming tasks. The details are available [in this blog post](https://huggingface.co/blog/terryyz/bigcodebench-hard). The dataset is available [here](https://huggingface.co/datasets/bigcode/bigcodebench-hard). The new release is `bigcodebench==v0.1.8`.
 - **[2024-06-28]** We release `bigcodebench==v0.1.7`.
 - **[2024-06-27]** We release `bigcodebench==v0.1.6`.
 - **[2024-06-19]** We start the Hugging Face BigCodeBench Leaderboard! The leaderboard is available [here](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
 - **[2024-06-18]** We release BigCodeBench, a new benchmark for code generation with 1140 software-engineering-oriented programming tasks. Preprint is available [here](https://arxiv.org/abs/2406.15877). PyPI package is available [here](https://pypi.org/project/bigcodebench/) with the version `0.1.5`.
+
+</div>
+</details>
 
 ## 🌸 About
 
@@ -45,7 +51,7 @@ To facilitate the evaluation of LLMs on BigCodeBench, we provide this Python pac
 
 ### Why BigCodeBench?
 
-BigCodeBench focuses on the evaluation of LLM4Code with *diverse function calls* and *complex instruction*, with:
+BigCodeBench focuses on task automation via code generation with *diverse function calls* and *complex instructions*, with:
 
 * ✨ **Precise evaluation & ranking**: See [our leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard) for latest LLM rankings before & after rigorous evaluation.
 * ✨ **Pre-generated samples**: BigCodeBench accelerates code intelligence research by open-sourcing [LLM-generated samples](#-LLM-generated-code) for various models -- no need to re-run the expensive benchmarks!
@@ -60,297 +66,77 @@ BigCodeBench focuses on the evaluation of LLM4Code with *diverse function calls*
 To get started, please first set up the environment:
 
 ```bash
-# Install to use bigcodebench.evaluate
-pip install bigcodebench --upgrade
-# If you want to use the evaluate locally, you need to install the requirements
-pip install -I -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/main/Requirements/requirements-eval.txt
-
-# Install to use bigcodebench.generate
-# You are strongly recommended to install the generate dependencies in a separate environment
+# By default, you will use the remote evaluation API to execute the output samples.
 pip install bigcodebench[generate] --upgrade
+
+# You are suggested to use `flash-attn` for generating code samples.
+pip install packaging ninja
+pip install flash-attn --no-build-isolation
+# Note: if you have installation problem, consider using pre-built
+# wheels from https://github.com/Dao-AILab/flash-attention/releases
 ```
 
 <details><summary>⏬ Install nightly version <i>:: click to expand ::</i></summary>
 <div>
 
 ```bash
-# Install to use bigcodebench.evaluate
-pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
-```
-
-</div>
-</details>
-
-<details><summary>⏬ Using BigCodeBench as a local repo? <i>:: click to expand ::</i></summary>
-<div>
-
-```bash
-git clone https://github.com/bigcode-project/bigcodebench.git
-cd bigcodebench
-export PYTHONPATH=$PYTHONPATH:$(pwd)
-# Install to use bigcodebench.evaluate
-pip install -e .
 # Install to use bigcodebench.generate
-pip install -e .[generate]
+pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcodebench[generate]" --upgrade
 ```
 
 </div>
 </details>
 
-### Code Generation
 
-You are suggested to use `flash-attn` for generating code samples.
+## 🚀 Remote Evaluation
+
+We use the greedy decoding as an example to show how to evaluate the generated code samples via remote API.
+
 ```bash
-pip install -U flash-attn
+bigcodebench.evaluate \
+  --model meta-llama/Meta-Llama-3.1-8B-Instruct \
+  --split [complete|instruct] \
+  --subset [full|hard] \
+  --backend [vllm|openai|anthropic|google|mistral|hf] \
+  --tp [TENSOR_PARALLEL_SIZE] \
+  --greedy
 ```
-
-To generate code samples from a model, you can use the following command:
->
-```bash
-# when greedy, there is no need for temperature and n_samples
-bigcodebench.generate \
-    --model [model_name] \
-    --split [complete|instruct] \
-    --subset [full|hard] \
-    [--greedy] \
-    --bs [bs] \
-    --temperature [temp] \
-    --n_samples [n_samples] \
-    --resume \
-    --backend [vllm|hf|openai|mistral|anthropic|google] \
-    --tp [gpu_number] \
-    [--trust_remote_code] \
-    [--base_url [base_url]] \
-    [--tokenizer_name [tokenizer_name]]
-```
->
-The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
->
-```bash
-# If you are using GPUs
-docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest \
-    --model [model_name] \ 
-    --split [complete|instruct] \
-    --subset [full|hard] \
-    [--greedy] \
-    --bs [bs] \   
-    --temperature [temp] \
-    --n_samples [n_samples] \
-    --resume \
-    --backend [vllm|hf|openai|mistral|anthropic|google] \
-    --tp [gpu_number]
-
-# ...Or if you are using CPUs
-docker run -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest \
-    --model [model_name] \ 
-    --split [complete|instruct] \
-    --subset [full|hard] \
-    [--greedy] \
-    --bs [bs] \   
-    --temperature [temp] \
-    --n_samples [n_samples] \
-    --resume \
-    --backend [vllm|hf|openai|mistral|anthropic|google]
-```
->
-```bash
-# If you wish to use gated or private HuggingFace models and datasets
-docker run -e HUGGING_FACE_HUB_TOKEN=$token -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest # omit other arguments4
-
-# Similarly, to use other backends that require authentication
-docker run -e OPENAI_API_KEY=$OPENAI_API_KEY -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest # omit other arguments
-docker run -e GOOGLE_API_KEY=$OPENAI_API_KEY -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest # omit other arguments
-docker run -e ANTHROPIC_KEY=$ANTHROPIC_KEY -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest # omit other arguments
-```
->
-Following which, you can run the built container as shown in above.
->
-<details><summary>🤔 Structure of `problem`? <i>:: click to expand ::</i></summary>
-<div>
-
-* `task_id` is the identifier string for the task
-* `entry_point` is the name of the function
-* `complete_prompt` is the prompt for BigCodeBench-Complete
-* `instruct_prompt` is the prompt for BigCodeBench-Instruct
-+ `canonical_solution` is the ground-truth implementation
-+ `test` is the `unittest.TestCase` class
-
-</div>
-</details>
+- The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated.jsonl`.
+- The evaluation results will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated_eval_results.json`.
+- The pass@k results will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated_pass_at_k.json`.
 
 > [!Note]
 >
-> **Expected Schema of `[model_name]--bigcodebench-[task]--[backend]-[temp]-[n_samples].jsonl`**
+> Remotely executing on BigCodeBench-Full typically takes 5-7 minutes, and on BigCodeBench-Hard typically takes 3-5 minutes.
+
+> [!Note]
 >
-> 1. `task_id`: Task ID, which are the keys of `get_bigcodebench()`
-> 2. `solution` (optional): Self-contained solution (usually including the prompt)
->    * Example: `{"task_id": "BigCodeBench/?", "solution": "def f():\n    return 1"}`
-
-### Code Post-processing
-
-LLM-generated text may not be compilable code for including natural language lines or incomplete extra code.
-We provide a tool namely `bigcodebench.sanitize` to clean up the code:
-
-```bash
-# 💡 If you want to get the calibrated results:
-bigcodebench.sanitize --samples samples.jsonl --calibrate
-# Sanitized code will be produced to `samples-sanitized-calibrated.jsonl`
-
-# 💡 Optionally run the sanitization step with multiprocessing to speedup
-bigcodebench.sanitize --samples samples.jsonl --calibrate --parallel 8
-
-# 💡 If you want to get the original results:
-bigcodebench.sanitize --samples samples.jsonl
-# Sanitized code will be produced to `samples-sanitized.jsonl`
-
-# 💡 If you are storing codes in directories:
-bigcodebench.sanitize --samples /path/to/vicuna-[??]b_temp_[??]
-# Sanitized code will be produced to `/path/to/vicuna-[??]b_temp_[??]-sanitized`
-```
-
-If you want to use the pre-built docker images for post-processing, you can use the following command:
-
-```bash
-# Change the entrypoint to bigcodebench.sanitize in any pre-built docker image, like bigcodebench/bigcodebench-evaluate:latest
-docker run -it --entrypoint bigcodebench.sanitize -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --samples samples.jsonl
-```
-
-<details><summary>🔎 Checking the compatibility of post-processed code<i>:: click to expand ::</i></summary>
-<div>
-
-To double-check the post-processing results, you can use `bigcodebench.syncheck` to check the code validity before and after sanitization, which will print erroneous code snippets and why they are wrong:
-
-```bash
-# 💡 If you are storing codes in jsonl:
-bigcodebench.syncheck --samples samples.jsonl
-
-# 💡 If you are storing codes in directories:
-bigcodebench.syncheck --samples /path/to/vicuna-[??]b_temp_[??]
-
-# 💡 Or change the entrypoint to bigcodebench.syncheck in any pre-built docker image, like 
-docker run -it --entrypoint bigcodebench.syncheck -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --samples samples.jsonl
-```
-
-</div>
-</details>
-
-
-### Code Evaluation
-
-You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
-
-```bash
-# Mount the current directory to the container
-# If you want to change the RAM address space limit (in MB, 30 GB by default): `--max-as-limit XXX`
-# If you want to change the RAM data segment limit (in MB, 30 GB by default): `--max-data-limit`
-# If you want to change the RAM stack limit (in MB, 10 MB by default): `--max-stack-limit`
-# If you want to increase the execution time limit (in seconds, 240 seconds by default): `--min-time-limit`
-docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
-
-# If you only want to check the ground truths
-docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --check-gt-only
-```
-
-...Or if you want to try it locally regardless of the risks ⚠️:
-
-First, install the dependencies for BigCodeBench:
-
-```bash
-pip install -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/main/Requirements/requirements-eval.txt
-```
-
-Then, run the evaluation:
-
-```bash
-# ...Or locally ⚠️
-bigcodebench.evaluate --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
-# ...If you really don't want to check the ground truths
-bigcodebench.evaluate --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --no-gt
-# If you want to save the pass rate to a file
-bigcodebench.evaluate --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --save_pass_rate
-
-# You are strongly recommended to use the following command to clean up the environment after evaluation:
-pids=$(ps -u $(id -u) -o pid,comm | grep 'bigcodebench' | awk '{print $1}'); if [ -n \"$pids\" ]; then echo $pids | xargs -r kill; fi;
-rm -rf /tmp/*
-```
-
-> [!Tip]
+> BigCodeBench uses different prompts for base and chat models.
+> By default it is detected by `tokenizer.chat_template` when using `hf`/`vllm` as backend.
+> For other backends, only chat mode is allowed.
 >
-> Do you use a very slow machine?
->
-> LLM solutions are regarded as **failed** on timeout (and OOM etc.).
-> Specifically, we set the dynamic timeout based on the ground-truth solution's runtime.
->
-> Additionally, you are **NOT** encouraged to make your test-bed over stressed while running evaluation.
-> For example, using `--parallel 64` on a 4-core machine or doing something else during evaluation are bad ideas...
+> Therefore, if your base models come with a `tokenizer.chat_template`,
+> please add `--direct_completion` to avoid being evaluated
+> in a chat mode.
 
-<details><summary>⌨️ More command-line flags <i>:: click to expand ::</i></summary>
-<div>
-
-* `--parallel`: by default half of the cores
-
-</div>
-</details>
-
-The output should be like (below is GPT-4 greedy decoding example):
-
-```
-Asserting the groundtruth...
-Expected outputs computed in 1200.0 seconds
-Reading samples...
-1140it [00:00, 1901.64it/s]
-Evaluating samples...
-100%|██████████████████████████████████████████| 1140/1140 [19:53<00:00, 6.75it/s]
-BigCodeBench-Instruct-calibrated
-Groundtruth pass rate: 1.000
-pass@1: 0.568
+Access OpenAI APIs from [OpenAI Console](https://platform.openai.com/)
+```bash
+export OPENAI_API_KEY=<your_openai_api_key>
 ```
 
-- The "k" includes `[1, 5, 10]` where k values `<=` the sample size will be used
-- A cache file named like `samples_eval_results.json` will be cached. Remove it to re-run the evaluation
-
-<details><summary>🤔 How long it would take? <i>:: click to expand ::</i></summary>
-<div>
-
-If you do greedy decoding where there is only one sample for each task, the evaluation should take just a few minutes on Intel(R) Xeon(R) Gold 6150 CPU @ 2.70GHz, composed of 2 sockets, with 18 cores per socket. However, if you have multiple samples for each task, the evaluation will take longer.
-Here are some tips to speed up the evaluation:
-
-* Use `--parallel $(nproc)`
-* Use our pre-evaluated results (see [LLM-generated code](#-LLM-generated-code))
-
-</div>
-</details>
-
-## 🔍 Failure Inspection
-
-You can inspect the failed samples by using the following command:
-
+Access Anthropic APIs from [Anthropic Console](https://console.anthropic.com/)
 ```bash
-# Inspect the failed samples and save the results to `inspect/`
-bigcodebench.inspect --eval_results sample-sanitized-calibrated_eval_results.json --split complete --subset hard
-
-# Re-run the inspection in place
-bigcodebench.inspect --eval_results sample-sanitized-calibrated_eval_results.json --split complete --subset hard --in_place
+export ANTHROPIC_API_KEY=<your_anthropic_api_key>
 ```
 
-## 🚀 Full Script
-
-We provide a sample script to run the full pipeline:
-
+Access Mistral APIs from [Mistral Console](https://console.mistral.ai/)
 ```bash
-bash run.sh
+export MISTRAL_API_KEY=<your_mistral_api_key>
 ```
 
-## 📊 Result Analysis
-
-We provide a script to replicate the analysis like Elo Rating and Task Solve Rate, which helps you understand the performance of the models further.
-
+Access Gemini APIs from [Google AI Studio](https://aistudio.google.com/)
 ```bash
-To run the analysis, you need to put all the `samples_eval_results.json` files in a `results` folder, which is in the same directory as the script.
-
-```bash
-cd analysis
-python get_results.py
+export GOOGLE_API_KEY=<your_google_api_key>
 ```
 
 ## 💻 LLM-generated Code
@@ -358,15 +144,9 @@ python get_results.py
 We share pre-generated code samples from LLMs we have [evaluated](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard):
 *  See the attachment of our [v0.1.5](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.1.5). We include both `sanitized_samples.zip` and `sanitized_samples_calibrated.zip` for your convenience.
 
-## 🐞 Known Issues
+## Advanced Usage
 
-- [ ] Due to [the Hugging Face tokenizer update](https://github.com/huggingface/transformers/pull/31305), some tokenizers may be broken and will degrade the performance of the evaluation. Therefore, we set up with `legacy=False` for the initialization. If you notice the unexpected behaviors, please try `--tokenizer_legacy` during the generation.
-
-- [ ] Due to the flakiness in the evaluation, the execution results may vary slightly (~0.2% for Full set, and ~0.6% for Hard set) between runs. We are working on improving the evaluation stability.
-
-- [x] You may get errors like `ImportError: /usr/local/lib/python3.10/site-packages/matplotlib/_c_internal_utils.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object` when running the evaluation. This is due to the memory limit of the docker container. You can increase the memory limit of the docker container to solve this issue. If the issue persists ,please use the real-time code execution session to evaluate the code in the [leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
-
-- [x] ~~We are aware of the issue of some users needing to use a proxy to access the internet. We are working on a subset of the tasks that do not require internet access to evaluate the code.~~ Please use the real-time code execution session to evaluate the code in the [leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
+Please refer to the [ADVANCED USAGE](https://github.com/bigcode-project/bigcodebench/blob/main/ADVANCED_USAGE.md) for more details.
 
 ## 📜 Citation
 
