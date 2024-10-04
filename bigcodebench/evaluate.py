@@ -115,7 +115,7 @@ def evaluate(
     split: str,
     subset: str,
     samples: Optional[str] = None,
-    remote_execute: bool = True,
+    local_execute: bool = False,
     remote_execute_api: str = "https://bigcode-bigcodebench-evaluator.hf.space/",
     pass_k: str = "1,5,10",
     save_pass_rate: bool = True,
@@ -135,16 +135,14 @@ def evaluate(
             **model_kwargs,
         )
     assert samples is not None, "No samples provided"
-    
-    extra = subset + "_" if subset != "full" else ""
-    
+        
     if os.path.isdir(samples):
-        result_path = os.path.join(samples, f"{extra}eval_results.json")
+        result_path = os.path.join(samples, "eval_results.json")
     else:
         assert samples.endswith(".jsonl")
-        result_path = samples.replace(".jsonl", f"_{extra}eval_results.json")
+        result_path = samples.replace(".jsonl", "_eval_results.json")
     
-    if remote_execute:
+    if not local_execute:
         
         client = Client(remote_execute_api)
         results, pass_at_k = client.predict(
@@ -351,7 +349,7 @@ def evaluate(
             json.dump(results, f, indent=2)
 
     if save_pass_rate:
-        pass_at_k_path = result_path.replace("_eval_results.json", "_pass_at_k.json")
+        pass_at_k_path = result_path.replace("eval_results.json", "pass_at_k.json")
 
         if os.path.isfile(pass_at_k_path):
             saved_pass_at_k = json.load(open(pass_at_k_path, "r"))
