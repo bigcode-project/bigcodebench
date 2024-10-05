@@ -20,8 +20,7 @@
     <a href="#-quick-start">🔥 Quick Start</a> •
     <a href="#-remote-evaluation">🚀 Remote Evaluation</a> •
     <a href="#-llm-generated-code">💻 LLM-generated Code</a> •
-    <a href="#-advanced-usage">📜 Advanced Usage</a> •
-    <a href="#-citation">🙏 Acknowledgement</a>
+    <a href="#-citation">📜 Citation</a>
 </p>
 
 ## 📰 News
