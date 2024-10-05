@@ -127,7 +127,8 @@ def evaluate(
     check_gt_only: bool = False,
     no_gt: bool = False,
     **model_kwargs,
-):
+):  
+    
     if not samples and model_kwargs:
         samples = run_codegen(
             split=split,
@@ -164,7 +165,7 @@ def evaluate(
         
     else:
         
-        pass_k = [int(k.strip()) for k in pass_k.split(',') if k.strip().isdigit()]
+        pass_k = [int(k) for k in pass_k.split(",")]
         
         if parallel is None:
             n_workers = max(1, multiprocessing.cpu_count() // 2)

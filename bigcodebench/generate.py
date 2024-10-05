@@ -19,13 +19,13 @@ def codegen(
     model: DecoderBase,
     target_path: str,
     split: str,
-    subset="full",
-    greedy=False,
-    strip_newlines=False,
-    n_samples=1,
-    id_range=None,
-    resume=True,
-    batch_size: int=-1,
+    subset: str,
+    greedy: bool = False,
+    strip_newlines: bool = False,
+    n_samples: int = 1,
+    id_range: Tuple[int, int] = None,
+    resume: bool = True,
+    batch_size: int = -1,
 ):
     with Progress(
         TextColumn(f"BigCodeBench--{split.capitalize()} ({subset.capitalize()}) •" + "[progress.percentage]{task.percentage:>3.0f}%"),
@@ -51,12 +51,12 @@ def codegen(
         batch_entry_points = []
         
         # Read existing data once if resuming
-        existing_data = {}
+        task2nexist = {}
         if resume and os.path.exists(target_path):
             with open(target_path, "r") as f:
                 for line in f:
                     item = json.loads(line)
-                    existing_data[item["task_id"]] = existing_data.get(item["task_id"], 0) + 1
+                    task2nexist[item["task_id"]] = task2nexist.get(item["task_id"], 0) + 1
         
         for id_num, (task_id, task) in enumerate(p.track(dataset.items())):
             if id_range is not None:
@@ -69,7 +69,7 @@ def codegen(
 
             p_name = task_id.replace("/", "_")
 
-            n_existing = existing_data.get(task_id, 0)
+            n_existing = task2nexist.get(task_id, 0)
             nsamples = n_samples - n_existing
             
             try:
@@ -91,7 +91,7 @@ def codegen(
                 p.console.print(log)
             
             if (batch_size and len(batch_prompts) == batch_size) or id_num == len(dataset) - 1 or (id_range and id_num == id_range[1] - 1):
-                if not batch_prompts and id_num == len(dataset) - 1:
+                if not batch_prompts and (id_num == len(dataset) - 1 or (id_range and id_num == id_range[1] - 1)):
                     break
                 outputs = model.codegen(
                     batch_prompts,
@@ -130,6 +130,7 @@ def run_codegen(
     bs: Optional[int] = None,
     n_samples: int = 1,
     temperature: float = 0.0,
+    max_new_tokens: int = 1280,
     greedy: bool = False,
     strip_newlines: bool = False,
     direct_completion: bool = False,
@@ -147,7 +148,7 @@ def run_codegen(
         temperature = 0
         n_samples = 1
         greedy = True
-        print("Greedy decoding ON (--greedy): setting bs=1, n_samples=1, temperature=0")
+        print("Greedy decoding ON (--greedy): setting n_samples=1, temperature=0")
 
     if id_range is not None:
         assert len(id_range) == 2, "id_range must be a list of length 2"
@@ -167,6 +168,7 @@ def run_codegen(
         subset=subset,
         split=split,
         temperature=temperature,
+        max_new_tokens=max_new_tokens,
         instruction_prefix=instruction_prefix,
         response_prefix=response_prefix,
         base_url=base_url,
@@ -181,7 +183,10 @@ def run_codegen(
     identifier = model.replace("/", "--") + f"--bigcodebench{extra}-{split}--{backend}-{temperature}-{n_samples}-sanitized_calibrated.jsonl"
     
     target_path = os.path.join(root, identifier)
-
+    
+    if not resume:
+        os.remove(target_path)
+    
     codegen(
         model=model_runner,
         target_path=target_path,
