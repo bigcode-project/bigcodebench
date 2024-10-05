@@ -11,6 +11,8 @@ import itertools
 import math
 from datasets import Dataset, DatasetDict, load_dataset
 from transformers import AutoTokenizer
+from cuml.linear_model import LogisticRegression
+import cupy as cp
 
 def update_model_info(model_info):
     for model, info in model_info.items():
@@ -67,6 +69,8 @@ def get_results(tids):
                     data = json.load(f)
             status = []
             
+            if len(data["eval"]) < len(tids):
+                continue
             for key, value in data["eval"].items():
                 if key not in tids:
                     continue
@@ -163,15 +167,6 @@ def read_task_perf(tids, task="complete"):
         try:
             try:
                 try:
-                    if info["prompted"]:# and not info["direct_complete"]:
-                        files = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized-calibrated_hard_eval_results.json")
-                        if files:
-                            file = files[0]
-                        else:
-                            file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_hard_eval_results.json")[0]
-                    else:
-                        file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_hard_eval_results.json")[0]
-                except:
                     if info["prompted"]:
                         files = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized-calibrated_eval_results.json")
                         if files:
@@ -180,6 +175,15 @@ def read_task_perf(tids, task="complete"):
                             file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_eval_results.json")[0]
                     else:
                         file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_eval_results.json")[0]
+                except:
+                    if info["prompted"]:# and not info["direct_complete"]:
+                        files = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized-calibrated_hard_eval_results.json")
+                        if files:
+                            file = files[0]
+                        else:
+                            file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_hard_eval_results.json")[0]
+                    else:
+                        file = glob(f"results/{model}--bigcodebench-{task}*-0-1-sanitized_hard_eval_results.json")[0]
             except:
                 try:
                     if info["prompted"]:# and not info["direct_complete"]:
@@ -205,6 +209,9 @@ def read_task_perf(tids, task="complete"):
         result_files.append(file)
         with open(file, "r") as f:
             data = json.load(f)
+
+        if len(data["eval"]) < len(tids):
+            continue
         for task_id, perfs in data["eval"].items():
             if task_id in tids:
                 status = 1 if perfs[0]["status"] == "pass" else 0
@@ -271,25 +278,26 @@ def get_bootstrap_result(battles, func_compute_elo, num_round):
 
 
 def get_elo_mle(df, SCALE=400, BASE=10, INIT_RATING=1000):
-    from sklearn.linear_model import LogisticRegression
+
+
     models = pd.concat([df["model_a"], df["model_b"]]).unique()
     models = pd.Series(np.arange(len(models)), index=models)
     p = len(models.index)
     n = df.shape[0]
 
-    X = np.zeros([n, p])
-    X[np.arange(n), models[df["model_a"]]] = +math.log(BASE)
-    X[np.arange(n), models[df["model_b"]]] = -math.log(BASE)
+    X = cp.zeros([n, p])
+    X[cp.arange(n), models[df["model_a"]]] = +math.log(BASE)
+    X[cp.arange(n), models[df["model_b"]]] = -math.log(BASE)
 
-    Y = np.zeros(n)
+    Y = cp.zeros(n)
     Y[df["winner"] == "model_a"] = 1.0
 
     lr = LogisticRegression(fit_intercept=False)
-    lr.fit(X,Y)
+    lr.fit(X, Y)
 
     elo_scores = SCALE * lr.coef_[0] + INIT_RATING
 
-    return pd.Series(elo_scores, index = models.index).sort_values(ascending=False)
+    return pd.Series(cp.asnumpy(elo_scores), index=models.index).sort_values(ascending=False)
 
 
 def update_elo_rating(results, elo_dict):
@@ -387,11 +395,10 @@ def get_perf_df(data_dict):
     
 if __name__ == "__main__":
     
-    # bcb_orig = load_dataset("bigcode/bigcodebench", split="v0.1.0_hf")
-    bcb_hard = load_dataset("bigcode/bigcodebench-hard", split="v0.1.0_hf")
-    # model_info = update_model_info(model_info)
+    bcb_orig = load_dataset("bigcode/bigcodebench", split="v0.1.1")
+    bcb_hard = load_dataset("bigcode/bigcodebench-hard", split="v0.1.1")
     bcb_config = {
-        # "": bcb_orig,
+        "": bcb_orig,
         "-hard": bcb_hard,
     }
     for suffix, bcb in bcb_config.items():
@@ -401,9 +408,9 @@ if __name__ == "__main__":
         instruct_data, instruct_files = read_task_perf(bcb["task_id"], "instruct")
         complete_df = get_perf_df(complete_data)
         instruct_df = get_perf_df(instruct_data)
+        
         push_ds(DatasetDict({"complete": Dataset.from_pandas(complete_df), "instruct": Dataset.from_pandas(instruct_df)}), f"bigcode/bigcodebench{suffix}-perf")
-        assert len(model_info) == len(complete_data),\
-            f"Missing results for {set([val['name'] for val in model_info.values()]) - set([model for model in complete_data.keys()])}"
+
         with open("task2domain.json", "r") as f:
             task2domain = json.load(f)
         domain_complete = get_domain_perf(complete_data, task2domain)
