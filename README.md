@@ -100,6 +100,8 @@ bigcodebench.evaluate \
   --tp [TENSOR_PARALLEL_SIZE] \
   --greedy
 ```
+
+- All the resulted files will be stored in a folder named `bcb_results`.
 - The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated.jsonl`.
 - The evaluation results will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated_eval_results.json`.
 - The pass@k results will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated_pass_at_k.json`.

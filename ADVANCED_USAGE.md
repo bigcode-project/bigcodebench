@@ -43,7 +43,54 @@ pip install -e .[generate]
 </div>
 </details>
 
-### 🚀 Local Generation
+## 🚀 Remote Evaluation
+
+Below are all the arguments for `bigcodebench.evaluate` for the remote evaluation:
+
+#### Required Arguments:
+- `--model`: The model to evaluate
+- `--split`: The split of the dataset to evaluate
+- `--subset`: The subset of the dataset to evaluate
+
+#### Optional Arguments:
+- `--root`: The root directory to store the results, default to `bcb_results`
+- `--bs`: The batch size, default to `1`
+- `--n_samples`: The number of samples, default to `1`
+- `--temperature`: The temperature, default to `0.0`
+- `--max_new_tokens`: The length of max new tokens, default to `1280`
+- `--greedy`: Whether to use greedy decoding, default to `False`
+- `--strip_newlines`: Whether to strip newlines, default to `False`, set to `True` to strip newlines for some model series like StarCoder2
+- `--direct_completion`: Whether to use direct completion, default to `False`
+- `--resume`: Whether to resume the evaluation, default to `True`, set to `False` to re-run the evaluation
+- `--id_range`: The range of the tasks to evaluate, default to `None`, e.g. `--id_range 10,20` will evaluate the tasks from 10 to 20
+- `--backend`: The backend to use, default to `vllm`
+- `--base_url`: The base URL of the backend for OpenAI-compatible APIs, default to `None`
+- `--tp`: The tensor parallel size for the vLLM backend, default to `1`
+- `--trust_remote_code`: Whether to trust the remote code, default to `False`
+- `--tokenizer_name`: The name of the customized tokenizer, default to `None`
+- `--tokenizer_legacy`: Whether to use the legacy tokenizer, default to `False`
+- `--samples`: The path to the generated samples file, default to `None`
+- `--local_execute`: Whether to execute the samples locally, default to `False`
+- `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://github.com/bigcode-project/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page.
+- `--pass_k`: The `k` in `Pass@k`, default to `[1, 5, 10]`, e.g. `--pass_k 1,5,10` will evaluate `Pass@1`, `Pass@5` and `Pass@10`
+- `--save_pass_rate`: Whether to save the pass rate to a file, default to `True`
+- `--parallel`: The number of parallel processes, default to `None`, e.g. `--parallel 10` will evaluate 10 samples in parallel
+- `--min_time_limit`: The minimum time limit for the execution, default to `1`, e.g. `--min_time_limit 10` will evaluate the samples with at least 10 seconds
+- `--max_as_limit`: The maximum address space limit for the execution, default to `30*1024` (30 GB), e.g. `--max_as_limit 20*1024` will evaluate the samples with at most 20 GB
+- `--max_data_limit`: The maximum data segment limit for the execution, default to `30*1024` (30 GB), e.g. `--max_data_limit 20*1024` will evaluate the samples with at most 20 GB
+- `--max_stack_limit`: The maximum stack limit for the execution, default to `10`, e.g. `--max_stack_limit 20` will evaluate the samples with at most 20 MB
+- `--check_gt_only`: Whether to only check the ground truths, default to `False`
+- `--no_gt`: Whether to not check the ground truths, default to `False`
+
+## 🚀 Full Script
+
+We provide an example script to run the full pipeline for the remote evaluation:
+
+```bash
+bash run.sh
+```
+
+## 🚀 Local Generation
 
 ```bash
 # when greedy, there is no need for temperature and n_samples
@@ -62,9 +109,11 @@ bigcodebench.generate \
     [--base_url [base_url]] \
     [--tokenizer_name [tokenizer_name]]
 ```
+
 >
 The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
 >
+
 ```bash
 # If you are using GPUs
 docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/app -t bigcodebench/bigcodebench-generate:latest \
@@ -148,7 +197,7 @@ docker run -it --entrypoint bigcodebench.syncheck -v $(pwd):/app bigcodebench/bi
 </details>
 
 
-### Local Evaluation
+## 🚀 Local Evaluation
 
 You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
 
@@ -250,14 +299,6 @@ bigcodebench.inspect --eval_results sample-sanitized-calibrated_eval_results.jso
 bigcodebench.inspect --eval_results sample-sanitized-calibrated_eval_results.json --split complete --subset hard --in_place
 ```
 
-## 🚀 Full Script
-
-We provide a sample script to run the full pipeline:
-
-```bash
-bash run.sh
-```
-
 ## 📊 Result Analysis
 
 We provide a script to replicate the analysis like Elo Rating and Task Solve Rate, which helps you understand the performance of the models further.
@@ -270,12 +311,7 @@ cd analysis
 python get_results.py
 ```
 
-## 💻 LLM-generated Code
-
-We share pre-generated code samples from LLMs we have [evaluated](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard):
-*  See the attachment of our [v0.1.5](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.1.5). We include both `sanitized_samples.zip` and `sanitized_samples_calibrated.zip` for your convenience.
-
-## 🐞 Known Issues
+## 🐞 Resolved Issues
 
 - [x] Due to [the Hugging Face tokenizer update](https://github.com/huggingface/transformers/pull/31305), some tokenizers may be broken and will degrade the performance of the evaluation. Therefore, we set up with `legacy=False` for the initialization. If you notice the unexpected behaviors, please try `--tokenizer_legacy` during the generation.
 
