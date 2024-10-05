@@ -25,7 +25,7 @@
 </p>
 
 ## 📰 News
-- **[2024-10-05]** We create a public code execution API on the Hugging Face space. 
+- **[2024-10-05]** We create a public code execution API on the [Hugging Face space](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator).
 - **[2024-10-01]** We have evaluated 139 models on BigCodeBench-Hard so far. Take a look at the [leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard)!
 - **[2024-08-19]** To make the evaluation fully reproducible, we add a real-time code execution session to the leaderboard. It can be viewed [here](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
 - **[2024-08-02]** We release `bigcodebench==v0.1.9`.
