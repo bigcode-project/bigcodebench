@@ -60,9 +60,8 @@ def make_raw_chat_prompt(
         task_prompt = tokenizer.apply_chat_template(
             [
                 {"role": "user", "content": task_prompt},
-                # {"role": "assistant", "content": response},
+                {"role": "assistant", "content": response},
             ],
             tokenize=False,
-            add_generation_prompt=True
         ).split(_MAGIC_SPLITTER_)[0]
     return task_prompt
