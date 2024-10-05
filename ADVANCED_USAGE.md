@@ -319,7 +319,7 @@ python get_results.py
 
 - [x] You may get errors like `ImportError: /usr/local/lib/python3.10/site-packages/matplotlib/_c_internal_utils.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object` when running the evaluation. This is due to the memory limit of the docker container. You can increase the memory limit of the docker container to solve this issue. If the issue persists ,please use the real-time code execution session to evaluate the code in the [leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
 
-- [x] We are aware of the issue of some users needing to use a proxy to access the internet. We are working on a subset of the tasks that do not require internet access to evaluate the code.
+- [x] We are aware of the issue of some users needing to use a proxy to access the internet. Please use [Remote Evaluation](#-remote-evaluation) to get the accurate results.
 
 ## 📜 Citation
 
