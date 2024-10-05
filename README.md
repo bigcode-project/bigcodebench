@@ -92,13 +92,12 @@ pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcode
 We use the greedy decoding as an example to show how to evaluate the generated code samples via remote API.
 
 ```bash
+# greedy decoding by default
 bigcodebench.evaluate \
   --model meta-llama/Meta-Llama-3.1-8B-Instruct \
   --split [complete|instruct] \
   --subset [full|hard] \
-  --backend [vllm|openai|anthropic|google|mistral|hf] \
-  --tp [TENSOR_PARALLEL_SIZE] \
-  --greedy
+  --backend [vllm|openai|anthropic|google|mistral|hf]
 ```
 
 - All the resulted files will be stored in a folder named `bcb_results`.
