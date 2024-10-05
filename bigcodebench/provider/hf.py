@@ -4,8 +4,8 @@ import torch
 from stop_sequencer import StopSequencer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from evalplus.provider.base import DecoderBase
-from evalplus.provider.utility import (
+from bigcodebench.provider.base import DecoderBase
+from bigcodebench.provider.utility import (
     extra_eos_for_direct_completion,
     make_raw_chat_prompt,
 )
@@ -33,6 +33,10 @@ class HuggingFaceDecoder(DecoderBase):
         print(f"{kwargs = }")
 
         self.tokenizer = AutoTokenizer.from_pretrained(name, use_fast=False, legacy=self.tokenizer_legacy)
+        self.tokenizer.pad_token = self.tokenizer.eos_token
+        # assume the model is decoder-only
+        self.tokenizer.padding_side = 'left'
+        
         if self.is_direct_completion():  # no chat template
             self.eos += extra_eos_for_direct_completion(dataset)
         else:  # with chat template
@@ -40,7 +44,6 @@ class HuggingFaceDecoder(DecoderBase):
 
         print(f"{self.eos = }")
         self.model = AutoModelForCausalLM.from_pretrained(name, **kwargs)
-        self.model = self.model.to(self.device)
 
     def is_direct_completion(self) -> bool:
         return self.direct_completion or self.tokenizer.chat_template is None
@@ -61,15 +64,16 @@ class HuggingFaceDecoder(DecoderBase):
             )
             for prompt in prompts
         ]
-        input_tokens = self.tokenizer.encode(prompts, return_tensors="pt").to(
+        
+        input_tokens = self.tokenizer(prompts, return_tensors="pt", padding=True, truncation=True).to(
             self.device
-        )
+        )["input_ids"]
+        
         kwargs = {}
         if do_sample:
             kwargs["top_p"] = 0.95
             kwargs["temperature"] = self.temperature
-
-        outputs = self.model.generate(
+        ret = self.model.generate(
             input_tokens,
             max_new_tokens=self.max_new_tokens,
             do_sample=do_sample,
@@ -79,17 +83,23 @@ class HuggingFaceDecoder(DecoderBase):
             tokenizer=self.tokenizer,
             **kwargs,
         )
+        
+        # Reshape ret into a list of lists, each sublist containing num_samples elements
+        ret_chunks = [ret[i:i + num_samples] for i in range(0, len(ret), num_samples)]
 
-        gen_strs = self.tokenizer.batch_decode(
-            outputs[:, input_tokens.size(-1) :],
-            skip_special_tokens=self.skip_special_tokens,
-        )
-        outputs = []
-        # removes eos tokens.
-        for output in gen_strs:
-            min_index = 10000
-            for eos in self.eos:
-                if eos in output:
-                    min_index = min(min_index, output.index(eos))
-            outputs.append(output[:min_index].replace("\t", "    "))
-        return outputs
+        all_outputs = []
+        # Process each chunk in ret_chunks
+        for i, ret_chunk in enumerate(ret_chunks):
+            gen_strs = self.tokenizer.batch_decode(
+                ret_chunk[:, input_tokens[i].size(-1):],
+                skip_special_tokens=self.skip_special_tokens,
+            )
+            outputs = []
+            for output in gen_strs:
+                min_index = 10000
+                for eos in self.eos:
+                    if eos in output:
+                        min_index = min(min_index, output.index(eos))
+                outputs.append(output[:min_index].replace("\t", "    "))
+            all_outputs.append(outputs)
+        return all_outputs

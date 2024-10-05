@@ -8,19 +8,20 @@ def make_model(
     split: str,
     dataset: str = "bigcodebench",
     temperature: float = 0.0,
+    max_new_tokens: int = 1280,
     # instruction model only
-    instruction_prefix=None,
-    response_prefix=None,
+    instruction_prefix: str = None,
+    response_prefix: str = None,
     # vllm only
-    tp=1,
-    direct_completion=False,
-    base_url=None,
-    trust_remote_code=False,
+    tp: int = 1,
+    direct_completion: bool = False,
+    base_url: str = None,
+    trust_remote_code: bool = False,
     # hf only
-    attn_implementation="eager",
+    attn_implementation: str = "eager",
     # tokenizer
-    tokenizer_name=None,
-    tokenizer_kwargs=None,
+    tokenizer_name: str = None,
+    tokenizer_legacy: bool = True,
 ) -> DecoderBase:
     if backend == "vllm":
         from bigcodebench.provider.vllm import VllmDecoder
@@ -30,9 +31,10 @@ def make_model(
             subset=subset,
             split=split,
             temperature=temperature,
+            max_new_tokens=max_new_tokens,
             dataset=dataset,
             direct_completion=direct_completion,
-            tensor_parallel_size=tp,
+            tp=tp,
             instruction_prefix=instruction_prefix,
             response_prefix=response_prefix,
         )
@@ -44,6 +46,7 @@ def make_model(
             subset=subset,
             split=split,
             temperature=temperature,
+            max_new_tokens=max_new_tokens,
             dataset=dataset,
             direct_completion=direct_completion,
             instruction_prefix=instruction_prefix,
@@ -59,6 +62,7 @@ def make_model(
             subset=subset,
             split=split,
             temperature=temperature,
+            max_new_tokens=max_new_tokens,
             base_url=base_url,
             instruction_prefix=instruction_prefix,
             response_prefix=response_prefix,
@@ -71,6 +75,7 @@ def make_model(
             subset=subset,
             split=split,
             temperature=temperature,
+            max_new_tokens=max_new_tokens,
             instruction_prefix=instruction_prefix,
             response_prefix=response_prefix,
         )
@@ -83,6 +88,7 @@ def make_model(
             subset=subset,
             split=split,
             temperature=temperature,
+            max_new_tokens=max_new_tokens,
             instruction_prefix=instruction_prefix,
             response_prefix=response_prefix,
         )
@@ -95,6 +101,7 @@ def make_model(
             subset=subset,
             split=split,
             temperature=temperature,
+            max_new_tokens=max_new_tokens,
             instruction_prefix=instruction_prefix,
             response_prefix=response_prefix,
         )

@@ -1,8 +1,8 @@
 import os
 from typing import List
+from tqdm import tqdm
 
 import google.generativeai as genai
-
 
 from bigcodebench.provider.base import DecoderBase
 from bigcodebench.gen.util.google_request import make_auto_request
@@ -24,7 +24,7 @@ class GoogleDecoder(DecoderBase):
         all_outputs = []
         
         for prompt in tqdm(prompts):
-            ret_texts = []
+            outputs = []
             message = make_raw_chat_prompt(
                 task_prompt=prompt,
                 subset=self.subset,
@@ -33,25 +33,23 @@ class GoogleDecoder(DecoderBase):
                 response_prefix=self.response_prefix,
                 tokenizer=None,
             )
-            replies = make_auto_request(
+            ret = make_auto_request(
                 self.client,
                 message,
                 self.name,
-                n=batch_size,
+                n=num_samples,
                 max_tokens=self.max_new_tokens,
                 temperature=self.temperature,
             )
-            for candidate in replies.candidates:
+            for candidate in ret.candidates:
                 parts = candidate.content.parts
                 if parts:
-                    ret_texts.append(parts[0].text)
+                    outputs.append(parts[0].text)
                 else:
                     print("Empty response!")
-                    ret_texts.append("")
+                    outputs.append("")
                     print(f"{candidate.safety_ratings = }")
-            ret_texts.append("")
-            all_outputs.append(ret_texts + [""] * (batch_size - len(ret_texts)))
-
+            all_outputs.append(outputs)
         return all_outputs
 
     def is_direct_completion(self) -> bool:

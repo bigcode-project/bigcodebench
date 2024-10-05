@@ -1,10 +1,11 @@
 import os
 from typing import List
+from tqdm import tqdm
 
 import openai
 
-from evalplus.gen.util import openai_request
-from evalplus.provider.base import DecoderBase
+from bigcodebench.provider.base import DecoderBase
+from bigcodebench.gen.util.openai_request import make_auto_request
 from bigcodebench.provider.utility import make_raw_chat_prompt
 
 class OpenAIChatDecoder(DecoderBase):
@@ -21,6 +22,7 @@ class OpenAIChatDecoder(DecoderBase):
             assert self.temperature > 0, "Temperature must be positive for sampling"
         all_outputs = []
         for prompt in tqdm(prompts):
+            outputs = []
             message = make_raw_chat_prompt(
                 task_prompt=prompt,
                 subset=self.subset,
@@ -29,7 +31,7 @@ class OpenAIChatDecoder(DecoderBase):
                 response_prefix=self.response_prefix,
                 tokenizer=None,
             )
-            ret = openai_request.make_auto_request(
+            ret = make_auto_request(
                 self.client,
                 message=message,
                 model=self.name,

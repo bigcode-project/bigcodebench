@@ -1,18 +1,21 @@
 import os
 from typing import List
+from tqdm import tqdm
 
-import anthropic
+from mistralai.client import MistralClient
+from mistralai.models.chat_completion import ChatMessage
 
 from bigcodebench.provider.base import DecoderBase
+from bigcodebench.gen.util.mistral_request import make_auto_request
 from bigcodebench.provider.utility import make_raw_chat_prompt
 
-class MistralDecoder(DecoderBase):
+class MistralChatDecoder(DecoderBase):
     def __init__(self, name: str, **kwargs) -> None:
         super().__init__(name, **kwargs)
-        self.client = mistral.Mistral(api_key=os.getenv("MISTRAL_API_KEY"))
+        self.client = MistralClient(api_key=os.getenv("MISTRAL_API_KEY"))
 
     def codegen(
-        self, prompt: str, do_sample: bool = True, num_samples: int = 200
+        self, prompts: List[str], do_sample: bool = True, num_samples: int = 200
     ) -> List[str]:
         if do_sample:
             assert self.temperature > 0, "Temperature must be positive for sampling"
@@ -22,7 +25,7 @@ class MistralDecoder(DecoderBase):
             outputs = []
             
             for _ in range(num_samples):
-                message = mistral_request.make_auto_request(
+                ret = make_auto_request(
                     client=self.client,
                     model=self.name,
                     messages=[
@@ -40,9 +43,8 @@ class MistralDecoder(DecoderBase):
                         )
                     ],
                     max_tokens=self.max_new_tokens,
-                    **kwargs,
                 )
-                outputs.append(message.content[0].text)
+                outputs.append(ret.choices[0].message.content)
             all_outputs.append(outputs)
         return all_outputs
 

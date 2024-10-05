@@ -1,4 +1,5 @@
 from typing import List
+from transformers import AutoTokenizer
 
 EOS = [
     "<|endoftext|>",
@@ -55,11 +56,13 @@ def make_raw_chat_prompt(
 {_MAGIC_SPLITTER_}
 ```
 """
-    task_prompt = tokenizer.apply_chat_template(
-        [
-            {"role": "user", "content": task_prompt},
-            {"role": "assistant", "content": response},
-        ],
-        tokenize=False,
-    ).split(_MAGIC_SPLITTER_)[0]
+    if tokenizer:
+        task_prompt = tokenizer.apply_chat_template(
+            [
+                {"role": "user", "content": task_prompt},
+                # {"role": "assistant", "content": response},
+            ],
+            tokenize=False,
+            add_generation_prompt=True
+        ).split(_MAGIC_SPLITTER_)[0]
     return task_prompt

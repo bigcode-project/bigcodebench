@@ -1,9 +1,10 @@
 import os
 from typing import List
+from tqdm import tqdm
 
 import anthropic
 
-from bigcodebench.gen.util import anthropic_request
+from bigcodebench.gen.util.anthropic_request import make_auto_request
 from bigcodebench.provider.base import DecoderBase
 from bigcodebench.provider.utility import make_raw_chat_prompt
 
@@ -18,15 +19,12 @@ class AnthropicDecoder(DecoderBase):
         if do_sample:
             assert self.temperature > 0, "Temperature must be positive for sampling"
 
-        if not do_sample:
-            assert batch_size == 1, "Sampling only supports batch size of 1"
-
         all_outputs = []
         for prompt in tqdm(prompts):
             outputs = []
             
             for _ in range(num_samples):
-                message = anthropic_request.make_auto_request(
+                ret = make_auto_request(
                     client=self.client,
                     model=self.name,
                     messages=[
@@ -46,9 +44,9 @@ class AnthropicDecoder(DecoderBase):
                     temperature=self.temperature,
                     stop_sequences=self.eos,
                 )
-                outputs.append(message.content[0].text)
+                outputs.append(ret.content[0].text)
             all_outputs.append(outputs)
-        return outputs
+        return all_outputs
 
     def is_direct_completion(self) -> bool:
         return False

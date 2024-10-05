@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from evalplus.provider.utility import EOS
+from bigcodebench.provider.utility import EOS
 
 
 class DecoderBase(ABC):
@@ -11,12 +11,14 @@ class DecoderBase(ABC):
         subset: str,
         split: str,
         temperature: float = 0.8,
-        max_new_tokens: int = 5120,
+        max_new_tokens: int = 1280,
         dtype: str = "bfloat16",  # default
         direct_completion: bool = False,
         trust_remote_code: bool = False,
         tokenizer_name: str = None,
         tokenizer_legacy: bool = False,
+        instruction_prefix: str = None,
+        response_prefix: str = None,
     ) -> None:
         print("Initializing a decoder model: {} ...".format(name))
         self.name = name
@@ -31,6 +33,8 @@ class DecoderBase(ABC):
         self.trust_remote_code = trust_remote_code
         self.tokenizer_name = tokenizer_name
         self.tokenizer_legacy = tokenizer_legacy
+        self.instruction_prefix = instruction_prefix
+        self.response_prefix = response_prefix
 
     @abstractmethod
     def codegen(
