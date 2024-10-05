@@ -57,11 +57,6 @@ BigCodeBench focuses on task automation via code generation with *diverse functi
 
 ## 🔥 Quick Start
 
-> [!Tip]
->
-> BigCodeBench ❤️ [bigcode-evaluation-harness](https://github.com/bigcode-project/bigcode-evaluation-harness)!
-> BigCodeBench will be integrated to bigcode-evaluation-harness, and you can also run it there!
-
 To get started, please first set up the environment:
 
 ```bash
