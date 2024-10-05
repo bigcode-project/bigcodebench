@@ -91,8 +91,11 @@ pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcode
 
 We use the greedy decoding as an example to show how to evaluate the generated code samples via remote API.
 
+> [!Note]
+>
+> Remotely executing on `BigCodeBench-Full` typically takes 6-7 minutes, and on `BigCodeBench-Hard` typically takes 4-5 minutes.
+
 ```bash
-# greedy decoding by default
 bigcodebench.evaluate \
   --model meta-llama/Meta-Llama-3.1-8B-Instruct \
   --split [complete|instruct] \
@@ -104,10 +107,6 @@ bigcodebench.evaluate \
 - The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated.jsonl`.
 - The evaluation results will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated_eval_results.json`.
 - The pass@k results will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated_pass_at_k.json`.
-
-> [!Note]
->
-> Remotely executing on `BigCodeBench-Full` typically takes 5-7 minutes, and on `BigCodeBench-Hard` typically takes 3-5 minutes.
 
 > [!Note]
 >
