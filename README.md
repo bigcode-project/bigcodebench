@@ -25,6 +25,7 @@
 </p>
 
 ## 📰 News
+- **[2024-10-06]** We are releasing `bigcodebench==v0.2.0`!
 - **[2024-10-05]** We create a public code execution API on the [Hugging Face space](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator).
 - **[2024-10-01]** We have evaluated 139 models on BigCodeBench-Hard so far. Take a look at the [leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard)!
 - **[2024-08-19]** To make the evaluation fully reproducible, we add a real-time code execution session to the leaderboard. It can be viewed [here](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
@@ -136,7 +137,7 @@ export GOOGLE_API_KEY=<your_google_api_key>
 ## 💻 LLM-generated Code
 
 We share pre-generated code samples from LLMs we have [evaluated](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard):
-*  See the attachment of our [v0.1.5](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.1.5). We include both `sanitized_samples.zip` and `sanitized_samples_calibrated.zip` for your convenience.
+*  See the attachment of our [v0.2.0](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.2.0). We include `sanitized_samples_calibrated.zip` for your convenience.
 
 ## Advanced Usage
 
