@@ -61,7 +61,7 @@ To get started, please first set up the environment:
 
 ```bash
 # By default, you will use the remote evaluation API to execute the output samples.
-pip install bigcodebench[generate] --upgrade
+pip install bigcodebench --upgrade
 
 # You are suggested to use `flash-attn` for generating code samples.
 pip install packaging ninja
@@ -75,7 +75,7 @@ pip install flash-attn --no-build-isolation
 
 ```bash
 # Install to use bigcodebench.generate
-pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcodebench[generate]" --upgrade
+pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
 ```
 
 </div>
