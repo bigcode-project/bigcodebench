@@ -3,25 +3,19 @@
 To get started, please first set up the environment:
 
 ```bash
-# Install to use bigcodebench.evaluate
-pip install bigcodebench --upgrade
-# If you want to use the evaluate locally, you need to install the requirements
+# If you want to use the evaluate locally, you need to install the requirements in an isolated environment
 pip install -I -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/main/Requirements/requirements-eval.txt
 
-# Install to use bigcodebench.generate
-# You are strongly recommended to install the generate dependencies in a separate environment
-pip install bigcodebench[generate] --upgrade
+# You are strongly recommended to install the bigcodebench dependencies in another environment
+pip install bigcodebench --upgrade
 ```
 
 <details><summary>⏬ Install nightly version <i>:: click to expand ::</i></summary>
 <div>
 
 ```bash
-# Install to use bigcodebench.evaluate
+# Install to use bigcodebench
 pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
-
-# Install to use bigcodebench.generate
-pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcodebench[generate]" --upgrade
 ```
 
 </div>
@@ -34,10 +28,8 @@ pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcode
 git clone https://github.com/bigcode-project/bigcodebench.git
 cd bigcodebench
 export PYTHONPATH=$PYTHONPATH:$(pwd)
-# Install to use bigcodebench.evaluate
+# Install to use bigcodebench
 pip install -e .
-# Install to use bigcodebench.generate
-pip install -e .[generate]
 ```
 
 </div>
