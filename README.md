@@ -85,6 +85,9 @@ pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcode
 ## 🚀 Remote Evaluation
 
 We use the greedy decoding as an example to show how to evaluate the generated code samples via remote API.
+> [!Warning]
+>
+> To ease the generation, we use batch inference by default. However, the batch inference results could vary from *batch sizes to batch sizes* and *versions to versions*, at least for the vLLM backend. If you want to get more deterministic results for greedy decoding, please set `--bs` to `1`. 
 
 > [!Note]
 >
