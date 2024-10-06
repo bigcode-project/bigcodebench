@@ -9,5 +9,4 @@ bigcodebench.evaluate \
   --model $MODEL \
   --split $SPLIT \
   --subset $SUBSET \
-  --backend $BACKEND \
-  --tp $NUM_GPU
+  --backend $BACKEND
