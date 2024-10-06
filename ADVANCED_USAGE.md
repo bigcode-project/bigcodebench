@@ -71,7 +71,7 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--tokenizer_legacy`: Whether to use the legacy tokenizer, default to `False`
 - `--samples`: The path to the generated samples file, default to `None`
 - `--local_execute`: Whether to execute the samples locally, default to `False`
-- `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://github.com/bigcode-project/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page.
+- `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page.
 - `--pass_k`: The `k` in `Pass@k`, default to `[1, 5, 10]`, e.g. `--pass_k 1,5,10` will evaluate `Pass@1`, `Pass@5` and `Pass@10`
 - `--save_pass_rate`: Whether to save the pass rate to a file, default to `True`
 - `--parallel`: The number of parallel processes, default to `None`, e.g. `--parallel 10` will evaluate 10 samples in parallel
@@ -111,7 +111,7 @@ bigcodebench.generate \
 ```
 
 >
-The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
+The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated.jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
 >
 
 ```bash
