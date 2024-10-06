@@ -167,7 +167,7 @@ def evaluate(
         
         pass_k = [int(k) for k in pass_k.split(",")]
         
-        if not parallel:
+        if parallel < 1:
             n_workers = max(1, multiprocessing.cpu_count() // 2)
         else:
             n_workers = parallel
