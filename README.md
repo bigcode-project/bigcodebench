@@ -48,6 +48,10 @@
 
 BigCodeBench is an **_easy-to-use_** benchmark for solving **_practical_** and **_challenging_** tasks via code. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more complex instructions and diverse function calls.
 
+There are two splits in BigCodeBench:
+- `Complete`: Thes split is designed for code completion based on the comprehensive docstrings.
+- `Instruct`: The split works for the instruction-tuned and chat models only, where the models are asked to generate a code snippet based on the natural language instructions. The instructions only contain necessary information, and require more complex reasoning.
+
 ### Why BigCodeBench?
 
 BigCodeBench focuses on task automation via code generation with *diverse function calls* and *complex instructions*, with:
