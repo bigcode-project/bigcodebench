@@ -3,25 +3,19 @@
 To get started, please first set up the environment:
 
 ```bash
-# Install to use bigcodebench.evaluate
-pip install bigcodebench --upgrade
-# If you want to use the evaluate locally, you need to install the requirements
+# If you want to use the evaluate locally, you need to install the requirements in an isolated environment
 pip install -I -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/main/Requirements/requirements-eval.txt
 
-# Install to use bigcodebench.generate
-# You are strongly recommended to install the generate dependencies in a separate environment
-pip install bigcodebench[generate] --upgrade
+# You are strongly recommended to install the bigcodebench dependencies in another environment
+pip install bigcodebench --upgrade
 ```
 
 <details><summary>⏬ Install nightly version <i>:: click to expand ::</i></summary>
 <div>
 
 ```bash
-# Install to use bigcodebench.evaluate
+# Install to use bigcodebench
 pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
-
-# Install to use bigcodebench.generate
-pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcodebench[generate]" --upgrade
 ```
 
 </div>
@@ -34,10 +28,8 @@ pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcode
 git clone https://github.com/bigcode-project/bigcodebench.git
 cd bigcodebench
 export PYTHONPATH=$PYTHONPATH:$(pwd)
-# Install to use bigcodebench.evaluate
+# Install to use bigcodebench
 pip install -e .
-# Install to use bigcodebench.generate
-pip install -e .[generate]
 ```
 
 </div>
@@ -71,10 +63,10 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--tokenizer_legacy`: Whether to use the legacy tokenizer, default to `False`
 - `--samples`: The path to the generated samples file, default to `None`
 - `--local_execute`: Whether to execute the samples locally, default to `False`
-- `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://github.com/bigcode-project/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page.
+- `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page.
 - `--pass_k`: The `k` in `Pass@k`, default to `[1, 5, 10]`, e.g. `--pass_k 1,5,10` will evaluate `Pass@1`, `Pass@5` and `Pass@10`
 - `--save_pass_rate`: Whether to save the pass rate to a file, default to `True`
-- `--parallel`: The number of parallel processes, default to `None`, e.g. `--parallel 10` will evaluate 10 samples in parallel
+- `--parallel`: The number of parallel processes, default to `-1`, e.g. `--parallel 10` will evaluate 10 samples in parallel
 - `--min_time_limit`: The minimum time limit for the execution, default to `1`, e.g. `--min_time_limit 10` will evaluate the samples with at least 10 seconds
 - `--max_as_limit`: The maximum address space limit for the execution, default to `30*1024` (30 GB), e.g. `--max_as_limit 20*1024` will evaluate the samples with at most 20 GB
 - `--max_data_limit`: The maximum data segment limit for the execution, default to `30*1024` (30 GB), e.g. `--max_data_limit 20*1024` will evaluate the samples with at most 20 GB
@@ -111,7 +103,7 @@ bigcodebench.generate \
 ```
 
 >
-The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples].jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
+The generated code samples will be stored in a file named `[model_name]--bigcodebench-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated.jsonl`. Alternatively, you can use the following command to utilize our pre-built docker images for generating code samples:
 >
 
 ```bash

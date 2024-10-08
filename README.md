@@ -20,11 +20,11 @@
     <a href="#-quick-start">🔥 Quick Start</a> •
     <a href="#-remote-evaluation">🚀 Remote Evaluation</a> •
     <a href="#-llm-generated-code">💻 LLM-generated Code</a> •
-    <a href="#-advanced-usage">📜 Advanced Usage</a> •
-    <a href="#-citation">🙏 Acknowledgement</a>
+    <a href="#-citation">📜 Citation</a>
 </p>
 
 ## 📰 News
+- **[2024-10-06]** We are releasing `bigcodebench==v0.2.0`!
 - **[2024-10-05]** We create a public code execution API on the [Hugging Face space](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator).
 - **[2024-10-01]** We have evaluated 139 models on BigCodeBench-Hard so far. Take a look at the [leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard)!
 - **[2024-08-19]** To make the evaluation fully reproducible, we add a real-time code execution session to the leaderboard. It can be viewed [here](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard).
@@ -48,6 +48,10 @@
 
 BigCodeBench is an **_easy-to-use_** benchmark for solving **_practical_** and **_challenging_** tasks via code. It aims to evaluate the true programming capabilities of large language models (LLMs) in a more realistic setting. The benchmark is designed for HumanEval-like function-level code generation tasks, but with much more complex instructions and diverse function calls.
 
+There are two splits in BigCodeBench:
+- `Complete`: Thes split is designed for code completion based on the comprehensive docstrings.
+- `Instruct`: The split works for the instruction-tuned and chat models only, where the models are asked to generate a code snippet based on the natural language instructions. The instructions only contain necessary information, and require more complex reasoning.
+
 ### Why BigCodeBench?
 
 BigCodeBench focuses on task automation via code generation with *diverse function calls* and *complex instructions*, with:
@@ -61,7 +65,7 @@ To get started, please first set up the environment:
 
 ```bash
 # By default, you will use the remote evaluation API to execute the output samples.
-pip install bigcodebench[generate] --upgrade
+pip install bigcodebench --upgrade
 
 # You are suggested to use `flash-attn` for generating code samples.
 pip install packaging ninja
@@ -75,7 +79,7 @@ pip install flash-attn --no-build-isolation
 
 ```bash
 # Install to use bigcodebench.generate
-pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcodebench[generate]" --upgrade
+pip install "git+https://github.com/bigcode-project/bigcodebench.git" --upgrade
 ```
 
 </div>
@@ -85,6 +89,9 @@ pip install "git+https://github.com/bigcode-project/bigcodebench.git#egg=bigcode
 ## 🚀 Remote Evaluation
 
 We use the greedy decoding as an example to show how to evaluate the generated code samples via remote API.
+> [!Warning]
+>
+> To ease the generation, we use batch inference by default. However, the batch inference results could vary from *batch sizes to batch sizes* and *versions to versions*, at least for the vLLM backend. If you want to get more deterministic results for greedy decoding, please set `--bs` to `1`. 
 
 > [!Note]
 >
@@ -136,7 +143,7 @@ export GOOGLE_API_KEY=<your_google_api_key>
 ## 💻 LLM-generated Code
 
 We share pre-generated code samples from LLMs we have [evaluated](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard):
-*  See the attachment of our [v0.1.5](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.1.5). We include both `sanitized_samples.zip` and `sanitized_samples_calibrated.zip` for your convenience.
+*  See the attachment of our [v0.2.0.post3](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.2.0.post3). We include `sanitized_samples_calibrated.zip` for your convenience.
 
 ## Advanced Usage
 

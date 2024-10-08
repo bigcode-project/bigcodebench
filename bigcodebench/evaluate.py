@@ -119,7 +119,7 @@ def evaluate(
     remote_execute_api: str = "https://bigcode-bigcodebench-evaluator.hf.space/",
     pass_k: str = "1,5,10",
     save_pass_rate: bool = True,
-    parallel: int = None,
+    parallel: int = -1,
     min_time_limit: float = 1,
     max_as_limit: int = 30*1024,
     max_data_limit: int = 30*1024,
@@ -167,7 +167,7 @@ def evaluate(
         
         pass_k = [int(k) for k in pass_k.split(",")]
         
-        if parallel is None:
+        if parallel < 1:
             n_workers = max(1, multiprocessing.cpu_count() // 2)
         else:
             n_workers = parallel
