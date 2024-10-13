@@ -16,12 +16,24 @@
 </p>
 
 <p align="center">
+    <a href="#-impact">💥 Impact</a> •
     <a href="#-news">📰 News</a> •
     <a href="#-quick-start">🔥 Quick Start</a> •
     <a href="#-remote-evaluation">🚀 Remote Evaluation</a> •
     <a href="#-llm-generated-code">💻 LLM-generated Code</a> •
     <a href="#-citation">📜 Citation</a>
 </p>
+
+## 💥 Impact
+BigCodeBench has been used by the many LLM teams including:
+- Zhipu AI
+- Alibaba Qwen
+- DeepSeek
+- Amazon AWS
+- Snowflake AI Research
+- ServiceNow Research
+- Meta AI
+- Cohere AI
 
 ## 📰 News
 - **[2024-10-06]** We are releasing `bigcodebench==v0.2.0`!
