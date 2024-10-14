@@ -25,7 +25,7 @@
 </p>
 
 ## 💥 Impact
-BigCodeBench has been used by the many LLM teams including:
+BigCodeBench has been used by many LLM teams including:
 - Zhipu AI
 - Alibaba Qwen
 - DeepSeek
