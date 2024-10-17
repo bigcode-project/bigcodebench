@@ -29,7 +29,7 @@ BigCodeBench has been used by many LLM teams including:
 - Zhipu AI
 - Alibaba Qwen
 - DeepSeek
-- Amazon AWS
+- Amazon AWS AI
 - Snowflake AI Research
 - ServiceNow Research
 - Meta AI
