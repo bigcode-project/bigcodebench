@@ -34,6 +34,7 @@ BigCodeBench has been used by many LLM teams including:
 - ServiceNow Research
 - Meta AI
 - Cohere AI
+- Sakana AI
 
 ## 📰 News
 - **[2024-10-06]** We are releasing `bigcodebench==v0.2.0`!
