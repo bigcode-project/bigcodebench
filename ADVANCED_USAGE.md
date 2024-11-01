@@ -57,6 +57,7 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--id_range`: The range of the tasks to evaluate, default to `None`, e.g. `--id_range 10,20` will evaluate the tasks from 10 to 20
 - `--backend`: The backend to use, default to `vllm`
 - `--base_url`: The base URL of the backend for OpenAI-compatible APIs, default to `None`
+- `--revision`: The revision of the model with the vLLM or HF backend, default to `main`
 - `--tp`: The tensor parallel size for the vLLM backend, default to `1`
 - `--trust_remote_code`: Whether to trust the remote code, default to `False`
 - `--tokenizer_name`: The name of the customized tokenizer, default to `None`
