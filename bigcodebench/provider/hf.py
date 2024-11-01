@@ -27,6 +27,7 @@ class HuggingFaceDecoder(DecoderBase):
             "trust_remote_code": self.trust_remote_code,
             "torch_dtype": getattr(torch, self.dtype),
             "attn_implementation": attn_implementation,  # "eager", "flash_attention_2", "sdpa"
+            "revision": self.revision,
         }
         self.skip_special_tokens = True
 

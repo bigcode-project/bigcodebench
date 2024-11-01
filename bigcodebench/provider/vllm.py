@@ -18,6 +18,7 @@ class VllmDecoder(DecoderBase):
             "tensor_parallel_size": int(os.getenv("VLLM_N_GPUS", tp)),
             "dtype": self.dtype,
             "trust_remote_code": self.trust_remote_code,
+            "revision": self.revision,
         }
         if self.tokenizer_name is None:
             self.tokenizer_name = self.name

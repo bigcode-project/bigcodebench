@@ -12,6 +12,8 @@ def make_model(
     # instruction model only
     instruction_prefix: str = None,
     response_prefix: str = None,
+    # vllm and hf only
+    revision: str = "main",
     # vllm only
     tp: int = 1,
     direct_completion: bool = False,
@@ -32,6 +34,7 @@ def make_model(
             split=split,
             temperature=temperature,
             max_new_tokens=max_new_tokens,
+            revision=revision,
             dataset=dataset,
             direct_completion=direct_completion,
             tp=tp,
@@ -47,6 +50,7 @@ def make_model(
             split=split,
             temperature=temperature,
             max_new_tokens=max_new_tokens,
+            revision=revision,
             dataset=dataset,
             direct_completion=direct_completion,
             instruction_prefix=instruction_prefix,

@@ -12,6 +12,7 @@ class DecoderBase(ABC):
         split: str,
         temperature: float = 0.8,
         max_new_tokens: int = 1280,
+        revision: str = "main",
         dtype: str = "bfloat16",  # default
         direct_completion: bool = False,
         trust_remote_code: bool = False,
@@ -29,6 +30,7 @@ class DecoderBase(ABC):
         self.skip_special_tokens = False
         self.max_new_tokens = max_new_tokens
         self.dtype = dtype
+        self.revision = revision
         self.direct_completion = direct_completion
         self.trust_remote_code = trust_remote_code
         self.tokenizer_name = tokenizer_name

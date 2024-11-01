@@ -139,6 +139,7 @@ def run_codegen(
     backend: str = "vllm",
     base_url: str = None,
     tp: int = 1,
+    revision: str = "main",
     trust_remote_code: bool = False,
     tokenizer_name: str = None,
     tokenizer_legacy: bool = False,
@@ -173,6 +174,7 @@ def run_codegen(
         response_prefix=response_prefix,
         base_url=base_url,
         tp=tp,
+        revision=revision,
         trust_remote_code=trust_remote_code,
         direct_completion=direct_completion,
         tokenizer_name=tokenizer_name,
@@ -180,7 +182,7 @@ def run_codegen(
     )
     
     extra = "-" + subset if subset != "full" else ""
-    identifier = model.replace("/", "--") + f"--bigcodebench{extra}-{split}--{backend}-{temperature}-{n_samples}-sanitized_calibrated.jsonl"
+    identifier = model.replace("/", "--") + f"--{revision}--bigcodebench{extra}-{split}--{backend}-{temperature}-{n_samples}-sanitized_calibrated.jsonl"
     
     target_path = os.path.join(root, identifier)
     
