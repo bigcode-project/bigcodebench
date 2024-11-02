@@ -64,7 +64,7 @@ def codegen(
                 if id_num < low:
                     p.console.print(f"Skipping {task_id} as it is not in {id_range}")
                     continue
-                if id_num > id_range[1]:
+                if id_num >= id_range[1]:
                     break
 
             p_name = task_id.replace("/", "_")
