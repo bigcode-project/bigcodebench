@@ -135,7 +135,7 @@ def run_codegen(
     strip_newlines: bool = False,
     direct_completion: bool = False,
     resume: bool = True,
-    id_range: Tuple[int, int] = None,
+    id_range: str = None,
     backend: str = "vllm",
     base_url: str = None,
     tp: int = 1,
@@ -152,6 +152,7 @@ def run_codegen(
         print("Greedy decoding ON (--greedy): setting n_samples=1, temperature=0")
 
     if id_range is not None:
+        id_range = [int(i) for i in id_range.split("-")]
         assert len(id_range) == 2, "id_range must be a list of length 2"
         assert id_range[0] < id_range[1], "id_range must be increasing"
         id_range = tuple(id_range)
