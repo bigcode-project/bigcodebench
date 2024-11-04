@@ -1,5 +1,6 @@
 from typing import List
 from transformers import AutoTokenizer
+from concurrent.futures import ThreadPoolExecutor
 
 EOS = [
     "<|endoftext|>",
@@ -65,3 +66,9 @@ def make_raw_chat_prompt(
             tokenize=False,
         ).split(_MAGIC_SPLITTER_)[0]
     return task_prompt
+
+
+def concurrent_call(n, callback, /, *args, **kwargs):
+    with ThreadPoolExecutor(max_workers=n) as executor:
+        futures = [executor.submit(callback, *args, **kwargs) for _ in range(n)]
+        return [future.result() for future in futures]
