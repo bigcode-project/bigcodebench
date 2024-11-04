@@ -5,13 +5,17 @@ from google.api_core.exceptions import GoogleAPICallError, ResourceExhausted
 
 
 def make_request(
-    client: genai.GenerativeModel, temperature, messages, max_new_tokens=2048
+    client: genai.GenerativeModel,
+    messages: List,
+    temperature: float,
+    n: int,
+    max_new_tokens: int = 2048,
 ) -> genai.types.GenerateContentResponse:
     messages = [{"role": m["role"], "parts": [m["content"]]} for m in messages]
     response = client.generate_content(
         messages,
         generation_config=genai.types.GenerationConfig(
-            candidate_count=1,
+            candidate_count=n,
             max_output_tokens=max_new_tokens,
             temperature=temperature,
         ),

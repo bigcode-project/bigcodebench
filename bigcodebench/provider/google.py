@@ -36,10 +36,9 @@ class GoogleDecoder(DecoderBase):
             ret = make_auto_request(
                 self.client,
                 message,
-                self.name,
                 n=num_samples,
-                max_tokens=self.max_new_tokens,
                 temperature=self.temperature,
+                max_new_tokens=self.max_new_tokens,
             )
             for candidate in ret.candidates:
                 parts = candidate.content.parts
