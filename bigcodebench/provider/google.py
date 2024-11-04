@@ -35,7 +35,7 @@ class GoogleDecoder(DecoderBase):
             )
             ret = make_auto_request(
                 self.client,
-                message,
+                message=message,
                 n=num_samples,
                 temperature=self.temperature,
                 max_new_tokens=self.max_new_tokens,
