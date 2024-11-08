@@ -233,7 +233,7 @@ def evaluate(
                             if "solution" in sample
                             else problems[task_id]["complete_prompt"] + sample["completion"]
                         )
-                        if "sanitized-calibrated" in samples:
+                        if "sanitized_calibrated" in samples:
                             solution = problems[task_id]["code_prompt"] + "\n    pass\n" + solution
                         remainings.add(sample["_identifier"])
                         args = (
@@ -254,22 +254,22 @@ def evaluate(
                     assert n_samples == len(remainings), "Missing problems in unfinished"
                     assert len(completion_id) == len(problems), "Missing problems in samples"
 
-            def stucking_checker():
-                while remainings:
-                    last_size = len(remainings)
-                    time.sleep(240)
-                    if last_size != len(remainings) or len(remainings) == 0:
-                        continue
-                    # Potential stucking
-                    warn("No samples had finished testing in the last 240s")
-                    warn(f"{len(remainings)} samples to be tested: {remainings}")
+                def stucking_checker():
+                    while remainings:
+                        last_size = len(remainings)
+                        time.sleep(240)
+                        if last_size != len(remainings) or len(remainings) == 0:
+                            continue
+                        # Potential stucking
+                        warn("No samples had finished testing in the last 240s")
+                        warn(f"{len(remainings)} samples to be tested: {remainings}")
 
-                    threading.Thread(target=stucking_checker).start()
+                threading.Thread(target=stucking_checker).start()
 
-                    for future in tqdm(as_completed(futures), total=n_samples):
-                        result = future.result()
-                        remainings.remove(result["_identifier"])
-                        eval_results[result["task_id"]].append(result)
+                for future in tqdm(as_completed(futures), total=n_samples):
+                    result = future.result()
+                    remainings.remove(result["_identifier"])
+                    eval_results[result["task_id"]].append(result)
 
                 # sort the results for each problem by completion_id
                 for task_id, task_results in eval_results.items():
@@ -307,7 +307,7 @@ def evaluate(
             pass_at_k["model"] = os.path.basename(samples).split("--bigcodebench-")[0]
             pass_at_k["split"] = split
             pass_at_k["subset"] = subset
-            pass_at_k["calibrated"] = "sanitized-calibrated" in samples
+            pass_at_k["calibrated"] = "sanitized_calibrated" in samples
             pass_at_k["gt_pass_rate"] = gt_pass_rate
             pass_at_k["failed_tasks"] = failed_tasks
             
