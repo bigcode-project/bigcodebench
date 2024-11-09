@@ -115,6 +115,7 @@ def evaluate(
     split: str,
     subset: str,
     samples: Optional[str] = None,
+    no_execute: bool = False,
     local_execute: bool = False,
     remote_execute_api: str = "https://bigcode-bigcodebench-evaluator.hf.space/",
     pass_k: str = "1,5,10",
@@ -135,6 +136,10 @@ def evaluate(
             subset=subset,
             **model_kwargs,
         )
+    
+    if no_execute:
+        return
+    
     assert samples is not None, "No samples provided"
         
     if os.path.isdir(samples):
