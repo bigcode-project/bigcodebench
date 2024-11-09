@@ -57,12 +57,15 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--id_range`: The range of the tasks to evaluate, default to `None`, e.g. `--id_range 10-20` will evaluate the tasks from 10 to 20
 - `--backend`: The backend to use, default to `vllm`
 - `--base_url`: The base URL of the backend for OpenAI-compatible APIs, default to `None`
+- `--instruction_prefix`: The instruction prefix for the Anthropic backend, default to `None`
+- `--response_prefix`: The response prefix for the Anthropic backend, default to `None`
 - `--revision`: The revision of the model with the vLLM or HF backend, default to `main`
 - `--tp`: The tensor parallel size for the vLLM backend, default to `1`
 - `--trust_remote_code`: Whether to trust the remote code, default to `False`
 - `--tokenizer_name`: The name of the customized tokenizer, default to `None`
 - `--tokenizer_legacy`: Whether to use the legacy tokenizer, default to `False`
 - `--samples`: The path to the generated samples file, default to `None`
+- `--no_execute`: Whether to not execute the samples, default to `False`
 - `--local_execute`: Whether to execute the samples locally, default to `False`
 - `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page.
 - `--pass_k`: The `k` in `Pass@k`, default to `[1, 5, 10]`, e.g. `--pass_k 1,5,10` will evaluate `Pass@1`, `Pass@5` and `Pass@10`
