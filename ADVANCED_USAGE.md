@@ -54,7 +54,7 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--strip_newlines`: Whether to strip newlines, default to `False`, set to `True` to strip newlines for some model series like StarCoder2
 - `--direct_completion`: Whether to use direct completion, default to `False`
 - `--resume`: Whether to resume the evaluation, default to `True`, set to `False` to re-run the evaluation
-- `--id_range`: The range of the tasks to evaluate, default to `None`, e.g. `--id_range 10,20` will evaluate the tasks from 10 to 20
+- `--id_range`: The range of the tasks to evaluate, default to `None`, e.g. `--id_range 10-20` will evaluate the tasks from 10 to 20
 - `--backend`: The backend to use, default to `vllm`
 - `--base_url`: The base URL of the backend for OpenAI-compatible APIs, default to `None`
 - `--revision`: The revision of the model with the vLLM or HF backend, default to `main`
