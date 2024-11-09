@@ -26,7 +26,7 @@ def make_request(
         ],
     )
 
-    return response.text
+    return response
 
 
 def make_auto_request(*args, **kwargs) -> genai.types.GenerateContentResponse:
