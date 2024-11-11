@@ -370,7 +370,7 @@ def evaluate(
                 print(f"Save pass@k to {pass_at_k_path}? [Y/N]")
                 decision = input()
             if decision.lower() == "y":
-                new_path = result_path + ".bak"
+                new_path = pass_at_k_path + ".bak"
                 while os.path.isfile(new_path):
                     new_path += ".bak"
                 os.rename(pass_at_k_path, new_path)
