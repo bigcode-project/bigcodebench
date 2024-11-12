@@ -41,6 +41,8 @@ def make_model(
             instruction_prefix=instruction_prefix,
             response_prefix=response_prefix,
             trust_remote_code=trust_remote_code,
+            tokenizer_name=tokenizer_name,
+            tokenizer_legacy=tokenizer_legacy,
         )
     elif backend == "hf":
         from bigcodebench.provider.hf import HuggingFaceDecoder
@@ -58,6 +60,8 @@ def make_model(
             response_prefix=response_prefix,
             attn_implementation=attn_implementation,
             trust_remote_code=trust_remote_code,
+            tokenizer_name=tokenizer_name,
+            tokenizer_legacy=tokenizer_legacy,
         )
     elif backend == "openai":
         from bigcodebench.provider.openai import OpenAIChatDecoder
