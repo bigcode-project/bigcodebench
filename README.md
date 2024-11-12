@@ -21,6 +21,8 @@
     <a href="#-quick-start">🔥 Quick Start</a> •
     <a href="#-remote-evaluation">🚀 Remote Evaluation</a> •
     <a href="#-llm-generated-code">💻 LLM-generated Code</a> •
+    <a href="#-advanced-usage">🧑 Advanced Usage</a> •
+    <a href="#-result-submission">📰 Result Submission</a> •
     <a href="#-citation">📜 Citation</a>
 </p>
 
@@ -158,9 +160,13 @@ export GOOGLE_API_KEY=<your_google_api_key>
 We share pre-generated code samples from LLMs we have [evaluated](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard):
 *  See the attachment of our [v0.2.0.post3](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.2.0.post3). We include `sanitized_samples_calibrated.zip` for your convenience.
 
-## Advanced Usage
+## 🧑 Advanced Usage
 
 Please refer to the [ADVANCED USAGE](https://github.com/bigcode-project/bigcodebench/blob/main/ADVANCED_USAGE.md) for more details.
+
+## 📰 Result Submission
+
+Please email both the generated code samples and the execution results to [terry.zhuo@monash.edu](mailto:terry.zhuo@monash.edu) if you would like to contribute your model to the leaderboard. Note that the file names should be in the format of `[model_name]--[revision]--[bigcodebench|bigcodebench-hard]-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated.jsonl` and `[model_name]--[revision]--[bigcodebench|bigcodebench-hard]-[instruct|complete]--[backend]-[temp]-[n_samples]-sanitized_calibrated_eval_results.json`. You can [file an issue](https://github.com/bigcode-project/bigcodebench/issues/new/choose) to remind us if we do not respond to your email within 3 days.
 
 ## 📜 Citation
 
