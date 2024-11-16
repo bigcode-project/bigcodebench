@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Tuple, Optional
 from warnings import warn
 from gradio_client import Client, handle_file
 
+import httpx
 import numpy as np
 from termcolor import cprint
 from tqdm import tqdm
@@ -149,22 +150,27 @@ def evaluate(
         result_path = samples.replace(".jsonl", "_eval_results.json")
     
     if not local_execute:
-        
-        client = Client(remote_execute_api)
-        results, pass_at_k = client.predict(
-            split=split,
-            subset=subset,
-            samples=handle_file(samples),
-            pass_k=pass_k,
-            parallel=parallel,
-            min_time_limit=min_time_limit,
-            max_as_limit=max_as_limit,
-            max_data_limit=max_data_limit,
-            max_stack_limit=max_stack_limit,
-            check_gt_only=check_gt_only,
-            no_gt=no_gt,
-            api_name="/predict"
-        )
+        while True:
+            try:
+                client = Client(remote_execute_api)
+                results, pass_at_k = client.predict(
+                    split=split,
+                    subset=subset,
+                    samples=handle_file(samples),
+                    pass_k=pass_k,
+                    parallel=parallel,
+                    min_time_limit=min_time_limit,
+                    max_as_limit=max_as_limit,
+                    max_data_limit=max_data_limit,
+                    max_stack_limit=max_stack_limit,
+                    check_gt_only=check_gt_only,
+                    no_gt=no_gt,
+                    api_name="/predict"
+                )
+                break
+            except httpx.ReadTimeout:
+                print("Read timeout error. Retrying in 4s...")
+                time.sleep(4)
         gt_pass_rate = pass_at_k["gt_pass_rate"]
         failed_tasks = pass_at_k["failed_tasks"]
         
@@ -380,6 +386,14 @@ def evaluate(
             with open(pass_at_k_path, "w") as f:
                 json.dump(pass_at_k, f, indent=2)
 
+
+def main():
+    from fire import Fire
+
+    Fire(evaluate)
+
+if __name__ == "__main__":
+    main()
 
 def main():
     from fire import Fire
