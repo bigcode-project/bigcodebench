@@ -1,6 +1,6 @@
 import os
 from typing import List
-
+from tqdm import tqdm
 import openai
 
 from bigcodebench.gen.util.openai_request import make_auto_request
@@ -38,7 +38,7 @@ class OpenAIChatDecoder(DecoderBase):
         )
         
         all_outputs = []
-        for message in messages:
+        for message in tqdm(messages):
             ret = make_auto_request(
                 client,
                 message=message,
