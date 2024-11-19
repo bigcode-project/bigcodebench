@@ -7,6 +7,7 @@ import threading
 import time
 from collections import Counter, defaultdict
 from concurrent.futures import ProcessPoolExecutor, as_completed, wait, FIRST_COMPLETED
+from concurrent.futures._base import CancelledError
 from datetime import datetime
 from typing import Any, Dict, List, Tuple, Optional
 from warnings import warn
@@ -168,7 +169,7 @@ def evaluate(
                     api_name="/predict"
                 )
                 break
-            except httpx.ReadTimeout:
+            except (httpx.ReadTimeout, CancelledError):
                 print("Read timeout error. Retrying in 4s...")
                 time.sleep(4)
         gt_pass_rate = pass_at_k["gt_pass_rate"]
