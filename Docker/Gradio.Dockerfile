@@ -2,7 +2,7 @@
 FROM python:3.10-slim
 
 # install git, g++ and python3-tk
-RUN apt-get update && apt-get install -y git g++ python3-tk zip unzip procps r-base
+RUN apt-get update && apt-get install -y git g++ python3-tk zip unzip procps r-base libgdal-dev
 
 # upgrade to latest pip
 RUN pip install --upgrade pip
@@ -39,7 +39,7 @@ RUN cd /bigcodebench && \
 # Pre-install the dataset
 RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
 
-RUN pip install -I --timeout 2000 -r https://github.com/bigcode-project/bigcodebench-annotation/releases/download/v0.1.0/requirements.txt
+RUN pip install -I --timeout 2000 -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/refs/heads/main/Requirements/requirements-eval.txt
 
 RUN apt-get update && \
     apt-get install -y \
