@@ -277,27 +277,27 @@ def evaluate(
                             warn("No samples had finished testing in the last 240s")
                             warn(f"{len(remainings)} samples to be tested: {remainings}")
 
-                threading.Thread(target=stucking_checker).start()
+                    threading.Thread(target=stucking_checker).start()
 
-                for future in tqdm(as_completed(futures), total=n_samples):
-                    result = future.result()
-                    remainings.remove(result["_identifier"])
-                    eval_results[result["task_id"]].append(result)
+                    for future in tqdm(as_completed(futures), total=n_samples):
+                        result = future.result()
+                        remainings.remove(result["_identifier"])
+                        eval_results[result["task_id"]].append(result)
 
-                    # sort the results for each problem by completion_id
-                    for task_id, task_results in eval_results.items():
-                        task_results.sort(key=lambda x: x["completion_id"])
-                        results["eval"][task_id] = []
-                        for res in task_results:
-                            stat, details = res["base"]
-                            results["eval"][task_id].append(
-                                {
-                                    "task_id": task_id,
-                                    "solution": res["solution"],
-                                    "status": stat,
-                                    "details": details,
-                                }
-                            )
+                        # sort the results for each problem by completion_id
+                        for task_id, task_results in eval_results.items():
+                            task_results.sort(key=lambda x: x["completion_id"])
+                            results["eval"][task_id] = []
+                            for res in task_results:
+                                stat, details = res["base"]
+                                results["eval"][task_id].append(
+                                    {
+                                        "task_id": task_id,
+                                        "solution": res["solution"],
+                                        "status": stat,
+                                        "details": details,
+                                    }
+                                )
 
                 # Calculate pass@k.
                 total = np.array([len(r) for k, r in results["eval"].items() if k in problems])
