@@ -69,6 +69,7 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--local_execute`: Whether to execute the samples locally, default to `False`
 - `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page.
 - `--pass_k`: The `k` in `Pass@k`, default to `[1, 5, 10]`, e.g. `--pass_k 1,5,10` will evaluate `Pass@1`, `Pass@5` and `Pass@10`
+- `--calibrated`: Whether to use the calibrated samples, default to `True`
 - `--save_pass_rate`: Whether to save the pass rate to a file, default to `True`
 - `--parallel`: The number of parallel processes, default to `-1`, e.g. `--parallel 10` will evaluate 10 samples in parallel
 - `--min_time_limit`: The minimum time limit for the execution, default to `1`, e.g. `--min_time_limit 10` will evaluate the samples with at least 10 seconds
