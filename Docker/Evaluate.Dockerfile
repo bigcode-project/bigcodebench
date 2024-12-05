@@ -16,7 +16,23 @@ RUN rm -rf /bigcodebench
 ADD "https://api.github.com/repos/bigcode-project/bigcodebench/commits?per_page=1" latest_commit
 RUN git clone https://github.com/bigcode-project/bigcodebench.git /bigcodebench
 
-RUN cd /bigcodebench && pip install .[evaluate] --no-deps
+RUN cd /bigcodebench && \
+    pip install . --no-deps && \
+    pip install \
+    appdirs>=1.4.4 \
+    fire>=0.6.0 \
+    multipledispatch>=0.6.0 \
+    pqdm>=0.2.0 \
+    tempdir>=0.7.1 \
+    termcolor>=2.0.0 \
+    tqdm>=4.56.0 \
+    tree_sitter_languages>=1.10.2 \
+    tree-sitter==0.21.3 \
+    wget>=3.2 \
+    datasets \
+    gradio-client \
+    numpy \
+    rich
 
 # Pre-install the dataset
 RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
