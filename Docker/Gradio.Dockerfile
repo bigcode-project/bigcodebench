@@ -18,7 +18,7 @@ RUN rm -rf /bigcodebench
 ADD "https://api.github.com/repos/bigcode-project/bigcodebench/commits?per_page=1" latest_commit
 RUN git clone https://github.com/bigcode-project/bigcodebench.git /bigcodebench
 
-RUN cd /bigcodebench && pip install .
+RUN cd /bigcodebench && pip install .[evaluate] --no-deps
 
 # Pre-install the dataset
 RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
