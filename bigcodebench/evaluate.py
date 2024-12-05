@@ -395,11 +395,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-def main():
-    from fire import Fire
-
-    Fire(evaluate)
-
-if __name__ == "__main__":
-    main()
