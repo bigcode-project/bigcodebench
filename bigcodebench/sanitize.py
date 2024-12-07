@@ -6,8 +6,8 @@ from typing import Dict, Generator, List, Optional, Set, Tuple
 from pqdm.processes import pqdm
 
 from tqdm import tqdm
-from tree_sitter import Node
-from tree_sitter_languages import get_parser
+import tree_sitter_python
+from tree_sitter import Language, Node, Parser
 
 from bigcodebench.data import (
     get_bigcodebench,
@@ -111,7 +111,7 @@ def has_return_statement(node: Node) -> bool:
 def extract_target_code_or_empty(code: str, entrypoint: Optional[str] = None) -> str:
     code = code_extract(code.strip())
     code_bytes = bytes(code, "utf8")
-    parser = get_parser("python")
+    parser = Parser(Language(tree_sitter_python.language()))
     tree = parser.parse(code_bytes)
     class_names = set()
     function_names = set()
