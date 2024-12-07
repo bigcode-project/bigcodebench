@@ -178,6 +178,8 @@ def evaluate(
         
     else:
         
+        pass_at_k = dict()
+
         pass_k = [int(k) for k in pass_k.split(",")]
         
         if parallel < 1:
@@ -207,8 +209,6 @@ def evaluate(
 
             results = compatible_eval_result(results)
         else:
-            pass_at_k = dict()
-            
             if check_gt_only:
             
                 if gt_pass_rate > 0.99:
@@ -299,30 +299,30 @@ def evaluate(
                                     }
                                 )
 
-                # Calculate pass@k.
-                total = np.array([len(r) for k, r in results["eval"].items() if k in problems])
-                base_correct = []
+        # Calculate pass@k.
+        total = np.array([len(r) for k, r in results["eval"].items() if k in problems])
+        base_correct = []
 
-                for key, res in results["eval"].items():
-                    if key not in problems:
-                        continue
-                    bc = sum([r["status"] == PASS for r in res])
-                    base_correct.append(bc)
+        for key, res in results["eval"].items():
+            if key not in problems:
+                continue
+            bc = sum([r["status"] == PASS for r in res])
+            base_correct.append(bc)
 
-                base_correct = np.array(base_correct)
+        base_correct = np.array(base_correct)
 
-                pass_at_k.update({
-                    f"pass@{k}": estimate_pass_at_k(total, base_correct, k).mean()
-                    for k in pass_k
-                    if total.min() >= k
-                })
+        pass_at_k.update({
+            f"pass@{k}": estimate_pass_at_k(total, base_correct, k).mean()
+            for k in pass_k
+            if total.min() >= k
+        })
 
-            pass_at_k["model"] = os.path.basename(samples).split("--bigcodebench-")[0]
-            pass_at_k["split"] = split
-            pass_at_k["subset"] = subset
-            pass_at_k["calibrated"] = calibrated
-            pass_at_k["gt_pass_rate"] = gt_pass_rate
-            pass_at_k["failed_tasks"] = failed_tasks
+        pass_at_k["model"] = os.path.basename(samples).split("--bigcodebench-")[0]
+        pass_at_k["split"] = split
+        pass_at_k["subset"] = subset
+        pass_at_k["calibrated"] = calibrated
+        pass_at_k["gt_pass_rate"] = gt_pass_rate
+        pass_at_k["failed_tasks"] = failed_tasks
             
     extra = subset.capitalize()
     split = split.capitalize()
