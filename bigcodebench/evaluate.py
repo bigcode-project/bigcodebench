@@ -165,6 +165,7 @@ def evaluate(
                     max_as_limit=max_as_limit,
                     max_data_limit=max_data_limit,
                     max_stack_limit=max_stack_limit,
+                    calibrated=calibrated,
                     check_gt_only=check_gt_only,
                     no_gt=no_gt,
                     api_name="/predict"
