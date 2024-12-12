@@ -6,6 +6,7 @@ SPLIT=complete
 SUBSET=hard
 
 bigcodebench.evaluate \
+  --tp $NUM_GPU \
   --model $MODEL \
   --split $SPLIT \
   --subset $SUBSET \
