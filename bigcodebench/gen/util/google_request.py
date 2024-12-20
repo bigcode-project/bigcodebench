@@ -11,12 +11,16 @@ def make_request(
     n: int,
     max_new_tokens: int = 2048,
 ) -> genai.types.GenerateContentResponse:
+    kwargs = {"temperature": temperature, "max_output_tokens": max_new_tokens}
+
+    if "-thinking-" in client.model_name:
+        kwargs.pop("max_output_tokens")
+
     response = client.generate_content(
         [{"role": "user", "parts": [message]}],
         generation_config=genai.types.GenerationConfig(
             candidate_count=n,
-            max_output_tokens=max_new_tokens,
-            temperature=temperature,
+            **kwargs
         ),
         safety_settings=[
             {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
@@ -45,4 +49,3 @@ def make_auto_request(*args, **kwargs) -> genai.types.GenerateContentResponse:
             print(e)
             time.sleep(1)
     return ret
-
