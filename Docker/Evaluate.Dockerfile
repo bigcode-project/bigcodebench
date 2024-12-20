@@ -55,7 +55,7 @@ RUN pip install -I --timeout 2000 -r https://raw.githubusercontent.com/bigcode-p
 RUN pip install datasets==2.17.0
 
 # Pre-install the dataset
-RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench()"
+RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench(subset='full'); get_bigcodebench(subset='hard')"
 
 WORKDIR /app
 
