@@ -15,16 +15,16 @@ def make_request(
 ) -> ChatCompletion:
     kwargs["top_p"] = 0.95
     kwargs["max_completion_tokens"] = max_tokens
+    kwargs["temperature"] = temperature
     if model.startswith("o1-"):  # pop top-p and max_completion_tokens
         kwargs.pop("top_p")
         kwargs.pop("max_completion_tokens")
-    
+        kwargs.pop("temperature")
     return client.chat.completions.create(
         model=model,
         messages=[
             {"role": "user", "content": message},
         ],
-        temperature=temperature,
         n=n,
         **kwargs
     )
