@@ -220,6 +220,8 @@ def evaluate(
                 if len(failed_tasks) > 0:
                     cprint(f"Failed tasks: {failed_tasks}", "red")
                 
+                return
+            
             else:
                 results = {
                     "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
