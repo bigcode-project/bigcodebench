@@ -57,7 +57,7 @@ class OpenAIChatDecoder(DecoderBase):
         batches = concurrent_call(
             num_samples, self._codegen_api_batch, messages, num_samples=1
         )
-        return [b[0] for b in batches]
+        return [[element for sublist in item for element in sublist] for item in zip(*batches)]
 
     def is_direct_completion(self) -> bool:
         return False
