@@ -189,6 +189,8 @@ def run_codegen(
     )
     
     extra = "-" + subset if subset != "full" else ""
+    if reasoning_effort and model.startswith("o1-") or model.startswith("o3-"):
+        model = model + f"--{reasoning_effort}"
     identifier = model.replace("/", "--") + f"--{revision}--bigcodebench{extra}-{split}--{backend}-{temperature}-{n_samples}-sanitized_calibrated.jsonl"
     
     target_path = os.path.join(root, identifier)
