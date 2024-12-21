@@ -9,6 +9,8 @@ def make_model(
     dataset: str = "bigcodebench",
     temperature: float = 0.0,
     max_new_tokens: int = 1280,
+    # o1 and o3 only
+    reasoning_effort: str = "medium",
     # instruction model only
     instruction_prefix: str = None,
     response_prefix: str = None,
@@ -73,6 +75,7 @@ def make_model(
             split=split,
             temperature=temperature,
             max_new_tokens=max_new_tokens,
+            reasoning_effort=reasoning_effort,
             base_url=base_url,
             instruction_prefix=instruction_prefix,
             response_prefix=response_prefix,
