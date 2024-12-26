@@ -27,7 +27,7 @@
 </p>
 
 ## 💥 Impact
-BigCodeBench has been used by many LLM teams including:
+BigCodeBench has been trusted by many LLM teams including:
 - Zhipu AI
 - Alibaba Qwen
 - DeepSeek
@@ -37,6 +37,7 @@ BigCodeBench has been used by many LLM teams including:
 - Meta AI
 - Cohere AI
 - Sakana AI
+- Allen Institute for Artificial Intelligence (AI2)
 
 ## 📰 News
 - **[2024-10-06]** We are releasing `bigcodebench==v0.2.0`!
