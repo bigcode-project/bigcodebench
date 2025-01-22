@@ -54,7 +54,7 @@ RUN pip install \
     rich \
     accelerate>=0.30.1 \
     anthropic>=0.26.1 \
-    google-generativeai>=0.5.4
+    google-generativeai>=0.5.4 \
     mistralai<1.0.0 \
     openai>=1.11.1 \
     e2b
