@@ -119,7 +119,7 @@ def evaluate(
     subset: str,
     samples: Optional[str] = None,
     no_execute: bool = False,
-    execution: str = "e2b", # "e2b", "gradio", "local"
+    execution: str = "gradio", # "e2b", "gradio", "local"
     selective_evaluate: str = "",
     e2b_endpoint: str = "bigcodebench_evaluator",
     gradio_endpoint: str = "https://bigcode-bigcodebench-evaluator.hf.space/",

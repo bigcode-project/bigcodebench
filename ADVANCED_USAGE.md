@@ -56,6 +56,8 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--resume`: Whether to resume the evaluation, default to `True`, set to `False` to re-run the evaluation
 - `--id_range`: The range of the tasks to evaluate, default to `None`, e.g. `--id_range 10-20` will evaluate the tasks from 10 to 20
 - `--backend`: The backend to use, default to `vllm`
+- `--execution`: The execution backend to use, default to `gradio`. You can choose from `e2b`, `gradio`, `local`.
+- `--reasoning_effort`: The reasoning effort to use, default to `medium`. You can choose from `easy`, `medium`, `hard` for `o1`, `o3` and `deepseek-reasoner`(soon) models.
 - `--base_url`: The base URL of the backend for OpenAI-compatible APIs, default to `None`
 - `--instruction_prefix`: The instruction prefix for the Anthropic backend, default to `None`
 - `--response_prefix`: The response prefix for the Anthropic backend, default to `None`
@@ -67,7 +69,7 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--samples`: The path to the generated samples file, default to `None`
 - `--no_execute`: Whether to not execute the samples, default to `False`
 - `--local_execute`: Whether to execute the samples locally, default to `False`
-- `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page.
+- `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page
 - `--pass_k`: The `k` in `Pass@k`, default to `[1, 5, 10]`, e.g. `--pass_k 1,5,10` will evaluate `Pass@1`, `Pass@5` and `Pass@10`
 - `--calibrated`: Whether to use the calibrated samples, default to `True`
 - `--save_pass_rate`: Whether to save the pass rate to a file, default to `True`
@@ -76,6 +78,7 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--max_as_limit`: The maximum address space limit for the execution, default to `30*1024` (30 GB), e.g. `--max_as_limit 20*1024` will evaluate the samples with at most 20 GB
 - `--max_data_limit`: The maximum data segment limit for the execution, default to `30*1024` (30 GB), e.g. `--max_data_limit 20*1024` will evaluate the samples with at most 20 GB
 - `--max_stack_limit`: The maximum stack limit for the execution, default to `10`, e.g. `--max_stack_limit 20` will evaluate the samples with at most 20 MB
+- `--selective_evaluate`: The subset of the dataset to evaluate, default to `""`. You can pass the index of the tasks to evaluate, e.g. `--selective_evaluate 1,2,3` will evaluate the BigCodeBench/1, BigCodeBench/2 and BigCodeBench/3
 - `--check_gt_only`: Whether to only check the ground truths, default to `False`
 - `--no_gt`: Whether to not check the ground truths, default to `False`
 

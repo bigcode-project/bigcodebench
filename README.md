@@ -12,7 +12,6 @@
     <a href="https://pepy.tech/project/bigcodebench"><img src="https://static.pepy.tech/badge/bigcodebench"></a>
     <a href="https://github.com/bigcodebench/bigcodebench/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/bigcodebench"></a>
     <a href="https://hub.docker.com/r/bigcodebench/bigcodebench-evaluate" title="Docker-Eval"><img src="https://img.shields.io/docker/image-size/bigcodebench/bigcodebench-evaluate"></a>
-    <a href="https://hub.docker.com/r/bigcodebench/bigcodebench-generate" title="Docker-Gen"><img src="https://img.shields.io/docker/image-size/bigcodebench/bigcodebench-generate"></a>
 </p>
 
 <p align="center">
@@ -40,6 +39,7 @@ BigCodeBench has been trusted by many LLM teams including:
 - Allen Institute for Artificial Intelligence (AI2)
 
 ## 📰 News
+- **[2025-01-22]** We are releasing `bigcodebench==v0.2.2.dev2`, with 163 models evaluated!
 - **[2024-10-06]** We are releasing `bigcodebench==v0.2.0`!
 - **[2024-10-05]** We create a public code execution API on the [Hugging Face space](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator).
 - **[2024-10-01]** We have evaluated 139 models on BigCodeBench-Hard so far. Take a look at the [leaderboard](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard)!
@@ -111,11 +111,13 @@ We use the greedy decoding as an example to show how to evaluate the generated c
 
 > [!Note]
 >
-> Remotely executing on `BigCodeBench-Full` typically takes 6-7 minutes, and on `BigCodeBench-Hard` typically takes 4-5 minutes.
+> `gradio` backend on `BigCodeBench-Full` typically takes 6-7 minutes, and on `BigCodeBench-Hard` typically takes 4-5 minutes.
+> `e2b` backend with default machine on `BigCodeBench-Full` typically takes 25-30 minutes, and on `BigCodeBench-Hard` typically takes 15-20 minutes.
 
 ```bash
 bigcodebench.evaluate \
   --model meta-llama/Meta-Llama-3.1-8B-Instruct \
+  --execution [e2b|gradio|local] \
   --split [complete|instruct] \
   --subset [full|hard] \
   --backend [vllm|openai|anthropic|google|mistral|hf]
@@ -128,6 +130,12 @@ bigcodebench.evaluate \
 
 > [!Note]
 >
+> The `gradio` backend is hosted on the [Hugging Face space](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) by default.
+> The default space can be sometimes slow, so we recommend you to use the `e2b` backend for faster evaluation.
+> Otherwise, you can also use the `e2b` sandbox for evaluation, which is also pretty slow on the default machine.
+
+> [!Note]
+>
 > BigCodeBench uses different prompts for base and chat models.
 > By default it is detected by `tokenizer.chat_template` when using `hf`/`vllm` as backend.
 > For other backends, only chat mode is allowed.
@@ -135,6 +143,12 @@ bigcodebench.evaluate \
 > Therefore, if your base models come with a `tokenizer.chat_template`,
 > please add `--direct_completion` to avoid being evaluated
 > in a chat mode.
+
+To use E2B, you need to set up an account and get an API key from [E2B](https://e2b.dev/).
+
+```bash
+export E2B_API_KEY=<your_e2b_api_key>
+```
 
 Access OpenAI APIs from [OpenAI Console](https://platform.openai.com/)
 ```bash
