@@ -37,26 +37,26 @@ RUN cd /bigcodebench && \
     pip install . --no-deps && \
     
 RUN pip install \
-    appdirs>=1.4.4 \
-    fire>=0.6.0 \
-    multipledispatch>=0.6.0 \
-    pqdm>=0.2.0 \
-    tempdir>=0.7.1 \
-    termcolor>=2.0.0 \
-    tqdm>=4.56.0 \
-    tree_sitter>=0.22.0 \
-    tree-sitter-python>=0.21.0 \
-    wget>=3.2 \
+    appdirs \
+    fire \
+    multipledispatch \
+    pqdm \
+    tempdir \
+    termcolor \
+    tqdm \
+    tree_sitter \
+    tree-sitter-python \
+    wget \
     transformers \
     datasets \
     gradio-client \
     numpy \
     rich \
-    accelerate>=0.30.1 \
-    anthropic>=0.26.1 \
-    google-generativeai>=0.5.4 \
-    mistralai<1.0.0 \
-    openai>=1.11.1 \
+    accelerate \
+    anthropic \
+    google-generativeai \
+    mistralai \
+    openai \
     e2b
 
 RUN pip install -I --timeout 2000 -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/refs/heads/main/Requirements/requirements-eval.txt
