@@ -34,33 +34,35 @@ RUN git clone https://github.com/bigcode-project/bigcodebench.git /bigcodebench
 RUN pip install numpy==1.24.3 pyarrow==14.0.1
 
 RUN cd /bigcodebench && \
-    pip install . --no-deps && \
-    pip install \
-    appdirs>=1.4.4 \
-    fire>=0.6.0 \
-    multipledispatch>=0.6.0 \
-    pqdm>=0.2.0 \
-    tempdir>=0.7.1 \
-    termcolor>=2.0.0 \
-    tqdm>=4.56.0 \
-    tree_sitter_languages>=1.10.2 \
-    tree-sitter==0.21.3 \
-    wget>=3.2 \
+    pip install . --no-deps
+    
+RUN pip install --timeout 2000 \
+    appdirs \
+    fire \
+    multipledispatch \
+    pqdm \
+    tempdir \
+    termcolor \
+    tqdm \
+    transformers \
+    tree_sitter \
+    tree-sitter-python \
+    wget \
+    datasets \
     gradio-client \
-    rich
+    numpy \
+    rich \
+    e2b
 
 RUN pip install -I --timeout 2000 -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/refs/heads/main/Requirements/requirements-eval.txt
 
 # Ensure the numpy version is compatible with the datasets version
 RUN pip install datasets==2.17.0
 
-# Pre-install the dataset
-RUN python3 -c "from bigcodebench.data import get_bigcodebench; get_bigcodebench(subset='full'); get_bigcodebench(subset='hard')"
-
 WORKDIR /app
 
 RUN chown -R bigcodebenchuser:bigcodebenchuser /app
 
-RUN chmod -R 777 /app
+RUN chmod -R 777 /app && rm -rf /root/.cache/pip
 
 USER bigcodebenchuser

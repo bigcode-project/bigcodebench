@@ -35,7 +35,8 @@ RUN pip install numpy==1.24.3 pyarrow==14.0.1
 
 RUN cd /bigcodebench && \
     pip install . --no-deps && \
-    pip install \
+    
+RUN pip install \
     appdirs>=1.4.4 \
     fire>=0.6.0 \
     multipledispatch>=0.6.0 \
@@ -43,11 +44,20 @@ RUN cd /bigcodebench && \
     tempdir>=0.7.1 \
     termcolor>=2.0.0 \
     tqdm>=4.56.0 \
-    tree_sitter_languages>=1.10.2 \
-    tree-sitter==0.21.3 \
+    tree_sitter>=0.22.0 \
+    tree-sitter-python>=0.21.0 \
     wget>=3.2 \
+    transformers \
+    datasets \
     gradio-client \
-    rich
+    numpy \
+    rich \
+    accelerate>=0.30.1 \
+    anthropic>=0.26.1 \
+    google-generativeai>=0.5.4
+    mistralai<1.0.0 \
+    openai>=1.11.1 \
+    e2b
 
 RUN pip install -I --timeout 2000 -r https://raw.githubusercontent.com/bigcode-project/bigcodebench/refs/heads/main/Requirements/requirements-eval.txt
 

@@ -121,7 +121,7 @@ def evaluate(
     no_execute: bool = False,
     execution: str = "e2b", # "e2b", "gradio", "local"
     selective_evaluate: str = "",
-    e2b_endpoint: str = "bigcodebench-evaluator",
+    e2b_endpoint: str = "bigcodebench_evaluator",
     gradio_endpoint: str = "https://bigcode-bigcodebench-evaluator.hf.space/",
     pass_k: str = "1,5,10",
     save_pass_rate: bool = True,
@@ -135,7 +135,6 @@ def evaluate(
     no_gt: bool = False,
     **model_kwargs,
 ):  
-    
     if not samples and model_kwargs:
         samples = run_codegen(
             split=split,
@@ -182,31 +181,32 @@ def evaluate(
         failed_tasks = pass_at_k["failed_tasks"]
     
     elif execution == "e2b":
-        sandbox = Sandbox(e2b_endpoint, timeout=60*10)
-        
+        sandbox = Sandbox(e2b_endpoint, api_key=os.environ["E2B_API_KEY"], timeout=60*60)
+
         # upload file to sandbox
         with open(samples, "r") as file:
             sandbox.files.write(samples, file)
         
         # run the evaluation
-        sandbox.commands.run("python3 -m bigcodebench.evaluate \
-                            --split {} --subset {} --samples {} \
-                            --pass_k {} --save_pass_rate {} --calibrated {} \
-                            --parallel {} --min_time_limit {} --max_as_limit {} \
-                            --max_data_limit {} --max_stack_limit {} --check_gt_only {} --no_gt {} \
-                            ".format(split, subset, samples, pass_k, save_pass_rate, calibrated, parallel, 
-                                     min_time_limit, max_as_limit, max_data_limit, max_stack_limit, check_gt_only, no_gt))
+        print(f"Command run in sandbox {e2b_endpoint}")
+        sandbox.commands.run("bigcodebench.evaluate  --execution 'local' "
+                        f"--split {split} --subset {subset} --samples {samples} "
+                        f"--pass_k {pass_k} --save_pass_rate {save_pass_rate} --calibrated {calibrated} "
+                        f"--parallel {parallel} --selective_evaluate {selective_evaluate} --min_time_limit {min_time_limit} "
+                        f"--max_as_limit {max_as_limit} --max_data_limit {max_data_limit} --max_stack_limit {max_stack_limit} "
+                        f"--check_gt_only {check_gt_only} --no_gt {no_gt}", on_stderr=lambda x: print(x), on_stdout=lambda x: print(x), timeout=60*50)
         
-        # download the results
-        content = sandbox.files.read(result_path)
-        with open(result_path, "w") as file:
-            file.write(content)
+        if not check_gt_only:
+            # download the results
+            content = sandbox.files.read(result_path)
+            with open(result_path, "w") as file:
+                file.write(content)
 
     else:
         
         pass_at_k = dict()
 
-        pass_k = [int(k) for k in pass_k.split(",")]
+        passk = [int(k) for k in pass_k.split(",")]
         
         if parallel < 1:
             n_workers = max(1, multiprocessing.cpu_count() // 2)
@@ -350,7 +350,7 @@ def evaluate(
 
         pass_at_k.update({
             f"pass@{k}": estimate_pass_at_k(total, base_correct, k).mean()
-            for k in pass_k
+            for k in passk
             if total.min() >= k
         })
 
