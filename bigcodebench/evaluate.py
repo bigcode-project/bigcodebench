@@ -12,6 +12,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Tuple, Optional
 from warnings import warn
 from gradio_client import Client, handle_file
+from e2b import Sandbox
 
 import httpx
 import numpy as np
@@ -118,9 +119,10 @@ def evaluate(
     subset: str,
     samples: Optional[str] = None,
     no_execute: bool = False,
-    local_execute: bool = False,
+    execution: str = "e2b", # "e2b", "gradio", "local"
     selective_evaluate: str = "",
-    remote_execute_api: str = "https://bigcode-bigcodebench-evaluator.hf.space/",
+    e2b_endpoint: str = "bigcodebench-evaluator",
+    gradio_endpoint: str = "https://bigcode-bigcodebench-evaluator.hf.space/",
     pass_k: str = "1,5,10",
     save_pass_rate: bool = True,
     calibrated: bool = True,
@@ -152,10 +154,10 @@ def evaluate(
         assert samples.endswith(".jsonl")
         result_path = samples.replace(".jsonl", "_eval_results.json")
     
-    if not local_execute:
+    if execution == "gradio":
         while True:
             try:
-                client = Client(remote_execute_api)
+                client = Client(gradio_endpoint)
                 results, pass_at_k = client.predict(
                     split=split,
                     subset=subset,
@@ -178,7 +180,28 @@ def evaluate(
                 time.sleep(4)
         gt_pass_rate = pass_at_k["gt_pass_rate"]
         failed_tasks = pass_at_k["failed_tasks"]
+    
+    elif execution == "e2b":
+        sandbox = Sandbox(e2b_endpoint, timeout=60*10)
         
+        # upload file to sandbox
+        with open(samples, "r") as file:
+            sandbox.files.write(samples, file)
+        
+        # run the evaluation
+        sandbox.commands.run("python3 -m bigcodebench.evaluate \
+                            --split {} --subset {} --samples {} \
+                            --pass_k {} --save_pass_rate {} --calibrated {} \
+                            --parallel {} --min_time_limit {} --max_as_limit {} \
+                            --max_data_limit {} --max_stack_limit {} --check_gt_only {} --no_gt {} \
+                            ".format(split, subset, samples, pass_k, save_pass_rate, calibrated, parallel, 
+                                     min_time_limit, max_as_limit, max_data_limit, max_stack_limit, check_gt_only, no_gt))
+        
+        # download the results
+        content = sandbox.files.read(result_path)
+        with open(result_path, "w") as file:
+            file.write(content)
+
     else:
         
         pass_at_k = dict()

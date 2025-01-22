@@ -132,7 +132,7 @@ def run_codegen(
     temperature: float = 0.0,
     max_new_tokens: int = 1280,
     greedy: bool = False,
-    reasoning_effort: str = "medium", # o1 and o3 only
+    reasoning_effort: str = "medium",
     strip_newlines: bool = False,
     direct_completion: bool = False,
     resume: bool = True,
