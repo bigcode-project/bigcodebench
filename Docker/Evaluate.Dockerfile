@@ -34,7 +34,7 @@ RUN git clone https://github.com/bigcode-project/bigcodebench.git /bigcodebench
 RUN pip install numpy==1.24.3 pyarrow==14.0.1
 
 RUN cd /bigcodebench && \
-    pip install . --no-deps && \
+    pip install . --no-deps
     
 RUN pip install \
     appdirs \
