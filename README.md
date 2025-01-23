@@ -131,7 +131,7 @@ bigcodebench.evaluate \
 > [!Note]
 >
 > The `gradio` backend is hosted on the [Hugging Face space](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) by default.
-> The default space can be sometimes slow, so we recommend you to use the `e2b` backend for faster evaluation.
+> The default space can be sometimes slow, so we recommend you to use the `gradio` backend with a cloned [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) endpoint for faster evaluation.
 > Otherwise, you can also use the `e2b` sandbox for evaluation, which is also pretty slow on the default machine.
 
 > [!Note]
