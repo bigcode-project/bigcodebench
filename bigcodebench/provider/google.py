@@ -43,10 +43,7 @@ class GoogleDecoder(DecoderBase):
             for candidate in ret.candidates:
                 parts = candidate.content.parts
                 if parts:
-                    if "-thinking-" in self.name:
-                        outputs.append(parts[1].text)
-                    else:
-                        outputs.append(parts[0].text)
+                    outputs.append(parts[0].text)
                 else:
                     print("Empty response!")
                     outputs.append("")
