@@ -20,6 +20,7 @@ class DecoderBase(ABC):
         tokenizer_legacy: bool = False,
         instruction_prefix: str = None,
         response_prefix: str = None,
+        prefill: bool = True,
     ) -> None:
         print("Initializing a decoder model: {} ...".format(name))
         self.name = name
@@ -37,6 +38,7 @@ class DecoderBase(ABC):
         self.tokenizer_legacy = tokenizer_legacy
         self.instruction_prefix = instruction_prefix
         self.response_prefix = response_prefix
+        self.prefill = prefill
 
     @abstractmethod
     def codegen(

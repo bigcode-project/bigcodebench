@@ -47,6 +47,7 @@ class VllmDecoder(DecoderBase):
                 split=self.split,
                 instruction_prefix=self.instruction_prefix,
                 response_prefix=self.response_prefix,
+                prefill=self.prefill,
                 tokenizer=self.tokenizer,
                 direct_completion=self.direct_completion,
             )

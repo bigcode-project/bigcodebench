@@ -14,6 +14,7 @@ def make_model(
     # instruction model only
     instruction_prefix: str = None,
     response_prefix: str = None,
+    prefill: bool = True,
     # vllm and hf only
     revision: str = "main",
     # vllm only
@@ -42,6 +43,7 @@ def make_model(
             tp=tp,
             instruction_prefix=instruction_prefix,
             response_prefix=response_prefix,
+            prefill=prefill,
             trust_remote_code=trust_remote_code,
             tokenizer_name=tokenizer_name,
             tokenizer_legacy=tokenizer_legacy,
@@ -60,6 +62,7 @@ def make_model(
             direct_completion=direct_completion,
             instruction_prefix=instruction_prefix,
             response_prefix=response_prefix,
+            prefill=prefill,
             attn_implementation=attn_implementation,
             trust_remote_code=trust_remote_code,
             tokenizer_name=tokenizer_name,

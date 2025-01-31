@@ -28,6 +28,7 @@ def make_raw_chat_prompt(
     split: str, 
     instruction_prefix: str,
     response_prefix: str,
+    prefill: bool,
     tokenizer: AutoTokenizer,
     direct_completion: bool = False,
 ) -> str:
@@ -58,13 +59,21 @@ def make_raw_chat_prompt(
 ```
 """
     if tokenizer:
-        task_prompt = tokenizer.apply_chat_template(
-            [
-                {"role": "user", "content": task_prompt},
-                {"role": "assistant", "content": response},
-            ],
-            tokenize=False,
-        ).split(_MAGIC_SPLITTER_)[0]
+        if prefill:
+            task_prompt = tokenizer.apply_chat_template(
+                [
+                    {"role": "user", "content": task_prompt},
+                    {"role": "assistant", "content": response},
+                ],
+                tokenize=False,
+            ).split(_MAGIC_SPLITTER_)[0]
+        else:
+            task_prompt = tokenizer.apply_chat_template(
+                [
+                    {"role": "user", "content": task_prompt},
+                ],
+                tokenize=False,
+            ).split(_MAGIC_SPLITTER_)[0]
     return task_prompt
 
 
