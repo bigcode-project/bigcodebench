@@ -142,7 +142,7 @@ def run_codegen(
     tp: int = 1,
     instruction_prefix: str = "Please provide a self-contained Python script that solves the following problem in a markdown code block:",
     response_prefix: str ="Below is a Python script with a self-contained function that solves the problem and passes corresponding tests:",
-    no_prefill: bool = False,
+    skip_prefill: bool = False,
     revision: str = "main",
     trust_remote_code: bool = False,
     tokenizer_name: str = None,
@@ -175,7 +175,7 @@ def run_codegen(
         reasoning_effort=reasoning_effort,
         instruction_prefix=instruction_prefix,
         response_prefix=response_prefix,
-        prefill=not no_prefill,
+        prefill=not skip_prefill,
         base_url=base_url,
         tp=tp,
         revision=revision,
@@ -188,7 +188,7 @@ def run_codegen(
     extra = "-" + subset if subset != "full" else ""
     if reasoning_effort and model.startswith("o1-") or model.startswith("o3-") or model.endswith("-reasoner"):
         model = model + f"--{reasoning_effort}"
-    identifier = model.replace("/", "--") + "--no_prefill" if no_prefill else "" + f"--{revision}--bigcodebench{extra}-{split}--{backend}-{temperature}-{n_samples}-sanitized_calibrated.jsonl"
+    identifier = model.replace("/", "--") + "--skip_prefill" if skip_prefill else "" + f"--{revision}--bigcodebench{extra}-{split}--{backend}-{temperature}-{n_samples}-sanitized_calibrated.jsonl"
     
     target_path = os.path.join(root, identifier)
     
