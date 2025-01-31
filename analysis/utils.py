@@ -7,7 +7,8 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "Partial",
-        },
+        "reasoning": False,
+    },
     "bigcode/starcoder2-15b-instruct-v0.1": {
         "name": "StarCoder2-15B-Instruct-v0.1",
         "link": "https://huggingface.co/bigcode/starcoder2-15b-instruct-v0.1",
@@ -16,7 +17,8 @@ model_info = {
         "size": 15,
         "act_param": 15,
         "open-data": "Full",
-        },
+        "reasoning": False,
+    },
     "bigcode/starcoder2-3b": {
         "name": "StarCoder2-3B",
         "link": "https://huggingface.co/bigcode/starcoder2-3b",
@@ -25,7 +27,8 @@ model_info = {
         "size": 3,
         "act_param": 3,
         "open-data": "Full",
-        },
+        "reasoning": False,
+    },
     "bigcode/starcoder2-7b": {
         "name": "StarCoder2-7B",
         "link": "https://huggingface.co/bigcode/starcoder2-7b",
@@ -34,7 +37,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "Full",
-        },
+        "reasoning": False,
+    },
     "bigcode/starcoder2-15b": {
         "name": "StarCoder2-15B",
         "link": "https://huggingface.co/bigcode/starcoder2-15b",
@@ -43,7 +47,8 @@ model_info = {
         "size": 15,
         "act_param": 15,
         "open-data": "Full",
-        },
+        "reasoning": False,
+    },
     "Qwen/CodeQwen1.5-7B": {
         "name": "CodeQwen1.5-7B",
         "link": "https://huggingface.co/Qwen/CodeQwen1.5-7B",
@@ -52,7 +57,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "google/codegemma-2b": {
         "name": "CodeGemma-2B",
         "link": "https://huggingface.co/google/codegemma-2b",
@@ -61,7 +67,8 @@ model_info = {
         "size": 2,
         "act_param": 2,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "google/codegemma-7b": {
         "name": "CodeGemma-7B",
         "link": "https://huggingface.co/google/codegemma-7b",
@@ -70,7 +77,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "google/codegemma-7b-it": {
         "name": "CodeGemma-7B-Instruct",
         "link": "https://huggingface.co/google/codegemma-7b-it",
@@ -79,7 +87,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "gpt-3.5-turbo-0125": {
         "name": "GPT-3.5-Turbo-0125",
         "link": "https://openai.com/index/new-embedding-models-and-api-updates",
@@ -88,7 +97,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "gpt-4o": {
         "name": "GPT-4o-2024-05-13",
         "link": "https://openai.com/index/hello-gpt-4o/",
@@ -97,7 +107,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "gpt-4-turbo-2024-04-09": {
         "name": "GPT-4-Turbo-2024-04-09",
         "link": "https://openai.com/blog/new-models-and-developer-products-announced-at-devday",
@@ -106,7 +117,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "gpt-4-0613": {
         "name": "GPT-4-0613",
         "link": "https://openai.com/blog/new-models-and-developer-products-announced-at-devday",
@@ -115,7 +127,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "codellama/CodeLlama-7b-hf": {
         "name": "CodeLlama-7B-Base",
         "link": "https://huggingface.co/codellama/CodeLlama-7b-hf",
@@ -124,7 +137,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "codellama/CodeLlama-13b-hf": {
         "name": "CodeLlama-13B-Base",
         "link": "https://huggingface.co/codellama/CodeLlama-13b-hf",
@@ -133,7 +147,8 @@ model_info = {
         "size": 13,
         "act_param": 13,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "codellama/CodeLlama-7b-Instruct-hf": {
         "name": "CodeLlama-7B-Instruct",
         "link": "https://huggingface.co/codellama/CodeLlama-7b-Instruct-hf",
@@ -142,7 +157,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "codellama/CodeLlama-13b-Instruct-hf": {
         "name": "CodeLlama-13B-Instruct",
         "link": "https://huggingface.co/codellama/CodeLlama-13b-Instruct-hf",
@@ -151,7 +167,8 @@ model_info = {
         "size": 13,
         "act_param": 13,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "mistral-large-2402": {
         "name": "Mistral-Large-2402",
         "link": "https://mistral.ai/news/mistral-large/",
@@ -160,7 +177,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "mistral-small-2402": {
         "name": "Mistral-Small-2402",
         "link": "https://mistral.ai/news/mistral-large/",
@@ -169,7 +187,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "mistralai/Mixtral-8x22B-v0.1": {
         "name": "Mixtral-8x22B-Base",
         "link": "https://huggingface.co/mistralai/Mixtral-8x22B-v0.1",
@@ -178,7 +197,8 @@ model_info = {
         "size": 176,
         "act_param": 44,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "mistralai/Mixtral-8x22B-Instruct-v0.1": {
         "name": "Mixtral-8x22B-Instruct",
         "link": "https://huggingface.co/mistralai/Mixtral-8x22B-Instruct-v0.1",
@@ -187,7 +207,8 @@ model_info = {
         "size": 176,
         "act_param": 44,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "codellama/CodeLlama-34b-hf": {
         "name": "CodeLlama-34B-Base",
         "link": "https://huggingface.co/codellama/CodeLlama-34b-hf",
@@ -196,7 +217,8 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "codellama/CodeLlama-34b-Instruct-hf": {
         "name": "CodeLlama-34B-Instruct",
         "link": "https://huggingface.co/codellama/CodeLlama-34b-Instruct-hf",
@@ -205,7 +227,8 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "codellama/CodeLlama-70b-hf": {
         "name": "CodeLlama-70B-Base",
         "link": "https://huggingface.co/codellama/CodeLlama-70b-hf",
@@ -214,7 +237,8 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "codellama/CodeLlama-70b-Instruct-hf": {
         "name": "CodeLlama-70B-Instruct",
         "link": "https://huggingface.co/codellama/CodeLlama-70b-Instruct-hf",
@@ -223,7 +247,8 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "Qwen/CodeQwen1.5-7B-Chat": {
         "name": "CodeQwen1.5-7B-Chat",
         "link": "https://huggingface.co/Qwen/CodeQwen1.5-7B-Chat",
@@ -232,7 +257,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "Qwen/Qwen1.5-110B-Chat": {
         "name": "Qwen1.5-110B-Chat",
         "link": "https://huggingface.co/Qwen/Qwen1.5-110B-Chat",
@@ -241,7 +267,8 @@ model_info = {
         "size": 110,
         "act_param": 110,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "Qwen/Qwen1.5-72B-Chat": {
         "name": "Qwen1.5-72B-Chat",
         "link": "https://huggingface.co/Qwen/Qwen1.5-72B-Chat",
@@ -250,7 +277,8 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "Qwen/Qwen1.5-32B-Chat": {
         "name": "Qwen1.5-32B-Chat",
         "link": "https://huggingface.co/Qwen/Qwen1.5-32B-Chat",
@@ -259,7 +287,8 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "deepseek-ai/DeepSeek-V2-Chat": {
         "name": "DeepSeek-V2-Chat",
         "link": "https://huggingface.co/deepseek-ai/DeepSeek-V2-Chat",
@@ -268,7 +297,8 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "deepseek-ai/deepseek-coder-1.3b-base": {
         "name": "DeepSeek-Coder-1.3B-Base",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-1.3b-base",
@@ -277,7 +307,8 @@ model_info = {
         "size": 1.3,
         "act_param": 1.3,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "deepseek-ai/deepseek-coder-1.3b-instruct": {
         "name": "DeepSeek-Coder-1.3B-Instruct",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-1.3b-instruct",
@@ -286,7 +317,8 @@ model_info = {
         "size": 1.3,
         "act_param": 1.3,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "deepseek-ai/deepseek-coder-33b-base": {
         "name": "DeepSeek-Coder-33B-Base",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-33b-base",
@@ -295,7 +327,8 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "deepseek-ai/deepseek-coder-33b-instruct": {
         "name": "DeepSeek-Coder-33B-Instruct",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-33b-instruct",
@@ -304,7 +337,8 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "deepseek-ai/deepseek-coder-6.7b-base": {
         "name": "DeepSeek-Coder-6.7B-Base",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-6.7b-base",
@@ -313,7 +347,8 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "deepseek-ai/deepseek-coder-6.7b-instruct": {
         "name": "DeepSeek-Coder-6.7B-Instruct",
         "link": "https://huggingface.co/deepseek-ai/deepseek-coder-6.7b-instruct",
@@ -322,7 +357,8 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "meta-llama/Meta-Llama-3-70B": {
         "name": "Llama-3-70B-Base",
         "link": "https://huggingface.co/meta-llama/Meta-Llama-3-70B",
@@ -331,7 +367,8 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "meta-llama/Meta-Llama-3-70B-Instruct": {
         "name": "Llama-3-70B-Instruct",
         "link": "https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct",
@@ -340,7 +377,8 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "meta-llama/Meta-Llama-3-8B": {
         "name": "Llama-3-8B-Base",
         "link": "https://huggingface.co/meta-llama/Meta-Llama-3-8B",
@@ -349,7 +387,8 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "meta-llama/Meta-Llama-3-8B-Instruct": {
         "name": "Llama-3-8B-Instruct",
         "link": "https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct",
@@ -358,7 +397,8 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "ibm-granite/granite-3b-code-instruct": {
         "name": "Granite-Code-3B-Instruct",
         "link": "https://huggingface.co/ibm-granite/granite-3b-code-instruct",
@@ -367,7 +407,8 @@ model_info = {
         "size": 3,
         "act_param": 3,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "ibm-granite/granite-8b-code-instruct": {
         "name": "Granite-Code-8B-Instruct",
         "link": "https://huggingface.co/ibm-granite/granite-8b-code-instruct",
@@ -376,7 +417,8 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "ibm-granite/granite-20b-code-instruct": {
         "name": "Granite-Code-20B-Instruct",
         "link": "https://huggingface.co/ibm-granite/granite-20b-code-instruct",
@@ -385,7 +427,8 @@ model_info = {
         "size": 20,
         "act_param": 20,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "ibm-granite/granite-34b-code-instruct": {
         "name": "Granite-Code-34B-Instruct",
         "link": "https://huggingface.co/ibm-granite/granite-34b-code-instruct",
@@ -394,7 +437,8 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "ibm-granite/granite-3b-code-base": {
         "name": "Granite-Code-3B-Base",
         "link": "https://huggingface.co/ibm-granite/granite-3b-code-base",
@@ -403,7 +447,8 @@ model_info = {
         "size": 3,
         "act_param": 3,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "ibm-granite/granite-8b-code-base": {
         "name": "Granite-Code-8B-Base",
         "link": "https://huggingface.co/ibm-granite/granite-8b-code-base",
@@ -412,7 +457,8 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "ibm-granite/granite-20b-code-base": {
         "name": "Granite-Code-20B-Base",
         "link": "https://huggingface.co/ibm-granite/granite-20b-code-base",
@@ -421,7 +467,8 @@ model_info = {
         "size": 20,
         "act_param": 20,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "ibm-granite/granite-34b-code-base": {
         "name": "Granite-Code-34B-Base",
         "link": "https://huggingface.co/ibm-granite/granite-34b-code-base",
@@ -430,7 +477,8 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "claude-3-haiku-20240307": {
         "name": "Claude-3-Haiku-20240307",
         "link": "https://www.anthropic.com/news/claude-3-family",
@@ -439,7 +487,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": True,
+    },
     "claude-3-sonnet-20240229": {
         "name": "Claude-3-Sonnet-20240229",
         "link": "https://www.anthropic.com/news/claude-3-family",
@@ -448,7 +497,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": True,
+    },
     "claude-3-opus-20240229": {
         "name": "Claude-3-Opus-20240229",
         "link": "https://www.anthropic.com/news/claude-3-family",
@@ -457,7 +507,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": True,
+    },
     "01-ai/Yi-1.5-34B-Chat": {
         "name": "Yi-1.5-34B-Chat",
         "link": "https://huggingface.co/01-ai/Yi-1.5-34B-Chat",
@@ -466,7 +517,8 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "01-ai/Yi-1.5-34B": {
         "name": "Yi-1.5-34B",
         "link": "https://huggingface.co/01-ai/Yi-1.5-34B",
@@ -475,7 +527,8 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "01-ai/Yi-1.5-9B-Chat": {
         "name": "Yi-1.5-9B-Chat",
         "link": "https://huggingface.co/01-ai/Yi-1.5-9B-Chat",
@@ -484,7 +537,8 @@ model_info = {
         "size": 9,
         "act_param": 9,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "01-ai/Yi-1.5-9B": {
         "name": "Yi-1.5-9B",
         "link": "https://huggingface.co/01-ai/Yi-1.5-9B",
@@ -493,7 +547,8 @@ model_info = {
         "size": 9,
         "act_param": 9,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "01-ai/Yi-1.5-6B-Chat": {
         "name": "Yi-1.5-6B-Chat",
         "link": "https://huggingface.co/01-ai/Yi-1.5-6B-Chat",
@@ -502,7 +557,8 @@ model_info = {
         "size": 6,
         "act_param": 6,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "01-ai/Yi-1.5-6B": {
         "name": "Yi-1.5-6B",
         "link": "https://huggingface.co/01-ai/Yi-1.5-6B",
@@ -511,7 +567,8 @@ model_info = {
         "size": 6,
         "act_param": 6,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "Qwen/Qwen2-57B-A14B": {
         "name": "Qwen2-57B-A14B",
         "link": "https://huggingface.co/Qwen/Qwen2-57B-A14B",
@@ -520,7 +577,8 @@ model_info = {
         "size": 57,
         "act_param": 14,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "Qwen/Qwen2-7B-Instruct": {
         "name": "Qwen2-7B-Instruct",
         "link": "https://huggingface.co/Qwen/Qwen2-7B-Instruct",
@@ -529,7 +587,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "Qwen/Qwen2-72B-Chat": {
         "name": "Qwen2-72B-Chat",
         "link": "https://huggingface.co/Qwen/Qwen2-72B-Chat",
@@ -538,7 +597,8 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "gemini-1.5-pro": {
         "name": "Gemini-1.5-Pro-API-0514",
         "link": "https://deepmind.google/technologies/gemini/pro",
@@ -547,7 +607,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "gemini-1.5-flash": {
         "name": "Gemini-1.5-Flash-API-0514",
         "link": "https://deepmind.google/technologies/gemini/flash/",
@@ -556,7 +617,8 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "m-a-p/OpenCodeInterpreter-DS-33B": {
         "name": "OpenCodeInterpreter-DS-33B",
         "link": "https://huggingface.co/m-a-p/OpenCodeInterpreter-DS-33B",
@@ -565,7 +627,8 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "Partial",
-        },
+        "reasoning": False,
+    },
     "m-a-p/OpenCodeInterpreter-DS-6.7B": {
         "name": "OpenCodeInterpreter-DS-6.7B",
         "link": "https://huggingface.co/m-a-p/OpenCodeInterpreter-DS-6.7B",
@@ -574,7 +637,8 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "Partial",
-        },
+        "reasoning": False,
+    },
     "m-a-p/OpenCodeInterpreter-DS-1.3B": {
         "name": "OpenCodeInterpreter-DS-1.3B",
         "link": "https://huggingface.co/m-a-p/OpenCodeInterpreter-DS-1.3B",
@@ -583,7 +647,8 @@ model_info = {
         "size": 1.3,
         "act_param": 1.3,
         "open-data": "Partial",
-        },
+        "reasoning": False,
+    },
     "microsoft/Phi-3-medium-128k-instruct": {
         "name": "Phi-3-Medium-128K-Instruct",
         "link": "https://huggingface.co/microsoft/Phi-3-medium-128k-instruct",
@@ -592,7 +657,8 @@ model_info = {
         "size": 14,
         "act_param": 14,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "microsoft/Phi-3-small-128k-instruct": {
         "name": "Phi-3-Small-128K-Instruct",
         "link": "https://huggingface.co/microsoft/Phi-3-small-128k-instruct",
@@ -601,7 +667,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "codestral-2405": {
         "name": "Codestral-22B-v0.1",
         "link": "https://huggingface.co/mistralai/Codestral-22B-v0.1",
@@ -610,7 +677,8 @@ model_info = {
         "size": 22,
         "act_param": 22,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "codestral-mamba-2407": {
         "name": "Codestral-Mamba",
         "link": "https://huggingface.co/mistralai/mamba-codestral-7B-v0.1",
@@ -619,7 +687,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "mistralai/Mistral-7B-Instruct-v0.3": {
         "name": "Mistral-7B-Instruct-v0.3",
         "link": "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3",
@@ -628,7 +697,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "mistralai/Mistral-7B-v0.3": {
         "name": "Mistral-7B-v0.3",
         "link": "https://huggingface.co/mistralai/Mistral-7B-v0.3",
@@ -637,7 +707,8 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        },
+        "reasoning": False,
+    },
     "CohereForAI/c4ai-command-r-plus": {
         "name": "Command R+",
         "link": "https://huggingface.co/CohereForAI/c4ai-command-r-plus",
@@ -646,6 +717,7 @@ model_info = {
         "size": 104,
         "act_param": 104,
         "open-data": "None",
+        "reasoning": False,
     },
     "deepseek-coder": {
         "name": "DeepSeek-Coder-V2-Instruct",
@@ -655,6 +727,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
+        "reasoning": True,
     },
     "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct": {
         "name": "DeepSeek-Coder-V2-Lite-Instruct",
@@ -664,6 +737,7 @@ model_info = {
         "size": 16,
         "act_param": 2.4,
         "open-data": "None",
+        "reasoning": False,
     },
     "deepseek-ai/DeepSeek-Coder-V2-Lite-Base": {
         "name": "DeepSeek-Coder-V2-Lite-Base",
@@ -673,6 +747,7 @@ model_info = {
         "size": 16,
         "act_param": 2.4,
         "open-data": "None",
+        "reasoning": False,
     },
     "claude-3-5-sonnet-20240620": {
         "name": "Claude-3.5-Sonnet-20240620",
@@ -682,6 +757,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "NousResearch/Hermes-2-Theta-Llama-3-70B": {
         "name": "Hermes-2-Theta-Llama-3-70B",
@@ -691,6 +767,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
+        "reasoning": False,
     },
     "microsoft/wavecoder-ultra-6.7b": {
         "name": "WaveCoder-Ultra-6.7B",
@@ -700,6 +777,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
+        "reasoning": False,
     },
     "google/gemma-2-9b-it": {
         "name": "Gemma-2-9B-Instruct",
@@ -709,6 +787,7 @@ model_info = {
         "size": 9,
         "act_param": 9,
         "open-data": "None",
+        "reasoning": False,
     },
     "Bin12345/AutoCoder": {
         "name": "AutoCoder",
@@ -718,6 +797,7 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "None",
+        "reasoning": False,
     },
     "Bin12345/AutoCoder_S_6.7B": {
         "name": "AutoCoder-S-6.7B",
@@ -727,6 +807,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
+        "reasoning": False,
     },
     "Bin12345/AutoCoder_QW_7B": {
         "name": "AutoCoder-QW-7B",
@@ -736,6 +817,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
+        "reasoning": False,
     },
     "SenseLLM/ReflectionCoder-DS-33B": {
         "name": "ReflectionCoder-DS-33B",
@@ -745,6 +827,7 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "Partial",
+        "reasoning": False,
     },
     "SenseLLM/ReflectionCoder-DS-6.7B": {
         "name": "ReflectionCoder-DS-6.7B",
@@ -754,6 +837,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "Partial",
+        "reasoning": False,
     },
     "SenseLLM/ReflectionCoder-CL-34B": {
         "name": "ReflectionCoder-CL-34B",
@@ -763,6 +847,7 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "Partial",
+        "reasoning": False,
     },
     "SenseLLM/ReflectionCoder-CL-7B": {
         "name": "ReflectionCoder-CL-7B",
@@ -772,6 +857,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "Partial",
+        "reasoning": False,
     },
     "new-microsoft/Phi-3-mini-128k-instruct": {
         "name": "Phi-3.1-Mini-128K-Instruct",
@@ -781,6 +867,7 @@ model_info = {
         "size": 3.8,
         "act_param": 3.8,
         "open-data": "None",
+        "reasoning": False,
     },
     "old-microsoft/Phi-3-mini-128k-instruct": {
         "name": "Phi-3-Mini-128K-Instruct",
@@ -790,6 +877,7 @@ model_info = {
         "size": 3.8,
         "act_param": 3.8,
         "open-data": "None",
+        "reasoning": False,
     },
     "internlm/internlm2_5-7b-chat": {
         "name": "InternLM2.5-7B-Chat",
@@ -799,6 +887,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
+        "reasoning": False,
     },
     "NousResearch/Hermes-2-Pro-Llama-3-70B": {
         "name": "Hermes-2-Pro-Llama-3-70B",
@@ -808,6 +897,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "Partial",
+        "reasoning": False,
     },
     "new-deepseek-chat": {
         "name": "DeepSeek-V2-Chat (2024-06-28)",
@@ -817,6 +907,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
+        "reasoning": True,
     },
     "vllm-google/gemma-2-27b-it": {
         "name": "Gemma-2-27B-Instruct",
@@ -826,6 +917,7 @@ model_info = {
         "size": 27,
         "act_param": 27,
         "open-data": "None",
+        "reasoning": False,
     },
     "Artigenz/Artigenz-Coder-DS-6.7B": {
         "name": "Artigenz-Coder-DS-6.7B",
@@ -835,6 +927,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
+        "reasoning": False,
     },
     "openchat/openchat-3.6-8b-20240522": {
         "name": "OpenChat-3.6-8B-20240522",
@@ -844,6 +937,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
+        "reasoning": False,
     },
     "Phind/Phind-CodeLlama-34B-v2": {
         "name": "Phind-CodeLlama-34B-v2",
@@ -853,6 +947,7 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
+        "reasoning": False,
     },
     "yi-large": {
         "name": "Yi-Large",
@@ -862,6 +957,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": False,
     },
     "THUDM/codegeex4-all-9b": {
         "name": "CodeGeex4-All-9B",
@@ -871,6 +967,7 @@ model_info = {
         "size": 9,
         "act_param": 9,
         "open-data": "None",
+        "reasoning": False,
     },
     "gpt-4o-mini-2024-07-18": {
         "name": "GPT-4o-mini-2024-07-18",
@@ -880,6 +977,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": False,
     },
     "Nexusflow/Athene-70B": {
         "name": "Athene-70B",
@@ -889,6 +987,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
+        "reasoning": False,
     },
     "NTQAI/Nxcode-CQ-7B-orpo": {
         "name": "Nxcode-CQ-7B-Orpo",
@@ -898,6 +997,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
+        "reasoning": False,
     },
     "migtissera/Llama-3-70B-Synthia-v3.5": {
         "name": "Llama-3-70B-Synthia-v3.5",
@@ -907,6 +1007,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
+        "reasoning": False,
     },
     "migtissera/Tess-v2.5.2-Qwen2-72B": {
         "name": "Tess-v2.5.2-Qwen2-72B",
@@ -916,6 +1017,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
+        "reasoning": False,
     },
     "WhiteRabbitNeo/WhiteRabbitNeo-33B-v1.5": {
         "name": "WhiteRabbitNeo-33B-v1.5",
@@ -925,6 +1027,7 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "None",
+        "reasoning": False,
     },
     "mistral-large-2407": {
         "name": "Mistral-Large-Instruct-2407",
@@ -934,6 +1037,7 @@ model_info = {
         "size": 123,
         "act_param": 123,
         "open-data": "None",
+        "reasoning": True,
     },
     "meta-llama/Meta-Llama-3.1-8B-Instruct": {
         "name": "Llama-3.1-8B-Instruct",
@@ -943,6 +1047,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
+        "reasoning": False,
     },
     "meta-llama/Meta-Llama-3.1-70B-Instruct": {
         "name": "Llama-3.1-70B-Instruct",
@@ -952,6 +1057,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
+        "reasoning": False,
     },
     "meta--llama-3.1-405b-instruct": {
         "name": "Llama-3.1-405B-Instruct",
@@ -961,6 +1067,7 @@ model_info = {
         "size": 405,
         "act_param": 405,
         "open-data": "None",
+        "reasoning": False,
     },
     "deepseek-coder-20240724": {
         "name": "DeepSeek-Coder-V2-Instruct (2024-07-24)",
@@ -970,6 +1077,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
+        "reasoning": False,
     },
     "microsoft/Phi-3.5-mini-instruct": {
         "name": "Phi-3.5-Mini-Instruct",
@@ -979,6 +1087,7 @@ model_info = {
         "size": 3.8,
         "act_param": 3.8,
         "open-data": "None",
+        "reasoning": False,
     },
     "nv-mistralai--mistral-nemo-12b-instruct": {
         "name": "Mistral-Nemo-12B-Instruct",
@@ -988,6 +1097,7 @@ model_info = {
         "size": 12,
         "act_param": 12,
         "open-data": "None",
+        "reasoning": False,
     },
     "wyt2000/InverseCoder-CL-13B": {
         "name": "InverseCoder-CL-13B",
@@ -997,6 +1107,7 @@ model_info = {
         "size": 13,
         "act_param": 13,
         "open-data": "Partial",
+        "reasoning": False,
     },
     "wyt2000/InverseCoder-CL-7B": {
         "name": "InverseCoder-CL-7B",
@@ -1006,6 +1117,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "Partial",
+        "reasoning": False,
     },
     "wyt2000/InverseCoder-DS-6.7B": {
         "name": "InverseCoder-DS-6.7B",
@@ -1015,6 +1127,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "Partial",
+        "reasoning": False,
     },
     "gemini-1.5-pro-exp-0801": {
         "name": "Gemini-1.5-Pro-Exp-0801",
@@ -1024,6 +1137,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "gpt-4o-2024-08-06": {
         "name": "GPT-4o-2024-08-06",
@@ -1033,6 +1147,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": False,
     },
     "abacusai/Dracarys-Llama-3.1-70B-Instruct": {
         "name": "Dracarys-Llama-3.1-70B-Instruct",
@@ -1042,6 +1157,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
+        "reasoning": False,
     },
     "abacusai/Dracarys-72B-Instruct": {
         "name": "Dracarys-72B-Instruct",
@@ -1051,6 +1167,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
+        "reasoning": False,
     },
     "gemini-1.5-pro-exp-0827": {
         "name": "Gemini-1.5-Pro-Exp-0827",
@@ -1060,6 +1177,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": False,
     },
     "gemini-1.5-flash-exp-0827": {
         "name": "Gemini-1.5-Flash-Exp-0827",
@@ -1069,6 +1187,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": False,
     },
     "microsoft/Phi-3.5-mini-instruct": {
         "name": "Phi-3.5-Mini-Instruct",
@@ -1078,6 +1197,7 @@ model_info = {
         "size": 3.8,
         "act_param": 3.8,
         "open-data": "None",
+        "reasoning": False,
     },
     "abacusai/Dracarys-Llama-3.1-70B-Instruct": {
         "name": "Dracarys-Llama-3.1-70B-Instruct",
@@ -1087,6 +1207,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
+        "reasoning": False,
     },
     "abacusai/Dracarys-72B-Instruct": {
         "name": "Dracarys-72B-Instruct",
@@ -1096,6 +1217,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
+        "reasoning": False,
     },
     "deepseek-coder-v2.5": {
         "name": "DeepSeek-V2.5",
@@ -1105,6 +1227,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
+        "reasoning": False,
     },
     "CohereForAI/c4ai-command-r-08-2024": {
         "name": "C4AI-Command-R-08-2024",
@@ -1114,6 +1237,7 @@ model_info = {
         "size": 32.3,
         "act_param": 32.3,
         "open-data": "None",
+        "reasoning": False,
     },
     "CohereForAI/c4ai-command-r-plus-08-2024": {
         "name": "C4AI-Command-R-Plus-08-2024",
@@ -1123,6 +1247,7 @@ model_info = {
         "size": 104,
         "act_param": 104,
         "open-data": "None",
+        "reasoning": False,
     },
     "ayueei--yue-coder-9b-preview": {
         "name": "Yi-Coder-9B-Chat",
@@ -1132,6 +1257,7 @@ model_info = {
         "size": 9,
         "act_param": 9,
         "open-data": "None",
+        "reasoning": False,
     },
     # "mattshumer/ref_70_e3_prefill": {
     #     "name": "Reflection-Llama-3.1-70B",
@@ -1159,6 +1285,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "o1-mini-2024-09-12": {
         "name": "o1-Mini-2024-09-12 (temperature=1)",
@@ -1168,6 +1295,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "Qwen/Qwen2.5-Coder-1.5B-Instruct": {
         "name": "Qwen2.5-Coder-1.5B-Instruct",
@@ -1177,6 +1305,7 @@ model_info = {
         "size": 1.5,
         "act_param": 1.5,
         "open-data": "None",
+        "reasoning": False,
     },
     "Qwen/Qwen2.5-Coder-7B-Instruct": {
         "name": "Qwen2.5-Coder-7B-Instruct",
@@ -1186,6 +1315,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
+        "reasoning": False,
     },
     "gemini-1.5-pro-002": {
         "name": "Gemini-1.5-Pro-002",
@@ -1195,6 +1325,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "mistralai/Mistral-Small-Instruct-2409": {
         "name": "Mistral-Small-Instruct-2409",
@@ -1204,6 +1335,7 @@ model_info = {
         "size": 22.2,
         "act_param": 22.2,
         "open-data": "None",
+        "reasoning": False,
     },
     "Qwen/Qwen2.5-0.5B-Instruct": {
         "name": "Qwen2.5-0.5B-Instruct",
@@ -1213,6 +1345,7 @@ model_info = {
         "size": 0.5,
         "act_param": 0.5,
         "open-data": "None",
+        "reasoning": False,
     },
     "Qwen/Qwen2.5-1.5B-Instruct": {
         "name": "Qwen2.5-1.5B-Instruct",
@@ -1222,6 +1355,7 @@ model_info = {
         "size": 1.5,
         "act_param": 1.5,
         "open-data": "None",
+        "reasoning": False,
     },
     "Qwen/Qwen2.5-7B-Instruct": {
         "name": "Qwen2.5-7B-Instruct",
@@ -1231,6 +1365,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
+        "reasoning": False,
     },
     "Qwen/Qwen2.5-14B-Instruct": {
         "name": "Qwen2.5-14B-Instruct",
@@ -1240,6 +1375,7 @@ model_info = {
         "size": 14,
         "act_param": 14,
         "open-data": "None",
+        "reasoning": False,
     },
     "Qwen/Qwen2.5-32B-Instruct": {
         "name": "Qwen2.5-32B-Instruct",
@@ -1249,6 +1385,7 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
+        "reasoning": False,
     },
     "Qwen/Qwen2.5-72B-Instruct": {
         "name": "Qwen2.5-72B-Instruct",
@@ -1258,6 +1395,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
+        "reasoning": False,
     },
     "meta-llama/Llama-3.2-1B-Instruct": {
         "name": "Llama-3.2-1B-Instruct",
@@ -1267,6 +1405,7 @@ model_info = {
         "size": 1,
         "act_param": 1,
         "open-data": "None",
+        "reasoning": False,
     },
     "meta-llama/Llama-3.2-3B-Instruct": {
         "name": "Llama-3.2-3B-Instruct",
@@ -1276,6 +1415,7 @@ model_info = {
         "size": 3,
         "act_param": 3,
         "open-data": "None",
+        "reasoning": False,
     },
     "nvidia/Llama-3.1-Nemotron-70B-Instruct-HF": {
         "name": "Llama-3.1-Nemotron-70B-Instruct",
@@ -1285,6 +1425,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "Partial",
+        "reasoning": False,
     },
     "claude-3-5-sonnet-20241022": {
         "name": "Claude-3.5-Sonnet-20241022",
@@ -1294,6 +1435,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": False,
     },
     "ibm-granite/granite-3.0-8b-instruct": {
         "name": "Granite-3.0-8B-Instruct",
@@ -1303,6 +1445,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
+        "reasoning": False,
     },
     "ibm-granite/granite-3.0-2b-instruct": {
         "name": "Granite-3.0-2B-Instruct",
@@ -1312,6 +1455,7 @@ model_info = {
         "size": 2,
         "act_param": 2,
         "open-data": "None",
+        "reasoning": False,
     },
     "grok-beta--main": {
         "name": "Grok-Beta",
@@ -1321,6 +1465,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "claude-3-5-haiku-20241022--main": {
         "name": "Claude-3.5-Haiku-20241022",
@@ -1330,6 +1475,17 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
+    },
+    "Qwen/Qwen2.5-Coder-14B-Instruct--main": {
+        "name": "Qwen2.5-Coder-14B-Instruct",
+        "link": "https://huggingface.co/Qwen/Qwen2.5-Coder-14B-Instruct",
+        "prompted": True,
+        "moe": False,
+        "size": 14,
+        "act_param": 14,
+        "open-data": "None",
+        "reasoning": False,
     },
     "Qwen/Qwen2.5-Coder-32B-Instruct--main": {
         "name": "Qwen2.5-Coder-32B-Instruct",
@@ -1339,6 +1495,7 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
+        "reasoning": False,
     },
     "infly/OpenCoder-1.5B-Instruct--main": {
         "name": "OpenCoder-1.5B-Instruct",
@@ -1348,6 +1505,7 @@ model_info = {
         "size": 1.5,
         "act_param": 1.5,
         "open-data": "None",
+        "reasoning": False,
     },
     "infly/OpenCoder-8B-Instruct--main": {
         "name": "OpenCoder-8B-Instruct",
@@ -1357,6 +1515,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
+        "reasoning": False,
     },
     "microsoft/Phi-3.5-mini-instruct--main": {
         "name": "Phi-3.5-Mini-Instruct",
@@ -1366,6 +1525,7 @@ model_info = {
         "size": 3.8,
         "act_param": 3.8,
         "open-data": "None",
+        "reasoning": False,
     },
     "Nexusflow/Athene-V2-Agent--main": {
         "name": "Athene-V2-Agent",
@@ -1375,6 +1535,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
+        "reasoning": False,
     },
     "Nexusflow/Athene-V2-Chat--main": {
         "name": "Athene-V2-Chat",
@@ -1384,6 +1545,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
+        "reasoning": False,
     },
     "gemini-exp-1114--main": {
         "name": "Gemini-Exp-1114",
@@ -1393,6 +1555,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "gpt-4o-2024-11-20--main": {
         "name": "GPT-4o-2024-11-20",
@@ -1402,6 +1565,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "gemini-exp-1121--main": {
         "name": "Gemini-Exp-1121",
@@ -1411,6 +1575,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": False,
     },
     "gemini-exp-1206--main": {
         "name": "Gemini-Exp-1206",
@@ -1420,6 +1585,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "meta-llama--Llama-3.3-70B-Instruct--main": {
         "name": "Llama-3.3-70B-Instruct",
@@ -1429,6 +1595,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
+        "reasoning": False,
     },
     "deepseek-ai--DeepSeek-V2.5-1210--main": {
         "name": "DeepSeek-V2.5-1210",
@@ -1438,6 +1605,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
+        "reasoning": False,
     },
     "gemini-2.0-flash-exp--main": {
         "name": "Gemini-2.0-Flash-Exp",
@@ -1447,6 +1615,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": False,
     },
     "gemini-2.0-flash-thinking-exp-1219--main": {
         "name": "Gemini-2.0-Flash-Thinking-Exp-1219",
@@ -1456,6 +1625,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": False,
     },
     "o1-2024-12-17--main": {
         "name": "o1-2024-12-17 (temperature=1, reasoning=medium)",
@@ -1465,6 +1635,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "o1-2024-12-17--low--main": {
         "name": "o1-2024-12-17 (temperature=1, reasoning=low)",
@@ -1474,6 +1645,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "o1-2024-12-17--high--main": {
         "name": "o1-2024-12-17 (temperature=1, reasoning=high)",
@@ -1483,14 +1655,96 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
+        "reasoning": True,
     },
     "deepseek-v3-chat--main": {
         "name": "DeepSeek-V3-Chat",
         "link": "https://huggingface.co/deepseek-ai/DeepSeek-V3-Chat",
         "prompted": True,
         "moe": True,
-        "size": 685,
-        "act_param": None,
+        "size": 671,
+        "act_param": 37,
         "open-data": "None",
+        "reasoning": True,
     },
+    "microsoft--phi-4--main": {
+        "name": "Phi-4",
+        "link": "https://huggingface.co/microsoft/phi-4",
+        "prompted": True,
+        "moe": False,
+        "size": 14.7,
+        "act_param": 14.7,
+        "open-data": "None",
+        "reasoning": False,
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Llama-70B--main": {
+        "name": "DeepSeek-R1-Distill-Llama-70B",
+        "link": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+        "prompted": True,
+        "moe": False,
+        "size": 70,
+        "act_param": 70,
+        "open-data": "None",
+        "reasoning": False,
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B--main": {
+        "name": "DeepSeek-R1-Distill-Qwen-32B",
+        "link": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+        "prompted": True,
+        "moe": False,
+        "size": 32,
+        "act_param": 32,
+        "open-data": "None",
+        "reasoning": False,
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B--main": {
+        "name": "DeepSeek-R1-Distill-Qwen-14B",
+        "link": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+        "prompted": True,
+        "moe": False,
+        "size": 14,
+        "act_param": 14,
+        "open-data": "None",
+        "reasoning": False,
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Llama-8B--main": {
+        "name": "DeepSeek-R1-Distill-Llama-8B",
+        "link": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+        "prompted": True,
+        "moe": False,
+        "size": 14,
+        "act_param": 14,
+        "open-data": "None",
+        "reasoning": False,
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B--main": {
+        "name": "DeepSeek-R1-Distill-Qwen-7B",
+        "link": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+        "prompted": True,
+        "moe": False,
+        "size": 14,
+        "act_param": 14,
+        "open-data": "None",
+        "reasoning": False,
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B--main": {
+        "name": "DeepSeek-R1-Distill-Qwen-1.5B",
+        "link": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+        "prompted": True,
+        "moe": False,
+        "size": 1.5,
+        "act_param": 1.5,
+        "open-data": "None",
+        "reasoning": False,
+    },
+    "mistralai/Mistral-Small-24B-Instruct-2501--main": {
+        "name": "Mistral-Small-24B-Instruct-2501",
+        "link": "https://huggingface.co/mistralai/Mistral-Small-24B-Instruct-2501",
+        "prompted": True,
+        "moe": False,
+        "size": 24,
+        "act_param": 24,
+        "open-data": "None",
+        "reasoning": False,
+    }
 }

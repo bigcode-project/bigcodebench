@@ -11,9 +11,6 @@ import itertools
 import math
 from datasets import Dataset, DatasetDict, load_dataset
 from transformers import AutoTokenizer
-from cuml.linear_model import LogisticRegression
-import cupy as cp
-
 
 def update_model_info(model_info):
     for model, info in model_info.items():
@@ -142,17 +139,17 @@ def split_gen():
                 if "calibrated" in file:
                     if info["prompted"]:
                         if suffix.startswith("complete"):
-                            with open(f"sanitized_calibrated_samples/complete/{model}--bigcodebench*-{suffix}", "w") as f:
+                            with open(f"sanitized_calibrated_samples/complete/{model}--bigcodebench-{suffix}", "w") as f:
                                 f.writelines(data)
                         else:
-                            with open(f"sanitized_calibrated_samples/instruct/{model}--bigcodebench*-{suffix}", "w") as f:
+                            with open(f"sanitized_calibrated_samples/instruct/{model}--bigcodebench-{suffix}", "w") as f:
                                 f.writelines(data)
                 else:
                     if suffix.startswith("complete"):
-                        with open(f"sanitized_samples/complete/{model}--bigcodebench*-{suffix}", "w") as f:
+                        with open(f"sanitized_samples/complete/{model}--bigcodebench-{suffix}", "w") as f:
                             f.writelines(data)
                     else:
-                        with open(f"sanitized_samples/instruct/{model}--bigcodebench*-{suffix}", "w") as f:
+                        with open(f"sanitized_samples/instruct/{model}--bigcodebench-{suffix}", "w") as f:
                             f.writelines(data)
 
 
@@ -221,95 +218,6 @@ def read_task_perf(tids, task="complete"):
     return model_results, result_files
 
 
-def get_winner_df(data_dict, tids, task, task_level=True, no_tie=True):
-    winner_dict = {"task_id": [], "model_a": [], "model_b": [], "winner": []}
-    if not task_level:
-        file = f"{task}_winner_df.csv"
-    else:
-        file = f"{task}_winner_task_df.csv"
-    
-    if task_level:
-        for task_id in tqdm(tids):
-            # pair without repetition (a, b) and (b, a) are the same
-            for model_a, model_b in itertools.combinations(data_dict.keys(), 2):
-                solve_rate_a = data_dict[model_a][task_id]
-                solve_rate_b = data_dict[model_b][task_id]
-                
-                if solve_rate_a > solve_rate_b:
-                    winner_dict["winner"].append("model_a")
-                elif solve_rate_a < solve_rate_b:
-                    winner_dict["winner"].append("model_b")
-                else:
-                    if no_tie:
-                        continue
-                    winner_dict["winner"].append("tie")
-                    
-                winner_dict["task_id"].append(task_id)
-                winner_dict["model_a"].append(model_a)
-                winner_dict["model_b"].append(model_b)
-    else:
-        data_dict = {model: np.mean(list(task_perf.values())) for model, task_perf in data_dict.items()}
-        for model_a, model_b in itertools.combinations(data_dict.keys(), 2):
-            solve_rate_a = data_dict[model_a]
-            solve_rate_b = data_dict[model_b]
-            
-            if solve_rate_a > solve_rate_b:
-                winner_dict["winner"].append("model_a")
-            elif solve_rate_a < solve_rate_b:
-                winner_dict["winner"].append("model_b")
-            else:
-                if no_tie:
-                    continue
-                winner_dict["winner"].append("tie")
-            winner_dict["task_id"].append(task)
-            winner_dict["model_a"].append(model_a)
-            winner_dict["model_b"].append(model_b)
-
-    df = pd.DataFrame(winner_dict)
-    df.to_csv(file, index=False)
-    return df
-
-
-def get_bootstrap_result(battles, func_compute_elo, num_round):
-    rows = []
-    for i in tqdm(range(num_round), desc="bootstrap"):
-        rows.append(func_compute_elo(battles.sample(frac=1.0, replace=True)))
-    df = pd.DataFrame(rows)
-    return df[df.median().sort_values(ascending=False).index]
-
-
-def get_elo_mle(df, SCALE=400, BASE=10, INIT_RATING=1000):
-
-
-    models = pd.concat([df["model_a"], df["model_b"]]).unique()
-    models = pd.Series(np.arange(len(models)), index=models)
-    p = len(models.index)
-    n = df.shape[0]
-
-    X = cp.zeros([n, p])
-    X[cp.arange(n), models[df["model_a"]]] = +math.log(BASE)
-    X[cp.arange(n), models[df["model_b"]]] = -math.log(BASE)
-
-    Y = cp.zeros(n)
-    Y[df["winner"] == "model_a"] = 1.0
-
-    lr = LogisticRegression(fit_intercept=False)
-    lr.fit(X, Y)
-
-    elo_scores = SCALE * lr.coef_[0] + INIT_RATING
-
-    return pd.Series(cp.asnumpy(elo_scores), index=models.index).sort_values(ascending=False)
-
-
-def update_elo_rating(results, elo_dict):
-    for model, info in model_info.items():
-        if info["name"] not in elo_dict:
-            results[info["name"]]["elo_mle"] = None
-        else:
-            results[info["name"]]["elo_mle"] = elo_dict[info["name"]]
-    return results
-
-
 def get_domain_perf(data_dict, task2domain):
     domain_perfs = {
         "Model": [],
@@ -347,7 +255,7 @@ def get_solve_rate(data_dict, task="complete"):
 
 def get_hf_ds(results):
     hf_dataset = {"model": [], "link": [], "moe": [], "size": [], "act_param": [], "type": [], #"lazy": [],# "direct_complete": [],
-                  "complete": [], "instruct": [], "elo_mle": []}
+                  "complete": [], "instruct": []}
 
     for model, result in results.items():
         hf_dataset["model"].append(model)
@@ -360,7 +268,6 @@ def get_hf_ds(results):
         hf_dataset["complete"].append(result["pass@1"]["complete"])
         hf_dataset["instruct"].append(result["pass@1"]["instruct"])
         # hf_dataset["direct_complete"].append(result["direct_complete"])
-        hf_dataset["elo_mle"].append(result["elo_mle"])
 
     return Dataset.from_dict(hf_dataset)
 
@@ -395,7 +302,7 @@ def get_perf_df(data_dict):
 
     
 if __name__ == "__main__":
-    split_gen()
+    # split_gen()
     bcb_orig = load_dataset("bigcode/bigcodebench", split="v0.1.1")
     bcb_hard = load_dataset("bigcode/bigcodebench-hard", split="v0.1.1")
     bcb_config = {
@@ -429,28 +336,7 @@ if __name__ == "__main__":
         instruct_solve_rate = get_solve_rate(instruct_data, task="instruct")
         solve_rate_ds = DatasetDict({"complete": complete_solve_rate, "instruct": instruct_solve_rate})
         push_ds(solve_rate_ds, f"bigcode/bigcodebench{suffix}-solve-rate")
-        
-        elo_config = {
-            "task_no_tie": (True, True),
-            "benchmark_tie": (False, False),
-        }
-        elo_ds = dict()
-        for config, (task_level, no_tie) in elo_config.items():
-            filter_complete_data = {model: task_perf for model, task_perf in complete_data.items() if model in instruct_data}
-            complete_battles = get_winner_df(filter_complete_data, bcb["task_id"], "complete", task_level=task_level, no_tie=no_tie)
-            instruct_battles = get_winner_df(instruct_data, bcb["task_id"], "instruct", task_level=task_level, no_tie=no_tie)
-            battles = pd.concat([complete_battles, instruct_battles])
-            elo_mle_bootstrap = get_bootstrap_result(battles, get_elo_mle, 500)
-            bootstrap_lu_median = elo_mle_bootstrap.median().reset_index().set_axis(["model", "Elo rating"], axis=1)
-            bootstrap_lu_median["Elo rating"] = (bootstrap_lu_median["Elo rating"] + 0.5).astype(int)
-            bootstrap_lu_median_dict = bootstrap_lu_median.set_index("model")["Elo rating"].to_dict()
-            if config == "task_no_tie":
-                task_elo = bootstrap_lu_median_dict
-            elo = get_bootstrap_scores(elo_mle_bootstrap)
-            elo_ds[config] = elo
-        push_ds(DatasetDict(elo_ds), f"bigcode/bigcodebench{suffix}-elo")
 
-        results = update_elo_rating(results, task_elo)
         with open(f"results{suffix}.json", "w") as f:
             json.dump(results, f, indent=4)
         ds = get_hf_ds(results)
