@@ -59,8 +59,9 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--execution`: The execution backend to use, default to `gradio`. You can choose from `e2b`, `gradio`, `local`.
 - `--reasoning_effort`: The reasoning effort to use, default to `medium`. You can choose from `easy`, `medium`, `hard` for `o1`, `o3` and `deepseek-reasoner`(soon) models.
 - `--base_url`: The base URL of the backend for OpenAI-compatible APIs, default to `None`
-- `--instruction_prefix`: The instruction prefix for the Anthropic backend, default to `None`
-- `--response_prefix`: The response prefix for the Anthropic backend, default to `None`
+- `--instruction_prefix`: The instruction prefix for the Anthropic backend.
+- `--response_prefix`: The response prefix for the Anthropic backend.
+- `--skip_prefill`: Whether to skip the prefill for vLLM and HF backend, which is useful for reasoning models.
 - `--revision`: The revision of the model with the vLLM or HF backend, default to `main`
 - `--tp`: The tensor parallel size for the vLLM backend, default to `1`
 - `--trust_remote_code`: Whether to trust the remote code, default to `False`
