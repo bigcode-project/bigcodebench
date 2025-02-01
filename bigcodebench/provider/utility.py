@@ -28,8 +28,8 @@ def make_raw_chat_prompt(
     split: str, 
     instruction_prefix: str,
     response_prefix: str,
-    prefill: bool,
     tokenizer: AutoTokenizer,
+    prefill: bool = True,
     direct_completion: bool = False,
 ) -> str:
     # directly return prompt if it does not have a tokenizer.chat_template
