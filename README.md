@@ -25,16 +25,12 @@
     <a href="#-citation">📜 Citation</a>
 </p>
 
-<p class="mb-0 fw-bold" style="font-size: 1.3em; text-align: center; border: 2px solid #C867B5; padding: 15px; border-radius: 10px; margin: 20px auto; max-width: 600px;">
-    <strong>🎉 Check out our latest work
-    <br> 
-    <a href="https://swe-arena.com" class="fw-bolder text-decoration-none"><u><span style='color: #C867B5;'>SWE Arena</span></u></a>
-    <br>
-    Open Evaluation Platform on AI for Software Engineering
-    <br>
-    100% free to use the latest frontier models!</strong>
-    <br>
-</p>
+<div align="center">
+    <h2>🎉 Check out our latest work!<br>
+    <a href="https://swe-arena.com">🌟 SWE Arena 🌟</a><br>
+    <strong>🚀 Open Evaluation Platform on AI for Software Engineering 🚀<br>
+    ✨ 100% free to use the latest frontier models! ✨</strong></h2>
+</div>
 
 ## 💥 Impact
 BigCodeBench has been trusted by many LLM teams including:
