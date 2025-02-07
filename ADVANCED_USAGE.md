@@ -69,7 +69,6 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--tokenizer_legacy`: Whether to use the legacy tokenizer, default to `False`
 - `--samples`: The path to the generated samples file, default to `None`
 - `--no_execute`: Whether to not execute the samples, default to `False`
-- `--local_execute`: Whether to execute the samples locally, default to `False`
 - `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page
 - `--pass_k`: The `k` in `Pass@k`, default to `[1, 5, 10]`, e.g. `--pass_k 1,5,10` will evaluate `Pass@1`, `Pass@5` and `Pass@10`
 - `--calibrated`: Whether to use the calibrated samples, default to `True`
@@ -208,10 +207,10 @@ You are strongly recommended to use a sandbox such as [docker](https://docs.dock
 # If you want to change the RAM data segment limit (in MB, 30 GB by default): `--max-data-limit`
 # If you want to change the RAM stack limit (in MB, 10 MB by default): `--max-stack-limit`
 # If you want to increase the execution time limit (in seconds, 240 seconds by default): `--min-time-limit`
-docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --local_execute --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
+docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --execution local --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
 
 # If you only want to check the ground truths
-docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --local_execute --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --check-gt-only
+docker run -v $(pwd):/app bigcodebench/bigcodebench-evaluate:latest --execution local --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --check-gt-only
 ```
 
 ...Or if you want to try it locally regardless of the risks ⚠️:
@@ -226,11 +225,11 @@ Then, run the evaluation:
 
 ```bash
 # ...Or locally ⚠️
-bigcodebench.evaluate --local_execute --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
+bigcodebench.evaluate --execution local --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl
 # ...If you really don't want to check the ground truths
-bigcodebench.evaluate --local_execute --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --no-gt
+bigcodebench.evaluate --execution local --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --no-gt
 # If you want to save the pass rate to a file
-bigcodebench.evaluate --local_execute --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --save_pass_rate
+bigcodebench.evaluate --execution local --split [complete|instruct] --subset [full|hard] --samples samples-sanitized-calibrated.jsonl --save_pass_rate
 
 # You are strongly recommended to use the following command to clean up the environment after evaluation:
 pids=$(ps -u $(id -u) -o pid,comm | grep 'bigcodebench' | awk '{print $1}'); if [ -n \"$pids\" ]; then echo $pids | xargs -r kill; fi;
