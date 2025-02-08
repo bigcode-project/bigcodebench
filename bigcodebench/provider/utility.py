@@ -72,7 +72,7 @@ def make_raw_chat_prompt(
                 [
                     {"role": "user", "content": task_prompt},
                 ],
-                tokenize=False,
+                tokenize=False, add_generation_prompt=True
             ).split(_MAGIC_SPLITTER_)[0]
     return task_prompt
 
