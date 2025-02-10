@@ -205,8 +205,7 @@ def evaluate(
     else:
         
         pass_at_k = dict()
-
-        passk = [int(k) for k in pass_k.split(",")]
+        passk = list(pass_k)
         
         if parallel < 1:
             n_workers = max(1, multiprocessing.cpu_count() // 2)
