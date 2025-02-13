@@ -205,11 +205,7 @@ def evaluate(
     else:
         
         pass_at_k = dict()
-
-        if isinstance(pass_k, str):
-            passk = [int(k) for k in pass_k.split(",")]
-        else:
-            passk = pass_k
+        passk = list(pass_k)
         
         if isinstance(selective_evaluate, str):
             selected_ids = set(selective_evaluate.split(","))
