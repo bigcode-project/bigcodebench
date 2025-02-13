@@ -214,7 +214,10 @@ def evaluate(
         if isinstance(selective_evaluate, str):
             selected_ids = set(selective_evaluate.split(","))
         else:
-            selected_ids = set(selective_evaluate)
+            try:
+                selected_ids = set(selective_evaluate)
+            except:
+                selected_ids = {}
 
         if parallel < 1:
             n_workers = max(1, multiprocessing.cpu_count() // 2)
@@ -229,10 +232,6 @@ def evaluate(
         
         # Add selective evaluation logic
         if selective_evaluate:
-            if isinstance(selective_evaluate, str):
-                selected_ids = set(selective_evaluate.split(","))
-            else:
-                selected_ids = set(selective_evaluate)
             problems = {k: v for k, v in problems.items() if k in selected_ids}
             if not problems:
                 raise ValueError(f"None of the provided task IDs {selected_ids} were found in the dataset")
