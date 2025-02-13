@@ -231,7 +231,7 @@ def evaluate(
         problems = get_bigcodebench(subset=subset)
         
         # Add selective evaluation logic
-        if selective_evaluate:
+        if selected_ids:
             problems = {k: v for k, v in problems.items() if k in selected_ids}
             if not problems:
                 raise ValueError(f"None of the provided task IDs {selected_ids} were found in the dataset")
