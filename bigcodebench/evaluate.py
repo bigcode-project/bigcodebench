@@ -217,7 +217,7 @@ def evaluate(
             try:
                 selected_ids = set(selective_evaluate)
             except:
-                selected_ids = {}
+                selected_ids = ""
 
         if parallel < 1:
             n_workers = max(1, multiprocessing.cpu_count() // 2)
