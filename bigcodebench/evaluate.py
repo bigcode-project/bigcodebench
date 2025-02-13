@@ -190,9 +190,9 @@ def evaluate(
         # run the evaluation
         print(f"Command run in sandbox {e2b_endpoint}")
         if not isinstance(pass_k, str):
-            pass_k = ",".join(map(str, pass_k))
+            pass_k = ",".join(pass_k)
         if not isinstance(selective_evaluate, str):
-            selective_evaluate = ",".join(map(str, selective_evaluate))
+            selective_evaluate = ",".join(selective_evaluate)
         sandbox.commands.run("bigcodebench.evaluate  --execution 'local' "
                         f"--split {split} --subset {subset} --samples {samples} "
                         f"--pass_k {pass_k} --save_pass_rate {save_pass_rate} --calibrated {calibrated} "
