@@ -28,7 +28,7 @@ RUN adduser --disabled-password --gecos "" bigcodebenchuser
 RUN rm -rf /bigcodebench
 
 # Acquire benchmark code to local
-RUN echo
+RUN echo 1
 ADD "https://api.github.com/repos/bigcode-project/bigcodebench/commits?per_page=1" latest_commit
 RUN git clone https://github.com/bigcode-project/bigcodebench.git /bigcodebench
 
