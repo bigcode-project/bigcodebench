@@ -189,10 +189,6 @@ def evaluate(
         
         # run the evaluation
         print(f"Command run in sandbox {e2b_endpoint}")
-        if not isinstance(pass_k, str):
-            pass_k = ",".join(pass_k)
-        if not isinstance(selective_evaluate, str):
-            selective_evaluate = ",".join(selective_evaluate)
         sandbox.commands.run("bigcodebench.evaluate  --execution 'local' "
                         f"--split {split} --subset {subset} --samples {samples} "
                         f"--pass_k {pass_k} --save_pass_rate {save_pass_rate} --calibrated {calibrated} "
@@ -210,8 +206,15 @@ def evaluate(
         
         pass_at_k = dict()
 
-        passk = [int(k) for k in pass_k.split(",")]
-        
+        if isinstance(pass_k, str):
+            passk = [int(k) for k in pass_k.split(",")]
+        else:
+            passk = pass_k
+        if isinstance(selective_evaluate, str):
+            selected_ids = set(selective_evaluate.split(","))
+        else:
+            selected_ids = set(selective_evaluate)
+
         if parallel < 1:
             n_workers = max(1, multiprocessing.cpu_count() // 2)
         else:
