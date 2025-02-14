@@ -189,12 +189,19 @@ def evaluate(
         
         # run the evaluation
         print(f"Command run in sandbox {e2b_endpoint}")
-        sandbox.commands.run("bigcodebench.evaluate  --execution 'local' "
-                        f"--split {split} --subset {subset} --samples {samples} "
-                        f"--pass_k {pass_k} --save_pass_rate {save_pass_rate} --calibrated {calibrated} "
-                        f"--parallel {parallel} --selective_evaluate {selective_evaluate} --min_time_limit {min_time_limit} "
+        command = "bigcodebench.evaluate  --execution 'local' "\
+                        f"--split {split} --subset {subset} --samples {samples} "\
+                        f"--pass_k {pass_k} --save_pass_rate {save_pass_rate} --calibrated {calibrated} "\
+                        f"--parallel {parallel} --selective_evaluate {selective_evaluate} --min_time_limit {min_time_limit} "\
                         f"--max_as_limit {max_as_limit} --max_data_limit {max_data_limit} --max_stack_limit {max_stack_limit} "
-                        f"--check_gt_only {check_gt_only} --no_gt {no_gt}", on_stderr=lambda x: print(x), on_stdout=lambda x: print(x), timeout=60*50)
+        
+        if  check_gt_only:
+            command += f"--check_gt_only "
+        if no_gt:
+            command += f"--no_gt "
+        if no_execute:
+            command += f"--no_execute "
+        sandbox.commands.run(command, on_stdout=lambda x: print(x), on_stderr=lambda x: print(x), timeout=60*60)
         
         if not check_gt_only:
             # download the results
