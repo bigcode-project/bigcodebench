@@ -211,7 +211,7 @@ def evaluate(
         else:
             passk = pass_k
         
-        if isinstance(selective_evaluate, str):
+        if selective_evaluate and isinstance(selective_evaluate, str):
             selected_ids = set(selective_evaluate.split(","))
         else:
             try:
