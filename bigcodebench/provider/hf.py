@@ -41,7 +41,8 @@ class HuggingFaceDecoder(DecoderBase):
         if self.is_direct_completion():  # no chat template
             self.eos += extra_eos_for_direct_completion(dataset)
         else:  # with chat template
-            self.eos += ["\n```\n"]
+            if self.prefill and "```" in self.response_prefix:
+                self.eos += ["\n```\n"]
 
         print(f"{self.eos = }")
         self.model = AutoModelForCausalLM.from_pretrained(name, **kwargs)

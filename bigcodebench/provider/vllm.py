@@ -27,7 +27,8 @@ class VllmDecoder(DecoderBase):
         if self.is_direct_completion():
             self.eos += extra_eos_for_direct_completion(dataset)
         else:
-            self.eos += ["\n```\n"]
+            if self.prefill:
+                self.eos += ["\n```\n"]
         self.llm = LLM(model=name, max_model_len=self.max_new_tokens, **kwargs)
         self.llm.set_tokenizer(tokenizer=self.tokenizer)
 
