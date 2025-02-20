@@ -127,7 +127,7 @@ bigcodebench.evaluate \
   --execution [e2b|gradio|local] \
   --split [complete|instruct] \
   --subset [full|hard] \
-  --backend [vllm|openai|anthropic|google|mistral|hf]
+  --backend [vllm|openai|anthropic|google|mistral|hf|hf-inference]
 ```
 
 - All the resulted files will be stored in a folder named `bcb_results`.
@@ -176,6 +176,13 @@ Access Gemini APIs from [Google AI Studio](https://aistudio.google.com/)
 ```bash
 export GOOGLE_API_KEY=<your_google_api_key>
 ```
+
+Access the [Hugging Face Serverless Inference API](https://huggingface.co/docs/api-inference/en/index)
+```bash
+export HF_INFERENCE_API_KEY=<your_hf_api_key>
+```
+
+Please make sure your HF access token has the `Make calls to inference providers` permission.
 
 ## 💻 LLM-generated Code
 
