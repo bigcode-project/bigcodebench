@@ -14,7 +14,7 @@ from datasets import load_dataset
 
 BIGCODEBENCH_OVERRIDE_PATH = os.environ.get("BIGCODEBENCH_OVERRIDE_PATH", None)
 BIGCODEBENCH_HF = "bigcode/bigcodebench"
-BIGCODEBENCH_VERSION = "v0.1.3"
+BIGCODEBENCH_VERSION = "v0.1.4"
 
 def _ready_bigcodebench_path(subset="full", version="default") -> str:
     if BIGCODEBENCH_OVERRIDE_PATH:
