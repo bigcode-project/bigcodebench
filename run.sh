@@ -10,5 +10,4 @@ bigcodebench.evaluate \
   --model $MODEL \
   --split $SPLIT \
   --subset $SUBSET \
-  --backend $BACKEND \
-  --check_gt_only
+  --backend $BACKEND
