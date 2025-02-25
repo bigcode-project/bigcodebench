@@ -9,9 +9,11 @@ from bigcodebench.provider.base import DecoderBase
 from bigcodebench.provider.utility import make_raw_chat_prompt
 
 class AnthropicDecoder(DecoderBase):
-    def __init__(self, name: str, **kwargs) -> None:
+    def __init__(self, name: str, reasoning_budget: int = 0, reasoning_beta: str = "output-128k-2025-02-19", **kwargs) -> None:
         super().__init__(name, **kwargs)
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_KEY"))
+        self.reasoning_budget = reasoning_budget
+        self.reasoning_beta = reasoning_beta
 
     def codegen(
         self, prompts: List[str], do_sample: bool = True, num_samples: int = 200
@@ -43,6 +45,8 @@ class AnthropicDecoder(DecoderBase):
                     max_tokens=self.max_new_tokens,
                     temperature=self.temperature,
                     stop_sequences=self.eos,
+                    reasoning_budget=self.reasoning_budget,
+                    reasoning_beta=self.reasoning_beta,
                 )
                 outputs.append(ret.content[0].text)
             all_outputs.append(outputs)

@@ -16,7 +16,18 @@ def make_auto_request(client: anthropic.Client, *args, **kwargs) -> Message:
         try:
             signal.signal(signal.SIGALRM, handler)
             signal.alarm(100)
-            ret = client.messages.create(*args, **kwargs)
+            if "reasoning_budget" in kwargs and "reasoning_beta" in kwargs:
+                ret = client.beta.messages.create(
+                    *args, 
+                    **kwargs, 
+                    thinking = {
+                        "type": "enabled",
+                        "budget": kwargs["reasoning_budget"],
+                    },
+                    betas=[kwargs["reasoning_beta"]]
+                )
+            else:
+                ret = client.messages.create(*args, **kwargs)
             signal.alarm(0)
         except anthropic.RateLimitError:
             print("Rate limit exceeded. Waiting...")

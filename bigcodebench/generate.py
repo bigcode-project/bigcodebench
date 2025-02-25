@@ -132,7 +132,11 @@ def run_codegen(
     temperature: float = 0.0,
     max_new_tokens: int = 1280,
     greedy: bool = False,
+    # openai
     reasoning_effort: str = "medium",
+    # anthropic
+    reasoning_budget: int = 0,
+    reasoning_beta: str = "output-128k-2025-02-19",
     strip_newlines: bool = False,
     direct_completion: bool = False,
     resume: bool = True,
@@ -173,6 +177,8 @@ def run_codegen(
         temperature=temperature,
         max_new_tokens=max_new_tokens,
         reasoning_effort=reasoning_effort,
+        reasoning_budget=reasoning_budget,
+        reasoning_beta=reasoning_beta,
         instruction_prefix=instruction_prefix,
         response_prefix=response_prefix,
         prefill=not skip_prefill,
@@ -186,8 +192,11 @@ def run_codegen(
     )
     
     extra = "-" + subset if subset != "full" else ""
-    if reasoning_effort and model.startswith("o1-") or model.startswith("o3-") or model.endswith("-reasoner"):
+    if backend == "openai" and reasoning_effort and model.startswith("o1-") or model.startswith("o3-") or model.endswith("-reasoner"):
         model = model + f"--{reasoning_effort}"
+    
+    if backend == "anthropic" and reasoning_budget and reasoning_beta:
+        model = model + f"--{reasoning_budget}-{reasoning_beta}"
 
     if skip_prefill:
         identifier = model.replace("/", "--") + "--skip_prefill" + f"--{revision}--bigcodebench{extra}-{split}--{backend}-{temperature}-{n_samples}-sanitized_calibrated.jsonl"
