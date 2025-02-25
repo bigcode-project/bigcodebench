@@ -48,7 +48,17 @@ class AnthropicDecoder(DecoderBase):
                     reasoning_budget=self.reasoning_budget,
                     reasoning_beta=self.reasoning_beta,
                 )
-                outputs.append(ret.content[0].text)
+                if isinstance(ret, anthropic.Stream):
+                    output = ""
+                    for chunk in ret:
+                        if chunk.type == "content_block_delta":
+                            if chunk.delta.type == "thinking_delta":
+                                output += chunk.delta.thinking
+                            elif chunk.delta.type == "text_delta":
+                                output += chunk.delta.text
+                    outputs.append(output)
+                else:
+                    outputs.append(ret.content[0].text)
             all_outputs.append(outputs)
         return all_outputs
 
