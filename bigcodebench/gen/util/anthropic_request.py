@@ -17,15 +17,14 @@ def make_auto_request(client: anthropic.Client, *args, **kwargs) -> Message:
             signal.signal(signal.SIGALRM, handler)
             signal.alarm(100)
             if "reasoning_budget" in kwargs and "reasoning_beta" in kwargs:
-                ret = client.beta.messages.create(
-                    *args, 
-                    **kwargs, 
-                    thinking = {
-                        "type": "enabled",
-                        "budget": kwargs["reasoning_budget"],
-                    },
-                    betas=[kwargs["reasoning_beta"]]
-                )
+                kwargs["thinking"] = {
+                    "type": "enabled",
+                    "budget": kwargs["reasoning_budget"],
+                }
+                kwargs["betas"] = [kwargs["reasoning_beta"]]
+                kwargs.pop("reasoning_budget")
+                kwargs.pop("reasoning_beta")
+                ret = client.beta.messages.create(*args, **kwargs)
             else:
                 ret = client.messages.create(*args, **kwargs)
             signal.alarm(0)
