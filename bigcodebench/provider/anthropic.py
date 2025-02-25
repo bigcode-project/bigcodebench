@@ -52,9 +52,9 @@ class AnthropicDecoder(DecoderBase):
                     output = ""
                     for chunk in ret:
                         if chunk.type == "content_block_delta":
-                            if chunk.delta.type == "thinking_delta":
-                                output += chunk.delta.thinking
-                            elif chunk.delta.type == "text_delta":
+                            # if chunk.delta.type == "thinking_delta":
+                            #     output += chunk.delta.thinking
+                            if chunk.delta.type == "text_delta":
                                 output += chunk.delta.text
                     outputs.append(output)
                 else:
