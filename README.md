@@ -187,7 +187,7 @@ Please make sure your HF access token has the `Make calls to inference providers
 ## 💻 LLM-generated Code
 
 We share pre-generated code samples from LLMs we have [evaluated](https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard) on the full set:
-*  See the attachment of our [v0.2.1.post7](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.2.1.post7). We include `sanitized_samples_calibrated.zip` for your convenience.
+*  See the attachment of our [v0.2.4](https://github.com/bigcode-project/bigcodebench/releases/tag/v0.2.4). We include `sanitized_samples_calibrated.zip` for your convenience.
 
 ## 🧑 Advanced Usage
 
