@@ -69,7 +69,8 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--tokenizer_legacy`: Whether to use the legacy tokenizer, default to `False`
 - `--samples`: The path to the generated samples file, default to `None`
 - `--no_execute`: Whether to not execute the samples, default to `False`
-- `--remote_execute_api`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page
+- `--e2b_endpoint`: The API endpoint for remote execution, default to `bigcodebench_evaluator`, you can also use your own E2B API endpoint by cloning the [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page
+- `--gradio_endpoint`: The API endpoint for remote execution, default to `https://bigcode-bigcodebench-evaluator.hf.space/`, you can also use your own Gradio API endpoint by cloning the [bigcodebench-evaluator](https://huggingface.co/spaces/bigcode/bigcodebench-evaluator) repo and check `Use via API` at the bottom of the HF space page
 - `--pass_k`: The `k` in `Pass@k`, default to `[1, 5, 10]`, e.g. `--pass_k 1,5,10` will evaluate `Pass@1`, `Pass@5` and `Pass@10`
 - `--calibrated`: Whether to use the calibrated samples, default to `True`
 - `--save_pass_rate`: Whether to save the pass rate to a file, default to `True`
