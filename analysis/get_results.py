@@ -118,12 +118,12 @@ def check_valid(results):
 
 
 def split_gen():
-    shutil.rmtree("sanitized_samples", ignore_errors=True)
     shutil.rmtree("sanitized_calibrated_samples", ignore_errors=True)
-    os.makedirs("sanitized_samples/complete", exist_ok=True)
-    os.makedirs("sanitized_samples/instruct", exist_ok=True)
-    os.makedirs("sanitized_calibrated_samples/complete", exist_ok=True)
-    os.makedirs("sanitized_calibrated_samples/instruct", exist_ok=True)
+    os.makedirs("sanitized_calibrated_samples/hard/complete", exist_ok=True)
+    os.makedirs("sanitized_calibrated_samples/hard/instruct", exist_ok=True)
+    os.makedirs("sanitized_calibrated_samples/full/complete", exist_ok=True)
+    os.makedirs("sanitized_calibrated_samples/full/instruct", exist_ok=True)
+    
     for model, info in model_info.items():
         model = model.replace("/", "--")
         files = glob(f"results/{model}--bigcodebench-*.jsonl")
@@ -131,27 +131,21 @@ def split_gen():
             model = info["link"].split("https://huggingface.co/")[-1].replace("/", "--")
         
         for file in files:
+            if "-sanitized" not in file or "calibrated" not in file:
+                continue
+                
             _, suffix = os.path.basename(file).split("--bigcodebench-")
             with open(file, "r") as f:
                 data = f.readlines()
                 
-            if "-sanitized" in file:
-                if "calibrated" in file:
-                    if info["prompted"]:
-                        if suffix.startswith("complete"):
-                            with open(f"sanitized_calibrated_samples/complete/{model}--bigcodebench-{suffix}", "w") as f:
-                                f.writelines(data)
-                        else:
-                            with open(f"sanitized_calibrated_samples/instruct/{model}--bigcodebench-{suffix}", "w") as f:
-                                f.writelines(data)
+            split_type = "hard" if "-hard-" in file else "full"
+            if info["prompted"]:
+                if suffix.startswith("complete") or suffix.startswith("hard-complete"):
+                    with open(f"sanitized_calibrated_samples/{split_type}/complete/{model}--bigcodebench-{suffix}", "w") as f:
+                        f.writelines(data)
                 else:
-                    if suffix.startswith("complete"):
-                        with open(f"sanitized_samples/complete/{model}--bigcodebench-{suffix}", "w") as f:
-                            f.writelines(data)
-                    else:
-                        with open(f"sanitized_samples/instruct/{model}--bigcodebench-{suffix}", "w") as f:
-                            f.writelines(data)
-
+                    with open(f"sanitized_calibrated_samples/{split_type}/instruct/{model}--bigcodebench-{suffix}", "w") as f:
+                        f.writelines(data)
 
 def read_task_perf(tids, task="complete"):
     model_results = dict()
@@ -302,7 +296,7 @@ def get_perf_df(data_dict):
 
     
 if __name__ == "__main__":
-    # split_gen()
+    split_gen()
     bcb_orig = load_dataset("bigcode/bigcodebench", split="v0.1.1")
     bcb_hard = load_dataset("bigcode/bigcodebench-hard", split="v0.1.1")
     bcb_config = {
