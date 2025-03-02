@@ -197,9 +197,12 @@ def run_codegen(
     if backend == "openai" and reasoning_effort and model.startswith("o1-") or model.startswith("o3-") or model.endswith("-reasoner"):
         model = model + f"--{reasoning_effort}"
     
+    if lora_path:
+        model = model + f"--lora-{lora_path}"
+    
     if backend == "anthropic" and reasoning_budget and reasoning_beta:
         model = model + f"--{reasoning_budget}-{reasoning_beta}"
-
+    
     if skip_prefill:
         identifier = model.replace("/", "--") + "--skip_prefill" + f"--{revision}--bigcodebench{extra}-{split}--{backend}-{temperature}-{n_samples}-sanitized_calibrated.jsonl"
     else:
