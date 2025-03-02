@@ -3,6 +3,8 @@ from typing import List
 
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
+from vllm.lora.request import LoRARequest
+from huggingface_hub import snapshot_download
 
 from bigcodebench.provider.base import DecoderBase
 from bigcodebench.provider.utility import (
@@ -11,7 +13,7 @@ from bigcodebench.provider.utility import (
 )
 
 class VllmDecoder(DecoderBase):
-    def __init__(self, name: str, dataset: str, tp: int, **kwargs) -> None:
+    def __init__(self, name: str, lora_path: str, dataset: str, tp: int, **kwargs) -> None:
         super().__init__(name, **kwargs)
 
         kwargs = {
@@ -29,7 +31,17 @@ class VllmDecoder(DecoderBase):
         else:
             if self.prefill and "```" in self.response_prefix:
                 self.eos += ["\n```\n"]
-        self.llm = LLM(model=name, max_model_len=self.max_new_tokens, **kwargs)
+        
+        self.lora_request = None
+        if lora_path:
+            local_lora_path = snapshot_download(lora_path)
+            self.lora_request = LoRARequest(
+                "lora",
+                1,
+                local_lora_path,
+            )
+        
+        self.llm = LLM(model=name, max_model_len=self.max_new_tokens, enable_lora=True if self.lora_path else False, **kwargs)
         self.llm.set_tokenizer(tokenizer=self.tokenizer)
 
     def is_direct_completion(self) -> bool:
@@ -64,6 +76,7 @@ class VllmDecoder(DecoderBase):
                 stop=self.eos,
                 skip_special_tokens=self.skip_special_tokens,
             ),
+            lora_request=self.lora_request,
             use_tqdm=True,
         )
 
