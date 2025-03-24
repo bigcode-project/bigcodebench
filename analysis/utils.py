@@ -1903,8 +1903,8 @@ model_info = {
         "link": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
         "prompted": True,
         "moe": False,
-        "size": 14,
-        "act_param": 14,
+        "size": 8,
+        "act_param": 8,
         "open-data": "None",
         "reasoning": False,
         "date": "2025-01-20"
@@ -1914,8 +1914,8 @@ model_info = {
         "link": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
         "prompted": True,
         "moe": False,
-        "size": 14,
-        "act_param": 14,
+        "size": 7,
+        "act_param": 7,
         "open-data": "None",
         "reasoning": False,
         "date": "2025-01-20"
@@ -2115,4 +2115,36 @@ model_info = {
         "reasoning": True,
         "date": "2025-02-19"
     },
+    "WarriorCoder-6.7B--main": {
+        "name": "WarriorCoder-6.7B (Reproduced)",
+        "link": "https://arxiv.org/abs/2412.17395",
+        "open-data": "None",
+        "prompted": True,
+        "moe": False,
+        "date": "2025-02-18"
+    },
+    "google--gemma-3-27b-it--main": {
+        "name": "Gemma-3-27B-Instruct",
+        "link": "https://huggingface.co/google/gemma-3-27b-it",
+        "open-data": "None",
+        "prompted": True,
+        "moe": False,
+        "date": "2025-03-12"
+    },
+    "Qwen--QwQ-32B--skip_prefill--main": {
+        "name": "QwQ-32B (w/ Reasoning)",
+        "link": "https://huggingface.co/Qwen/QwQ-32B",
+        "open-data": "None",
+        "prompted": True,
+        "moe": False,
+        "date": "2025-03-06"
+    },
+    "deepseek-chat-0324--main": {
+        "name": "DeepSeek-V3-0324",
+        "link": "https://huggingface.co/deepseek-ai/DeepSeek-V3-0324",
+        "open-data": "None",
+        "prompted": True,
+        "moe": False,
+        "date": "2025-03-24"
+    }
 }
