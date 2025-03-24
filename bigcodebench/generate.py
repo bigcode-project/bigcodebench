@@ -132,6 +132,8 @@ def run_codegen(
     n_samples: int = 1,
     temperature: float = 0.0,
     max_new_tokens: int = 1280,
+    # vllm
+    max_model_len: int = 12800,
     greedy: bool = False,
     # openai
     reasoning_effort: str = "medium",
@@ -178,6 +180,7 @@ def run_codegen(
         lora_path=lora_path,
         temperature=temperature,
         max_new_tokens=max_new_tokens,
+        max_model_len=max_model_len,
         reasoning_effort=reasoning_effort,
         reasoning_budget=reasoning_budget,
         reasoning_beta=reasoning_beta,

@@ -13,7 +13,7 @@ from bigcodebench.provider.utility import (
 )
 
 class VllmDecoder(DecoderBase):
-    def __init__(self, name: str, lora_path: str, dataset: str, tp: int, **kwargs) -> None:
+    def __init__(self, name: str, lora_path: str, dataset: str, tp: int, max_model_len: int, **kwargs) -> None:
         super().__init__(name, **kwargs)
 
         kwargs = {
@@ -41,8 +41,7 @@ class VllmDecoder(DecoderBase):
                 local_lora_path,
             )
         
-        # max_model_len is set to max_new_tokens * 10
-        self.llm = LLM(model=name, max_model_len=self.max_new_tokens * 10, enable_lora=True if self.lora_request else False, **kwargs)
+        self.llm = LLM(model=name, max_model_len=max_model_len, enable_lora=True if self.lora_request else False, **kwargs)
         self.llm.set_tokenizer(tokenizer=self.tokenizer)
 
     def is_direct_completion(self) -> bool:

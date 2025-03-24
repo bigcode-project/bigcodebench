@@ -50,6 +50,7 @@ Below are all the arguments for `bigcodebench.evaluate` for the remote evaluatio
 - `--n_samples`: The number of samples, default to `1`
 - `--temperature`: The temperature, default to `0.0`
 - `--max_new_tokens`: The length of max new tokens, default to `1280`
+- `--max_model_len`: The length of max tokens in VLLM, default to `12800`
 - `--greedy`: Whether to use greedy decoding, default to `False`
 - `--strip_newlines`: Whether to strip newlines, default to `False`, set to `True` to strip newlines for some model series like StarCoder2
 - `--direct_completion`: Whether to use direct completion, default to `False`

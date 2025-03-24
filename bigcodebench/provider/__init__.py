@@ -10,6 +10,7 @@ def make_model(
     dataset: str = "bigcodebench",
     temperature: float = 0.0,
     max_new_tokens: int = 1280,
+    max_model_len: int = 12800,
     # openai only
     reasoning_effort: str = "medium",
     # anthropic only
@@ -42,6 +43,7 @@ def make_model(
             lora_path=lora_path,
             temperature=temperature,
             max_new_tokens=max_new_tokens,
+            max_model_len=max_model_len,
             revision=revision,
             dataset=dataset,
             direct_completion=direct_completion,
