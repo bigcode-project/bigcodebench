@@ -41,7 +41,7 @@ class VllmDecoder(DecoderBase):
                 local_lora_path,
             )
         
-        self.llm = LLM(model=name, max_model_len=self.max_new_tokens, enable_lora=True if self.lora_request else False, **kwargs)
+        self.llm = LLM(model=name, enable_lora=True if self.lora_request else False, **kwargs)
         self.llm.set_tokenizer(tokenizer=self.tokenizer)
 
     def is_direct_completion(self) -> bool:
