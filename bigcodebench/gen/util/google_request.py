@@ -1,11 +1,12 @@
 import time
 
-import google.generativeai as genai
+from google import genai
 from google.api_core.exceptions import GoogleAPICallError, ResourceExhausted
 
 
 def make_request(
-    client: genai.GenerativeModel,
+    model: str,
+    client: genai.Client,
     message: str,
     temperature: float,
     n: int,
@@ -13,21 +14,34 @@ def make_request(
 ) -> genai.types.GenerateContentResponse:
     kwargs = {"temperature": temperature, "max_output_tokens": max_new_tokens}
 
-    if "-thinking-" in client.model_name:
+    if "-thinking-" in model:
         kwargs.pop("max_output_tokens")
-
-    response = client.generate_content(
-        [{"role": "user", "parts": [message]}],
-        generation_config=genai.types.GenerationConfig(
+    
+    response = client.models.generate_content(
+        model=model,
+        contents=message,
+        config=genai.types.GenerateContentConfig(
             candidate_count=n,
+            safety_settings=[
+                genai.types.SafetySetting(
+                    category='HARM_CATEGORY_DANGEROUS_CONTENT',
+                    threshold='BLOCK_NONE'
+                ),
+                genai.types.SafetySetting(
+                    category='HARM_CATEGORY_SEXUALLY_EXPLICIT',
+                    threshold='BLOCK_NONE'
+                ),
+                genai.types.SafetySetting(
+                    category='HARM_CATEGORY_HATE_SPEECH',
+                    threshold='BLOCK_NONE'
+                ),
+                genai.types.SafetySetting(
+                    category='HARM_CATEGORY_HARASSMENT',
+                    threshold='BLOCK_NONE'
+                ),
+            ],
             **kwargs
-        ),
-        safety_settings=[
-            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
-        ],
+        ),            
     )
 
     return response

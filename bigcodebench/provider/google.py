@@ -2,7 +2,7 @@ import os
 from typing import List
 from tqdm import tqdm
 
-import google.generativeai as genai
+from google import genai
 
 from bigcodebench.provider.base import DecoderBase
 from bigcodebench.gen.util.google_request import make_auto_request
@@ -12,8 +12,8 @@ from bigcodebench.provider.utility import make_raw_chat_prompt
 class GoogleDecoder(DecoderBase):
     def __init__(self, name: str, **kwargs):
         super().__init__(name, **kwargs)
-        genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-        self.client = genai.GenerativeModel(name)
+        self.model = name
+        self.client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
     def codegen(
         self, prompts: List[str], do_sample: bool = True, num_samples: int = 200
@@ -34,7 +34,8 @@ class GoogleDecoder(DecoderBase):
                 tokenizer=None,
             )
             ret = make_auto_request(
-                self.client,
+                model=self.model,
+                client=self.client,
                 message=message,
                 n=num_samples,
                 temperature=self.temperature,
