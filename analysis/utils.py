@@ -2071,6 +2071,7 @@ model_info = {
         "moe": False,
         "size": None,
         "act_param": None,
+        "reasoning": True,
         "date": "2025-01-29"
     },
     "Kwaipilot--KwaiCoder-23B-A4B-v1--main": {
@@ -2081,6 +2082,7 @@ model_info = {
         "moe": True,
         "size": 23,
         "act_param": 4,
+        "reasoning": False,
         "date": "2025-01-25"
     },
     "qwen-max-latest--main": {
@@ -2091,6 +2093,7 @@ model_info = {
         "moe": True,
         "size": None,
         "act_param": None,
+        "reasoning": True,
         "date": "2025-01-28"
     },
     "claude-3-7-sonnet-20250219--3200-output-128k-2025-02-19--main": {
@@ -2121,6 +2124,10 @@ model_info = {
         "open-data": "None",
         "prompted": True,
         "moe": False,
+        "size": 6.7,
+        "act_param": 6.7,
+        "open-data": "None",
+        "reasoning": False,
         "date": "2025-02-18"
     },
     "google--gemma-3-27b-it--main": {
@@ -2129,6 +2136,10 @@ model_info = {
         "open-data": "None",
         "prompted": True,
         "moe": False,
+        "size": 27,
+        "act_param": 27,
+        "open-data": "None",
+        "reasoning": False,
         "date": "2025-03-12"
     },
     "Qwen--QwQ-32B--skip_prefill--main": {
@@ -2137,6 +2148,10 @@ model_info = {
         "open-data": "None",
         "prompted": True,
         "moe": False,
+        "size": 32,
+        "act_param": 32,
+        "open-data": "None",
+        "reasoning": True,
         "date": "2025-03-06"
     },
     "deepseek-chat-0324--main": {
@@ -2144,7 +2159,23 @@ model_info = {
         "link": "https://huggingface.co/deepseek-ai/DeepSeek-V3-0324",
         "open-data": "None",
         "prompted": True,
-        "moe": False,
+        "moe": True,
+        "size": 671,
+        "act_param": 37,
+        "open-data": "None",
+        "reasoning": True,
         "date": "2025-03-24"
+    },
+    "gemini-2.5-pro-exp-03-25--main": {
+        "name": "Gemini-2.5-Pro-Exp-03-25",
+        "link": "https://blog.google/technology/google-deepmind/gemini-model-thinking-updates-march-2025/",
+        "open-data": "None",
+        "prompted": True,
+        "moe": False,
+        "size": None,
+        "act_param": 37,
+        "open-data": "None",
+        "reasoning": True,
+        "date": "2025-03-25"
     }
 }
