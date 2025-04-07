@@ -7,7 +7,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-12-04",
     },
     "bigcode/starcoder2-15b-instruct-v0.1": {
@@ -18,7 +18,7 @@ model_info = {
         "size": 15,
         "act_param": 15,
         "open-data": "Full",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-30"
     },
     "bigcode/starcoder2-3b": {
@@ -29,7 +29,7 @@ model_info = {
         "size": 3,
         "act_param": 3,
         "open-data": "Full",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-02-29"
     },
     "bigcode/starcoder2-7b": {
@@ -40,7 +40,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "Full",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-02-29"
     },
     "bigcode/starcoder2-15b": {
@@ -51,7 +51,7 @@ model_info = {
         "size": 15,
         "act_param": 15,
         "open-data": "Full",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-02-29"
     },
     "Qwen/CodeQwen1.5-7B": {
@@ -62,7 +62,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-16"
     },
     "google/codegemma-2b": {
@@ -73,7 +73,7 @@ model_info = {
         "size": 2,
         "act_param": 2,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-10"
     },
     "google/codegemma-7b": {
@@ -84,7 +84,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-10"
     },
     "google/codegemma-7b-it": {
@@ -95,7 +95,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-10"
     },
     "gpt-3.5-turbo-0125": {
@@ -106,7 +106,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-01-25"
     },
     "gpt-4o": {
@@ -117,7 +117,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-13"
     },
     "gpt-4-turbo-2024-04-09": {
@@ -128,7 +128,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-09"
     },
     "gpt-4-0613": {
@@ -139,7 +139,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-06-13"
     },
     "codellama/CodeLlama-7b-hf": {
@@ -150,7 +150,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-08-25"
     },
     "codellama/CodeLlama-13b-hf": {
@@ -161,7 +161,7 @@ model_info = {
         "size": 13,
         "act_param": 13,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-08-25"
     },
     "codellama/CodeLlama-7b-Instruct-hf": {
@@ -172,7 +172,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-08-25"
     },
     "codellama/CodeLlama-13b-Instruct-hf": {
@@ -183,7 +183,7 @@ model_info = {
         "size": 13,
         "act_param": 13,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-08-25"
     },
     "mistral-large-2402": {
@@ -194,7 +194,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-02-26"
     },
     "mistral-small-2402": {
@@ -205,7 +205,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-02-26"
     },
     "mistralai/Mixtral-8x22B-v0.1": {
@@ -216,7 +216,7 @@ model_info = {
         "size": 176,
         "act_param": 44,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-17"
     },
     "mistralai/Mixtral-8x22B-Instruct-v0.1": {
@@ -227,7 +227,7 @@ model_info = {
         "size": 176,
         "act_param": 44,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-17"
     },
     "codellama/CodeLlama-34b-hf": {
@@ -238,7 +238,7 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-08-25"
     },
     "codellama/CodeLlama-34b-Instruct-hf": {
@@ -249,7 +249,7 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-08-25"
     },
     "codellama/CodeLlama-70b-hf": {
@@ -260,7 +260,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-08-25"
     },
     "codellama/CodeLlama-70b-Instruct-hf": {
@@ -271,7 +271,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-08-25"
     },
     "Qwen/CodeQwen1.5-7B-Chat": {
@@ -282,7 +282,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-16"
     },
     "Qwen/Qwen1.5-110B-Chat": {
@@ -293,7 +293,7 @@ model_info = {
         "size": 110,
         "act_param": 110,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-26"
     },
     "Qwen/Qwen1.5-72B-Chat": {
@@ -304,7 +304,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-26"
     },
     "Qwen/Qwen1.5-32B-Chat": {
@@ -315,7 +315,7 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-26"
     },
     "deepseek-ai/DeepSeek-V2-Chat": {
@@ -326,7 +326,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-06"
     },
     "deepseek-ai/deepseek-coder-1.3b-base": {
@@ -337,7 +337,7 @@ model_info = {
         "size": 1.3,
         "act_param": 1.3,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-10-28"
     },
     "deepseek-ai/deepseek-coder-1.3b-instruct": {
@@ -348,7 +348,7 @@ model_info = {
         "size": 1.3,
         "act_param": 1.3,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-10-28"
     },
     "deepseek-ai/deepseek-coder-33b-base": {
@@ -359,7 +359,7 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-10-28"
     },
     "deepseek-ai/deepseek-coder-33b-instruct": {
@@ -370,7 +370,7 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-10-28"
     },
     "deepseek-ai/deepseek-coder-6.7b-base": {
@@ -381,7 +381,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-10-28"
     },
     "deepseek-ai/deepseek-coder-6.7b-instruct": {
@@ -392,7 +392,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-10-28"
     },
     "meta-llama/Meta-Llama-3-70B": {
@@ -403,7 +403,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-18"
     },
     "meta-llama/Meta-Llama-3-70B-Instruct": {
@@ -414,7 +414,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-18"
     },
     "meta-llama/Meta-Llama-3-8B": {
@@ -425,7 +425,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-18"
     },
     "meta-llama/Meta-Llama-3-8B-Instruct": {
@@ -436,7 +436,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-18"
     },
     "ibm-granite/granite-3b-code-instruct": {
@@ -447,7 +447,7 @@ model_info = {
         "size": 3,
         "act_param": 3,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-06"
     },
     "ibm-granite/granite-8b-code-instruct": {
@@ -458,7 +458,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-06"
     },
     "ibm-granite/granite-20b-code-instruct": {
@@ -469,7 +469,7 @@ model_info = {
         "size": 20,
         "act_param": 20,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-06"
     },
     "ibm-granite/granite-34b-code-instruct": {
@@ -480,7 +480,7 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-06"
     },
     "ibm-granite/granite-3b-code-base": {
@@ -491,7 +491,7 @@ model_info = {
         "size": 3,
         "act_param": 3,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-06"
     },
     "ibm-granite/granite-8b-code-base": {
@@ -502,7 +502,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-06"
     },
     "ibm-granite/granite-20b-code-base": {
@@ -513,7 +513,7 @@ model_info = {
         "size": 20,
         "act_param": 20,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-06"
     },
     "ibm-granite/granite-34b-code-base": {
@@ -524,7 +524,7 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-06"
     },
     "claude-3-haiku-20240307": {
@@ -535,7 +535,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-03-07"
     },
     "claude-3-sonnet-20240229": {
@@ -546,7 +546,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-02-29"
     },
     "claude-3-opus-20240229": {
@@ -557,7 +557,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-02-29"
     },
     "01-ai/Yi-1.5-34B-Chat": {
@@ -568,7 +568,7 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-20"
     },
     "01-ai/Yi-1.5-34B": {
@@ -579,7 +579,7 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-20"
     },
     "01-ai/Yi-1.5-9B-Chat": {
@@ -590,7 +590,7 @@ model_info = {
         "size": 9,
         "act_param": 9,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-20"
     },
     "01-ai/Yi-1.5-9B": {
@@ -601,7 +601,7 @@ model_info = {
         "size": 9,
         "act_param": 9,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-20"
     },
     "01-ai/Yi-1.5-6B-Chat": {
@@ -612,7 +612,7 @@ model_info = {
         "size": 6,
         "act_param": 6,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-20"
     },
     "01-ai/Yi-1.5-6B": {
@@ -623,7 +623,7 @@ model_info = {
         "size": 6,
         "act_param": 6,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-20"
     },
     "Qwen/Qwen2-57B-A14B": {
@@ -634,7 +634,7 @@ model_info = {
         "size": 57,
         "act_param": 14,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-06-07"
     },
     "Qwen/Qwen2-7B-Instruct": {
@@ -645,7 +645,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-06-07"
     },
     "Qwen/Qwen2-72B-Chat": {
@@ -656,7 +656,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-06-07"
     },
     "gemini-1.5-pro": {
@@ -667,7 +667,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-14"
     },
     "gemini-1.5-flash": {
@@ -678,7 +678,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-14"
     },
     "m-a-p/OpenCodeInterpreter-DS-33B": {
@@ -689,7 +689,7 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-02-22"
     },
     "m-a-p/OpenCodeInterpreter-DS-6.7B": {
@@ -700,7 +700,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-02-22"
     },
     "m-a-p/OpenCodeInterpreter-DS-1.3B": {
@@ -711,7 +711,7 @@ model_info = {
         "size": 1.3,
         "act_param": 1.3,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-02-22"
     },
     "microsoft/Phi-3-medium-128k-instruct": {
@@ -722,7 +722,7 @@ model_info = {
         "size": 14,
         "act_param": 14,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-21"
     },
     "microsoft/Phi-3-small-128k-instruct": {
@@ -733,7 +733,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-21"
     },
     "codestral-2405": {
@@ -744,7 +744,7 @@ model_info = {
         "size": 22,
         "act_param": 22,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-23"
     },
     "codestral-mamba-2407": {
@@ -755,7 +755,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-16"
     },
     "mistralai/Mistral-7B-Instruct-v0.3": {
@@ -766,7 +766,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-22"
     },
     "mistralai/Mistral-7B-v0.3": {
@@ -777,7 +777,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-22"
     },
     "CohereForAI/c4ai-command-r-plus": {
@@ -788,7 +788,7 @@ model_info = {
         "size": 104,
         "act_param": 104,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-04"
     },
     "deepseek-coder": {
@@ -799,7 +799,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-06-17"
     },
     "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct": {
@@ -810,7 +810,7 @@ model_info = {
         "size": 16,
         "act_param": 2.4,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-06-17"
     },
     "deepseek-ai/DeepSeek-Coder-V2-Lite-Base": {
@@ -821,7 +821,7 @@ model_info = {
         "size": 16,
         "act_param": 2.4,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-06-17"
     },
     "claude-3-5-sonnet-20240620": {
@@ -832,7 +832,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-06-20"
     },
     "NousResearch/Hermes-2-Theta-Llama-3-70B": {
@@ -843,7 +843,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-06-24"
     },
     "microsoft/wavecoder-ultra-6.7b": {
@@ -854,7 +854,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-12-26"
     },
     "google/gemma-2-9b-it": {
@@ -865,7 +865,7 @@ model_info = {
         "size": 9,
         "act_param": 9,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-06-19"
     },
     "Bin12345/AutoCoder": {
@@ -876,7 +876,7 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-23"
     },
     "Bin12345/AutoCoder_S_6.7B": {
@@ -887,7 +887,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-23"
     },
     "Bin12345/AutoCoder_QW_7B": {
@@ -898,7 +898,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-23"
     },
     "SenseLLM/ReflectionCoder-DS-33B": {
@@ -909,7 +909,7 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-27"
     },
     "SenseLLM/ReflectionCoder-DS-6.7B": {
@@ -920,7 +920,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-27"
     },
     "SenseLLM/ReflectionCoder-CL-34B": {
@@ -931,7 +931,7 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-27"
     },
     "SenseLLM/ReflectionCoder-CL-7B": {
@@ -942,7 +942,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-27"
     },
     "new-microsoft/Phi-3-mini-128k-instruct": {
@@ -953,7 +953,7 @@ model_info = {
         "size": 3.8,
         "act_param": 3.8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-21"
     },
     "old-microsoft/Phi-3-mini-128k-instruct": {
@@ -964,7 +964,7 @@ model_info = {
         "size": 3.8,
         "act_param": 3.8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-21"
     },
     "internlm/internlm2_5-7b-chat": {
@@ -975,7 +975,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-03"
     },
     "NousResearch/Hermes-2-Pro-Llama-3-70B": {
@@ -986,7 +986,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-06-27"
     },
     "new-deepseek-chat": {
@@ -997,7 +997,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-06-28"
     },
     "vllm-google/gemma-2-27b-it": {
@@ -1008,7 +1008,7 @@ model_info = {
         "size": 27,
         "act_param": 27,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-06-19"
     },
     "Artigenz/Artigenz-Coder-DS-6.7B": {
@@ -1019,7 +1019,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-16"
     },
     "openchat/openchat-3.6-8b-20240522": {
@@ -1030,7 +1030,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-22"
     },
     "Phind/Phind-CodeLlama-34B-v2": {
@@ -1041,7 +1041,7 @@ model_info = {
         "size": 34,
         "act_param": 34,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2023-08-25"
     },
     "yi-large": {
@@ -1052,7 +1052,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-13"
     },
     "THUDM/codegeex4-all-9b": {
@@ -1063,7 +1063,7 @@ model_info = {
         "size": 9,
         "act_param": 9,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-05"
     },
     "gpt-4o-mini-2024-07-18": {
@@ -1074,7 +1074,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-18"
     },
     "Nexusflow/Athene-70B": {
@@ -1085,7 +1085,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-20"
     },
     "NTQAI/Nxcode-CQ-7B-orpo": {
@@ -1096,7 +1096,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-25"
     },
     "migtissera/Llama-3-70B-Synthia-v3.5": {
@@ -1107,7 +1107,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-05-27"
     },
     "migtissera/Tess-v2.5.2-Qwen2-72B": {
@@ -1118,7 +1118,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-18"
     },
     "WhiteRabbitNeo/WhiteRabbitNeo-33B-v1.5": {
@@ -1129,7 +1129,7 @@ model_info = {
         "size": 33,
         "act_param": 33,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-02-10"
     },
     "mistral-large-2407": {
@@ -1140,7 +1140,7 @@ model_info = {
         "size": 123,
         "act_param": 123,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-07-24"
     },
     "meta-llama/Meta-Llama-3.1-8B-Instruct": {
@@ -1151,7 +1151,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-23"
     },
     "meta-llama/Meta-Llama-3.1-70B-Instruct": {
@@ -1162,7 +1162,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-23"
     },
     "meta--llama-3.1-405b-instruct": {
@@ -1173,7 +1173,7 @@ model_info = {
         "size": 405,
         "act_param": 405,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-23"
     },
     "deepseek-coder-20240724": {
@@ -1184,7 +1184,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-24"
     },
     "microsoft/Phi-3.5-mini-instruct": {
@@ -1195,7 +1195,7 @@ model_info = {
         "size": 3.8,
         "act_param": 3.8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-23"
     },
     "nv-mistralai--mistral-nemo-12b-instruct": {
@@ -1206,7 +1206,7 @@ model_info = {
         "size": 12,
         "act_param": 12,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-18"
     },
     "wyt2000/InverseCoder-CL-13B": {
@@ -1217,7 +1217,7 @@ model_info = {
         "size": 13,
         "act_param": 13,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-08"
     },
     "wyt2000/InverseCoder-CL-7B": {
@@ -1228,7 +1228,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-08"
     },
     "wyt2000/InverseCoder-DS-6.7B": {
@@ -1239,7 +1239,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-07-08"
     },
     "gemini-1.5-pro-exp-0801": {
@@ -1250,7 +1250,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-08-01"
     },
     "gpt-4o-2024-08-06": {
@@ -1261,7 +1261,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-08-06"
     },
     "abacusai/Dracarys-Llama-3.1-70B-Instruct": {
@@ -1272,7 +1272,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-08-23"
     },
     "abacusai/Dracarys-72B-Instruct": {
@@ -1283,7 +1283,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-08-23"
     },
     "gemini-1.5-pro-exp-0827": {
@@ -1294,7 +1294,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-08-27"
     },
     "gemini-1.5-flash-exp-0827": {
@@ -1305,7 +1305,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-08-27"
     },
     "microsoft/Phi-3.5-mini-instruct": {
@@ -1316,7 +1316,7 @@ model_info = {
         "size": 3.8,
         "act_param": 3.8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-23"
     },
     "abacusai/Dracarys-Llama-3.1-70B-Instruct": {
@@ -1327,7 +1327,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-23"
     },
     "abacusai/Dracarys-72B-Instruct": {
@@ -1338,7 +1338,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-04-23"
     },
     "deepseek-coder-v2.5": {
@@ -1349,7 +1349,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-18"
     },
     "CohereForAI/c4ai-command-r-08-2024": {
@@ -1360,7 +1360,7 @@ model_info = {
         "size": 32.3,
         "act_param": 32.3,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-08-30"
     },
     "CohereForAI/c4ai-command-r-plus-08-2024": {
@@ -1371,7 +1371,7 @@ model_info = {
         "size": 104,
         "act_param": 104,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-08-30"
     },
     "ayueei--yue-coder-9b-preview": {
@@ -1382,7 +1382,7 @@ model_info = {
         "size": 9,
         "act_param": 9,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-04"
     },
     # "mattshumer/ref_70_e3_prefill": {
@@ -1411,7 +1411,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-09-12"
     },
     "o1-mini-2024-09-12": {
@@ -1422,7 +1422,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-09-12"
     },
     "Qwen/Qwen2.5-Coder-1.5B-Instruct": {
@@ -1433,7 +1433,7 @@ model_info = {
         "size": 1.5,
         "act_param": 1.5,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-11-12"
     },
     "Qwen/Qwen2.5-Coder-7B-Instruct": {
@@ -1444,7 +1444,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-11-12"
     },
     "gemini-1.5-pro-002": {
@@ -1455,7 +1455,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-09-25"
     },
     "mistralai/Mistral-Small-Instruct-2409": {
@@ -1466,7 +1466,7 @@ model_info = {
         "size": 22.2,
         "act_param": 22.2,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-18"
     },
     "Qwen/Qwen2.5-0.5B-Instruct": {
@@ -1477,7 +1477,7 @@ model_info = {
         "size": 0.5,
         "act_param": 0.5,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-19"
     },
     "Qwen/Qwen2.5-1.5B-Instruct": {
@@ -1488,7 +1488,7 @@ model_info = {
         "size": 1.5,
         "act_param": 1.5,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-19"
     },
     "Qwen/Qwen2.5-7B-Instruct": {
@@ -1499,7 +1499,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-19"
     },
     "Qwen/Qwen2.5-14B-Instruct": {
@@ -1510,7 +1510,7 @@ model_info = {
         "size": 14,
         "act_param": 14,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-19"
     },
     "Qwen/Qwen2.5-32B-Instruct": {
@@ -1521,7 +1521,7 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-19"
     },
     "Qwen/Qwen2.5-72B-Instruct": {
@@ -1532,7 +1532,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-19"
     },
     "meta-llama/Llama-3.2-1B-Instruct": {
@@ -1543,7 +1543,7 @@ model_info = {
         "size": 1,
         "act_param": 1,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-25"
     },
     "meta-llama/Llama-3.2-3B-Instruct": {
@@ -1554,7 +1554,7 @@ model_info = {
         "size": 3,
         "act_param": 3,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-25"
     },
     "nvidia/Llama-3.1-Nemotron-70B-Instruct-HF": {
@@ -1565,7 +1565,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "Partial",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-25"
     },
     "claude-3-5-sonnet-20241022": {
@@ -1576,7 +1576,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-10-22"
     },
     "ibm-granite/granite-3.0-8b-instruct": {
@@ -1587,7 +1587,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-10-21"
     },
     "ibm-granite/granite-3.0-2b-instruct": {
@@ -1598,7 +1598,7 @@ model_info = {
         "size": 2,
         "act_param": 2,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-10-21"
     },
     "grok-beta--main": {
@@ -1609,7 +1609,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-03-17"
     },
     "claude-3-5-haiku-20241022--main": {
@@ -1620,7 +1620,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-10-22"
     },
     "Qwen/Qwen2.5-Coder-14B-Instruct--main": {
@@ -1631,7 +1631,7 @@ model_info = {
         "size": 14,
         "act_param": 14,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-19"
     },
     "Qwen/Qwen2.5-Coder-32B-Instruct--main": {
@@ -1642,7 +1642,7 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-09-19"
     },
     "infly/OpenCoder-1.5B-Instruct--main": {
@@ -1653,7 +1653,7 @@ model_info = {
         "size": 1.5,
         "act_param": 1.5,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-11-09"
     },
     "infly/OpenCoder-8B-Instruct--main": {
@@ -1664,7 +1664,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-11-09"
     },
     "microsoft/Phi-3.5-mini-instruct--main": {
@@ -1675,7 +1675,7 @@ model_info = {
         "size": 3.8,
         "act_param": 3.8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-08-21"
     },
     "Nexusflow/Athene-V2-Agent--main": {
@@ -1686,7 +1686,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-11-14"
     },
     "Nexusflow/Athene-V2-Chat--main": {
@@ -1697,7 +1697,7 @@ model_info = {
         "size": 72,
         "act_param": 72,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-11-14"
     },
     "gemini-exp-1114--main": {
@@ -1708,7 +1708,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-11-14"
     },
     "gpt-4o-2024-11-20--main": {
@@ -1719,7 +1719,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-11-20"
     },
     "gemini-exp-1121--main": {
@@ -1730,7 +1730,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-11-21"
     },
     "gemini-exp-1206--main": {
@@ -1741,7 +1741,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-12-06"
     },
     "meta-llama--Llama-3.3-70B-Instruct--main": {
@@ -1752,7 +1752,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-12-19"
     },
     "deepseek-ai--DeepSeek-V2.5-1210--main": {
@@ -1763,7 +1763,7 @@ model_info = {
         "size": 236,
         "act_param": 21,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-12-10"
     },
     "gemini-2.0-flash-exp--main": {
@@ -1774,7 +1774,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-12-11"
     },
     "gemini-2.0-flash-thinking-exp-1219--main": {
@@ -1785,7 +1785,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-12-19"
     },
     "gemini-2.0-flash-thinking-exp-01-21--main": {
@@ -1796,7 +1796,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-21"
     },
     "o1-2024-12-17--main": {
@@ -1807,7 +1807,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-12-17"
     },
     "o1-2024-12-17--low--main": {
@@ -1818,7 +1818,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-12-17"
     },
     "o1-2024-12-17--high--main": {
@@ -1829,7 +1829,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-12-17"
     },
     "deepseek-v3-chat--main": {
@@ -1840,7 +1840,7 @@ model_info = {
         "size": 671,
         "act_param": 37,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2024-12-26"
     },
     "microsoft--phi-4--main": {
@@ -1851,7 +1851,7 @@ model_info = {
         "size": 14.7,
         "act_param": 14.7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-12-13"
     },
     "deepseek-reasoner--main": {
@@ -1862,7 +1862,7 @@ model_info = {
         "size": 671,
         "act_param": 37,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-01-20"
     },
     "deepseek-ai/DeepSeek-R1-Distill-Llama-70B--main": {
@@ -1873,7 +1873,7 @@ model_info = {
         "size": 70,
         "act_param": 70,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-20"
     },
     "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B--main": {
@@ -1884,7 +1884,7 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-20"
     },
     "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B--main": {
@@ -1895,7 +1895,7 @@ model_info = {
         "size": 14,
         "act_param": 14,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-20"
     },
     "deepseek-ai/DeepSeek-R1-Distill-Llama-8B--main": {
@@ -1906,7 +1906,7 @@ model_info = {
         "size": 8,
         "act_param": 8,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-20"
     },
     "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B--main": {
@@ -1917,7 +1917,7 @@ model_info = {
         "size": 7,
         "act_param": 7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-20"
     },
     "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B--main": {
@@ -1928,7 +1928,7 @@ model_info = {
         "size": 1.5,
         "act_param": 1.5,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-20"
     },
     "mistralai/Mistral-Small-24B-Instruct-2501--main": {
@@ -1939,7 +1939,7 @@ model_info = {
         "size": 24,
         "act_param": 24,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-31"
     },
     "o3-mini-2025-01-31--medium--main": {
@@ -1950,7 +1950,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-01-31"
     },
     "o3-mini-2025-01-31--low--main": {
@@ -1961,7 +1961,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-01-31"
     },
     "o3-mini-2025-01-31--high--main": {
@@ -1972,7 +1972,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-01-31"
     },
     "gemini-2.0-flash-001--main": {
@@ -1983,7 +1983,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-02-05"
     },
     "gemini-2.0-flash-exp--main": {
@@ -1994,7 +1994,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-02-05"
     },
     "gemini-2.0-flash-lite-preview-02-05--main": {
@@ -2005,7 +2005,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-02-05"
     },
     "gemini-2.0-pro-exp-02-05--main": {
@@ -2016,7 +2016,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-02-05"
     },
     "NovaSky-AI--Sky-T1-32B-Flash--main": {
@@ -2027,7 +2027,7 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-12"
     },
     "NovaSky-AI--Sky-T1-32B-Preview--main": {
@@ -2038,7 +2038,7 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-12"
     },
     "Qwen--QwQ-32B-Preview--main": {
@@ -2049,7 +2049,7 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2024-11-28"
     },
     "claude-3-7-sonnet-20250219--main": {
@@ -2060,7 +2060,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-02-19"
     },
     "chatgpt-4o-latest--main": {
@@ -2071,7 +2071,7 @@ model_info = {
         "moe": False,
         "size": None,
         "act_param": None,
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-01-29"
     },
     "Kwaipilot--KwaiCoder-23B-A4B-v1--main": {
@@ -2082,7 +2082,7 @@ model_info = {
         "moe": True,
         "size": 23,
         "act_param": 4,
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-01-25"
     },
     "qwen-max-latest--main": {
@@ -2093,7 +2093,7 @@ model_info = {
         "moe": True,
         "size": None,
         "act_param": None,
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-01-28"
     },
     "claude-3-7-sonnet-20250219--3200-output-128k-2025-02-19--main": {
@@ -2104,7 +2104,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-02-19"
     },
     "claude-3-7-sonnet-20250219--main": {
@@ -2115,7 +2115,7 @@ model_info = {
         "size": None,
         "act_param": None,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-02-19"
     },
     "WarriorCoder-6.7B--main": {
@@ -2127,7 +2127,7 @@ model_info = {
         "size": 6.7,
         "act_param": 6.7,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-02-18"
     },
     "google--gemma-3-27b-it--main": {
@@ -2139,7 +2139,7 @@ model_info = {
         "size": 27,
         "act_param": 27,
         "open-data": "None",
-        "reasoning": False,
+        "prefill": True,
         "date": "2025-03-12"
     },
     "Qwen--QwQ-32B--skip_prefill--main": {
@@ -2151,7 +2151,7 @@ model_info = {
         "size": 32,
         "act_param": 32,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-03-06"
     },
     "deepseek-chat-0324--main": {
@@ -2163,7 +2163,7 @@ model_info = {
         "size": 671,
         "act_param": 37,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-03-24"
     },
     "gemini-2.5-pro-exp-03-25--main": {
@@ -2175,7 +2175,31 @@ model_info = {
         "size": None,
         "act_param": 37,
         "open-data": "None",
-        "reasoning": True,
+        "prefill": False,
         "date": "2025-03-25"
-    }
+    },
+    "meta/llama-4-scout-17b-16e-instruct--main": {
+        "name": "Llama-4-Scout",
+        "link": "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct",
+        "open-data": "None",
+        "prompted": True,
+        "moe": True,
+        "size": 109,
+        "act_param": 17,
+        "open-data": "None",
+        "prefill": False,
+        "date": "2025-04-05"
+    },
+    "meta/llama-4-maverick-17b-128e-instruct--main": {
+        "name": "Llama-4-Maverick",
+        "link": "https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct",
+        "open-data": "None",
+        "prompted": True,
+        "moe": True,
+        "size": 109,
+        "act_param": 17,
+        "open-data": "None",
+        "prefill": False,
+        "date": "2025-04-05"
+    },
 }

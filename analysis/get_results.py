@@ -4,7 +4,7 @@ import shutil
 import numpy as np
 from numpy import mean
 from glob import glob
-from utils import *
+from utils import model_info
 from tqdm import tqdm
 import pandas as pd
 import itertools
@@ -48,6 +48,8 @@ def get_results(tids):
             "moe": info["moe"],
             "size": info["size"],
             "act_param": info["act_param"],
+            "date": info.get("date", None),
+            "prefill": info.get("prefill", False),
             # "direct_complete": info["direct_complete"],
         }
         
@@ -249,7 +251,7 @@ def get_solve_rate(data_dict, task="complete"):
 
 def get_hf_ds(results):
     hf_dataset = {"model": [], "link": [], "moe": [], "size": [], "act_param": [], "type": [], #"lazy": [],# "direct_complete": [],
-                  "complete": [], "instruct": []}
+                  "complete": [], "instruct": [], "date": [], "prefill": []}
 
     for model, result in results.items():
         hf_dataset["model"].append(model)
@@ -261,6 +263,8 @@ def get_hf_ds(results):
         # hf_dataset["lazy"].append(result["lazy"])
         hf_dataset["complete"].append(result["pass@1"]["complete"])
         hf_dataset["instruct"].append(result["pass@1"]["instruct"])
+        hf_dataset["date"].append(result["date"])
+        hf_dataset["prefill"].append(result["prefill"])
         # hf_dataset["direct_complete"].append(result["direct_complete"])
 
     return Dataset.from_dict(hf_dataset)
