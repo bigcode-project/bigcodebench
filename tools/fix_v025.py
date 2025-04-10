@@ -53,7 +53,7 @@ def map_ds(sample):
         sample['complete_prompt'] = "import nltk\nnltk.download('stopwords')\n" + sample['complete_prompt']
         sample['instruct_prompt'] = sample['instruct_prompt'].replace(
             "\nYou should write self-contained code starting with:\n```\n",
-            "\nYou should write self-contained code starting with:\n```\n"
+            "\nYou should write self-contained code starting with:\n```\nimport nltk\nnltk.download('stopwords')\n"
         )
 
     if sample["task_id"] in ["BigCodeBench/635"]:
@@ -68,8 +68,8 @@ def map_ds(sample):
         )
 
         sample['instruct_prompt'] = sample['instruct_prompt'].replace(
-            "# Importing the required libraries",
-            "# Importing the required libraries\nimport nltk\nnltk.download('stopwords')\n"
+            "\nYou should write self-contained code starting with:\n```\n",
+            "\nYou should write self-contained code starting with:\n```\nimport nltk\nnltk.download('stopwords')\n"
         )
 
     if sample["task_id"] in ["BigCodeBench/849"]:
@@ -77,7 +77,7 @@ def map_ds(sample):
         sample['complete_prompt'] = "import nltk\nnltk.download('stopwords')\n" + sample['complete_prompt']
         sample['instruct_prompt'] = sample['instruct_prompt'].replace(
             "\nYou should write self-contained code starting with:\n```\n",
-            "\nYou should write self-contained code starting with:\n```\n"
+            "\nYou should write self-contained code starting with:\n```\nimport nltk\nnltk.download('stopwords')\n"
         )
 
     if sample["task_id"] in ["BigCodeBench/940"]:
