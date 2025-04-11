@@ -17,7 +17,7 @@ def make_request(
     kwargs["top_p"] = 0.95
     kwargs["max_completion_tokens"] = max_tokens
     kwargs["temperature"] = temperature
-    if model.startswith("o1-") or model.startswith("o3-") or model.endswith("-reasoner"):  # pop top-p and max_completion_tokens
+    if any(model.startswith(m) or model.endswith(m) for m in ["o1-", "o3-", "reasoner", "grok-3-mini"]):  # pop top-p and max_completion_tokens
         kwargs.pop("top_p")
         kwargs.pop("max_completion_tokens")
         kwargs.pop("temperature")

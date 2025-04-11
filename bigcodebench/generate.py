@@ -197,7 +197,7 @@ def run_codegen(
     )
     
     extra = "-" + subset if subset != "full" else ""
-    if backend == "openai" and reasoning_effort and model.startswith("o1-") or model.startswith("o3-") or model.endswith("-reasoner"):
+    if backend == "openai" and reasoning_effort and any(model.startswith(m) or model.endswith(m) for m in ["o1-", "o3-", "reasoner", "grok-3-mini"]):
         model = model + f"--{reasoning_effort}"
     
     if lora_path:
