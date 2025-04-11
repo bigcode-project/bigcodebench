@@ -2202,4 +2202,52 @@ model_info = {
         "prefill": False,
         "date": "2025-04-05"
     },
+    "agentica-org/DeepCoder-14B-Preview--main": {
+        "name": "DeepCoder-14B-Preview",
+        "link": "https://huggingface.co/agentica-org/DeepCoder-14B-Preview",
+        "open-data": "None",
+        "prompted": True,
+        "moe": True,
+        "size": 14,
+        "act_param": 14,
+        "open-data": "None",
+        "prefill": True,
+        "date": "2025-04-09"
+    },
+    "openrouter/quasar-alpha--main": {
+        "name": "Quasar-Alpha",
+        "link": "https://openrouter.ai/openrouter/quasar-alpha",
+        "open-data": "None",
+        "prompted": True,
+        "moe": True,
+        "size": None,
+        "act_param": None,
+        "open-data": "None",
+        "prefill": False,
+        "date": "2025-04-02"
+    },
+    "agentica-org/DeepCoder-14B-Preview--skip_prefill--main": {
+        "name": "DeepCoder-14B-Preview (w/ Reasoning, 64k tokens, temperature=0.6)",
+        "link": "https://huggingface.co/agentica-org/DeepCoder-14B-Preview",
+        "open-data": "None",
+        "prompted": True,
+        "moe": False,
+        "size": 14,
+        "act_param": 14,
+        "open-data": "None",
+        "prefill": False,
+        "date": "2025-04-09"
+    },
+    "openrouter/optimus-alpha--main": {
+        "name": "Optimus-Alpha",
+        "link": "https://openrouter.ai/openrouter/optimus-alpha",
+        "open-data": "None",
+        "prompted": True,
+        "moe": True,
+        "size": None,
+        "act_param": None,
+        "open-data": "None",
+        "prefill": False,
+        "date": "2025-04-10"
+    }
 }
