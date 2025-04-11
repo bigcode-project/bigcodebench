@@ -49,7 +49,6 @@ class OpenAIChatDecoder(DecoderBase):
                 reasoning_effort=self.reasoning_effort,
                 n=num_samples,
             )
-            print(ret)
             outputs = []
             for item in ret.choices:
                 outputs.append(item.message.content)
