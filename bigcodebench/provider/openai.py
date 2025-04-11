@@ -28,7 +28,7 @@ class OpenAIChatDecoder(DecoderBase):
             tokenizer=None,
         ) for prompt in prompts]
         # use concurrency based batching for o1 and deepseek models
-        if any(self.name.startswith(model) or self.name.endswith(model) for model in ["o1-", "o3-", "reasoner", "grok-3-mini"]):
+        if any(self.name.startswith(model) or self.name.endswith(model) for model in ["o1-", "o3-", "reasoner", "grok-3-mini-beta"]):
             return self._codegen_batch_via_concurrency(messages, num_samples)
 
         return self._codegen_api_batch(messages, num_samples)
