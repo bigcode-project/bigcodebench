@@ -214,9 +214,13 @@ def evaluate(
         pass_at_k = dict()
 
         if isinstance(pass_k, str):
-            passk = [int(k) for k in pass_k.split(",")]
+            passk = [int(k) for k in pass_k.split(",") if k.strip()]
+        elif isinstance(pass_k, int):
+            passk = [pass_k]
+        elif isinstance(pass_k, (list, tuple)):
+            passk = list(pass_k)
         else:
-            passk = pass_k
+            raise ValueError(f"Invalid type for pass_k: {type(pass_k)}")
         
         if selective_evaluate and isinstance(selective_evaluate, str):
             selected_ids = set(selective_evaluate.split(","))
