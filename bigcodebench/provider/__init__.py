@@ -144,3 +144,15 @@ def make_model(
             instruction_prefix=instruction_prefix,
             response_prefix=response_prefix,
         )
+    elif backend == "codex":
+        from bigcodebench.provider.codex import CodexDecoder
+
+        return CodexDecoder(
+            name=model,
+            subset=subset,
+            split=split,
+            temperature=temperature,
+            max_new_tokens=max_new_tokens,
+            instruction_prefix=instruction_prefix,
+            response_prefix=response_prefix,
+        )
