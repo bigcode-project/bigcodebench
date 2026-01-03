@@ -105,7 +105,7 @@ bigcodebench.generate \
     --temperature [temp] \
     --n_samples [n_samples] \
     --resume \
-    --backend [vllm|openai|mistral|anthropic|google|hf] \
+    --backend [vllm|openai|mistral|anthropic|google|hf|codex] \
     --tp [TENSOR_PARALLEL_SIZE] \
     [--trust_remote_code] \
     [--base_url [base_url]] \
@@ -127,7 +127,7 @@ docker run --gpus '"device=$CUDA_VISIBLE_DEVICES"' -v $(pwd):/app -t bigcodebenc
     --temperature [temp] \
     --n_samples [n_samples] \
     --resume \
-    --backend [vllm|openai|mistral|anthropic|google|hf] \
+    --backend [vllm|openai|mistral|anthropic|google|hf|codex] \
     --tp [TENSOR_PARALLEL_SIZE]
 
 # ...Or if you are using CPUs

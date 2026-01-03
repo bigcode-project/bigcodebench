@@ -127,7 +127,7 @@ bigcodebench.evaluate \
   --execution [e2b|gradio|local] \
   --split [complete|instruct] \
   --subset [full|hard] \
-  --backend [vllm|openai|anthropic|google|mistral|hf|hf-inference]
+  --backend [vllm|openai|anthropic|google|mistral|hf|hf-inference|codex]
 ```
 
 - All the resulted files will be stored in a folder named `bcb_results`.
