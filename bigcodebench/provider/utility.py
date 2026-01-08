@@ -1,6 +1,7 @@
 from typing import List
 from transformers import AutoTokenizer
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from tqdm import tqdm
 
 EOS = [
     "<|endoftext|>",
@@ -81,3 +82,30 @@ def concurrent_call(n, callback, /, *args, **kwargs):
     with ThreadPoolExecutor(max_workers=n) as executor:
         futures = [executor.submit(callback, *args, **kwargs) for _ in range(n)]
         return [future.result() for future in futures]
+
+
+# Parallel processing utility for processing multiple different items concurrently.
+# Unlike concurrent_call which runs the same operation n times, concurrent_map 
+# processes n different items in parallel (similar to map() but concurrent).
+# Automatically tracks indices to preserve output order and shows progress with tqdm.
+def concurrent_map(items, callback, /, *args, **kwargs):
+    """
+    Process a list of items in parallel using a callback function.
+    
+    Args:
+        items: List of items to process
+        callback: Function that takes (index, item, *args, **kwargs) and returns a result
+        *args, **kwargs: Additional arguments passed to callback
+    
+    Returns:
+        List of results in the same order as input items
+    """
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(callback, i, item, *args, **kwargs): i 
+                   for i, item in enumerate(items)}
+        results = [None] * len(items)
+        # Collect results as they complete with progress bar
+        for future in tqdm(as_completed(futures), total=len(items)):
+            index = futures[future]
+            results[index] = future.result()
+        return results

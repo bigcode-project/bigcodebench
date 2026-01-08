@@ -6,7 +6,7 @@ import openai
 from bigcodebench.gen.util.openai_request import make_auto_request
 from bigcodebench.provider.utility import make_raw_chat_prompt
 from bigcodebench.provider.base import DecoderBase
-from bigcodebench.provider.utility import concurrent_call
+from bigcodebench.provider.utility import concurrent_call, concurrent_map
 
 class OpenAIChatDecoder(DecoderBase):
     def __init__(self, name: str, base_url=None, reasoning_effort="medium", **kwargs) -> None:
@@ -38,8 +38,8 @@ class OpenAIChatDecoder(DecoderBase):
             api_key=os.getenv("OPENAI_API_KEY", "none"), base_url=self.base_url
         )
         
-        all_outputs = []
-        for message in tqdm(messages):
+        # Helper function to process a single message with its index
+        def process_message(index, message):
             ret = make_auto_request(
                 client,
                 message=message,
@@ -52,7 +52,11 @@ class OpenAIChatDecoder(DecoderBase):
             outputs = []
             for item in ret.choices:
                 outputs.append(item.message.content)
-            all_outputs.append(outputs)
+            return outputs
+        
+        # Process messages in parallel using utility function
+        all_outputs = concurrent_map(messages, process_message)
+        
         return all_outputs
 
     def _codegen_batch_via_concurrency(self, messages: List[str], num_samples: int) -> List[str]:
