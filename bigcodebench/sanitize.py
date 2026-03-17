@@ -180,6 +180,8 @@ def extract_target_code_or_empty(code: str, entrypoint: Optional[str] = None) ->
 
 
 def sanitize(code: str, entrypoint: Optional[str] = None) -> str:
+    if code is None:
+        return ""
     sanitized_code = extract_target_code_or_empty(code, entrypoint).strip()
     if not sanitized_code:
         return code_extract(code)
